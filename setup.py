@@ -42,7 +42,7 @@ setup_requires = [
 
 install_requires = [
     'invenio-oarepo>=1.0.0',
-    # 'invenio-nusl-common>=1.0.0',
+    'invenio-nusl-common>=1.0.0',
     # 'invenio-nusl-theses>=1.0.0'
 
 ]
@@ -51,7 +51,7 @@ packages = find_packages()
 
 # Get the version string. Cannot be done with import!
 g = {}
-with open(os.path.join('nusl', 'version.py'), 'rt') as fp:
+with open(os.path.join('invenio_nusl', 'version.py'), 'rt') as fp:
     exec(fp.read(), g)
     version = g['__version__']
 
