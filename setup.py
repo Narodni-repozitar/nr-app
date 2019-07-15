@@ -70,6 +70,9 @@ setup(
     include_package_data=True,
     platforms='any',
     entry_points={
+        'flask.commands': [
+            'nusl = invenio_nusl.cli:nusl',
+        ],
         'console_scripts': [
 
         ],
