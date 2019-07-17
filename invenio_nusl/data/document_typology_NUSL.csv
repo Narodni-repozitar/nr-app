@@ -1,0 +1,35 @@
+term,bterm,nazev_term,nazev_bterm
+studie,anl_met_mat,Studie,Analytické a metodické materiály
+analyzy,anl_met_mat,Analýzy,Analytické a metodické materiály
+metodiky,anl_met_mat,Metodiky,Analytické a metodické materiály
+monografie,aut_prace,Monografie,Autorské práce
+preprinty,aut_prace,Preprinty,Autorské práce
+tematicke_sborniky,aut_prace,Tematické sborníky,Autorské práce
+referaty,aut_prace,Referáty,Autorské práce
+firemni_tisk,firemni_lit,Firemní tisk,Firemní literatura
+katalogy_vyrobku,firemni_lit,Katalogy výrobků,Firemní literatura
+vestniky,firemni_lit,Věstníky,Firemní literatura
+prispevky_z_konference,konf_mat,Příspěvky z konference,Konferenční materiály
+sborniky,konf_mat,Sborníky,Konferenční materiály
+programy,konf_mat,Programy,Konferenční materiály
+postery,konf_mat,Postery,Konferenční materiály
+letaky,promo_edu_mat,Letáky,Propagační a vzdělávací materiály
+tiskove_zpravy,promo_edu_mat,Tiskové zprávy,Propagační a vzdělávací materiály
+brozury,promo_edu_mat,Brožury,Propagační a vzdělávací materiály
+pruvodce_expozici,promo_edu_mat,Průvodce expozicí,Propagační a vzdělávací materiály
+katalogy_vystav,promo_edu_mat,Katalogy výstav,Propagační a vzdělávací materiály
+bakalarske_prace,vskp,Bakalářské práce,Vysokoškolské kvalifikační práce
+diplomove_prace,vskp,Diplomové práce,Vysokoškolské kvalifikační práce
+disertacni_prace,vskp,Disertační práce,Vysokoškolské kvalifikační práce
+rigorozni_prace,vskp,Rigorózní práce,Vysokoškolské kvalifikační práce
+habilitacni_prace,vskp,Habilitační práce,Vysokoškolské kvalifikační práce
+vyzkumne_zpravy,zpravy,Výzkumné zprávy,Zprávy
+grantove_zpravy,zpravy,Grantové zprávy,Zprávy
+prubezne_zpravy_z_projektu,zpravy,Průběžné zprávy z projektu,Zprávy
+zaverecne_zpravy_z_projektu,zpravy,Závěrečné zprávy z projektu,Zprávy
+vyrocni_zpravy,zpravy,Výroční zprávy,Zprávy
+statisticke_zpravy,zpravy,Statistické zprávy,Zprávy
+zpravy_o_stavu,zpravy,Zprávy o stavu,Zprávy
+cestovni_zpravy,zpravy,Cestovní zprávy,Zprávy
+zpravy_z_pruzkumu,zpravy,Zprávy z průzkumu,Zprávy
+technicke_zpravy,zpravy,Technické zprávy,Zprávy
