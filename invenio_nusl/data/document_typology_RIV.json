@@ -1,0 +1,46 @@
+{
+  "J": [
+    "imp",
+    "SC",
+    "ost"
+  ],
+  "B": null,
+  "C": null,
+  "D": null,
+  "P": null,
+  "Z": [
+    "polop",
+    "tech",
+    "odru",
+    "plem"
+  ],
+  "F": [
+    "uzit",
+    "prum"
+  ],
+  "G": [
+    "prot",
+    "funk"
+  ],
+  "H": [
+    "leg",
+    "neleg",
+    "konc"
+  ],
+  "N": [
+    "metS",
+    "metC",
+    "metA",
+    "lec",
+    "pam",
+    "map"
+  ],
+  "R": null,
+  "S": null,
+  "V": [null, "souhrn"],
+  "A": null,
+  "E": [null, "krit"],
+  "M": null,
+  "W": null,
+  "O": null
+}
