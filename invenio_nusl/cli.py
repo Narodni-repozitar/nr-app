@@ -1,14 +1,12 @@
+import csv
+import os
+
 import click
 from flask import cli
 from invenio_db import db
 
-from flask_taxonomies.managers import TaxonomyManager
 from flask_taxonomies.models import Taxonomy
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
-
-import csv
-import os
-import json
 
 
 @click.group()
@@ -19,21 +17,22 @@ def nusl():
 @nusl.command('import_studyfields')
 @cli.with_appcontext
 def import_studyfields():
-    studyfields = Taxonomy(code='studyfields', extra_data={
-        "title": [
-            {
-                "name": "studijní obory",
-                "lang": "cze"
-            },
-            {
-                "name": "study fields",
-                "lang": "eng"
-            }
-        ]
-    })
-    db.session.add(studyfields)
-    db.session.commit()
-    manager = TaxonomyManager()
+    studyfields = Taxonomy.get('studyfields')
+    if not studyfields:
+        studyfields = Taxonomy.create_taxonomy(code='studyfields', extra_data={
+            "title": [
+                {
+                    "name": "studijní obory",
+                    "lang": "cze"
+                },
+                {
+                    "name": "study fields",
+                    "lang": "eng"
+                }
+            ]
+        })
+        db.session.add(studyfields)
+        db.session.commit()
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(path, "data", "field.csv")
 
@@ -42,12 +41,12 @@ def import_studyfields():
         counter = 0
         for row in reader:
             counter += 1
-            term = manager.create(row["KOD"],
-                                  title={
-                                      "name": row["NAZEV"],
-                                  },
-                                  path='/studyfields/',
-                                  extra_data={"code": row["KOD"]})
+            term = studyfields.create_term(slug=row["KOD"],
+                                           extra_data={"code": row["KOD"],
+                                                       "title": {
+                                                           "name": row["NAZEV"],
+                                                       }
+                                                       })
 
             db.session.add(term)
             db.session.commit()
@@ -57,7 +56,7 @@ def import_studyfields():
 @nusl.command('import_studyprogramme')
 @cli.with_appcontext
 def import_studyprogramme():
-    studyprogramme = Taxonomy(code='studyprogramme', extra_data={
+    studyprogramme = Taxonomy.create_taxonomy(code='studyprogramme', extra_data={
         "title": [
             {
                 "name": "studijní programy",
@@ -71,7 +70,6 @@ def import_studyprogramme():
     })
     db.session.add(studyprogramme)
     db.session.commit()
-    manager = TaxonomyManager()
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(path, "data", "programme.csv")
 
@@ -80,18 +78,19 @@ def import_studyprogramme():
         counter = 0
         for row in reader:
             counter += 1
-            term = manager.create(row["KOD"],
-                                  title={
-                                      "name": [
-                                          {
-                                              "name": row["NAZEV"],
-                                              "lang": "cze"
-                                          },
-                                          {"name": row["ANAZEV"], "lang": "eng"} if row["ANAZEV"] != "" else {}
-                                      ]
-                                  },
-                                  path='/studyprogramme/',
-                                  extra_data={"code": row["KOD"]})
+            term = studyprogramme.create_term(
+                slug=row["KOD"],
+                extra_data={"code": row["KOD"],
+                            "title": {
+                                "name": [
+                                    {
+                                        "name": row["NAZEV"],
+                                        "lang": "cze"
+                                    },
+                                    {"name": row["ANAZEV"], "lang": "eng"} if row["ANAZEV"] != "" else {}
+                                ]
+                            }
+                            })
 
             db.session.add(term)
             db.session.commit()
@@ -101,7 +100,7 @@ def import_studyprogramme():
 @nusl.command('import_universities')
 @cli.with_appcontext
 def import_universities():
-    universities = Taxonomy(code='universities', extra_data={
+    universities = Taxonomy.create_taxonomy(code='universities', extra_data={
         "title": [
             {
                 "name": "Univerzity",
@@ -115,7 +114,6 @@ def import_universities():
     })
     db.session.add(universities)
     db.session.commit()
-    manager = TaxonomyManager()
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(path, "data", "universities.csv")
 
@@ -124,26 +122,26 @@ def import_universities():
         counter = 0
         for row in reader:
             counter += 1
-            term = manager.create(row["ic"].strip(),
-                                  title={
-                                      "name": row["nazev_cz"],
-                                  },
-                                  path='/universities/',
-                                  extra_data={
-                                      "Název": row["nazev_cz"],
-                                      "Typ VŠ": row["typ_VS"],
-                                      "Forma VŠ": row["text_forma_VS"],
-                                      "Kraj": row["kraj"],
-                                      "Resortní identifikátor (RID)": row["rid"],
-                                      "Sídlo": row["sidlo"],
-                                      "IČO": row["ic"],
-                                      "Datová schránka": row["datova_schranka"],
-                                      "Web": row["web"],
-                                      "Statutární zástupce": row["statutarni_zastupce"],
-                                      "Funkční období od": row["funkcni_obdobi_od"],
-                                      "Funkční období do": row["funkcni_obdobi_do"]
-                                  }
-                                  )
+            term = universities.create_term(
+                slug=row["ic"].strip(),
+                extra_data={
+                    "title": {
+                        "name": row["nazev_cz"].strip(),
+                    },
+                    "Název": row["nazev_cz"].strip(),
+                    "Typ VŠ": row["typ_VS"].strip(),
+                    "Forma VŠ": row["text_forma_VS"].strip(),
+                    "Kraj": row["kraj"].strip(),
+                    "Resortní identifikátor (RID)": row["rid"].strip(),
+                    "Sídlo": row["sidlo"].strip(),
+                    "IČO": row["ic"].strip(),
+                    "Datová schránka": row["datova_schranka"].strip(),
+                    "Web": row["web"].strip(),
+                    "Statutární zástupce": row["statutarni_zastupce"].strip(),
+                    "Funkční období od": row["funkcni_obdobi_od"].strip(),
+                    "Funkční období do": row["funkcni_obdobi_do"].strip()
+                }
+            )
 
             db.session.add(term)
             db.session.commit()
@@ -153,10 +151,10 @@ def import_universities():
 @nusl.command('import_faculties')
 @cli.with_appcontext
 def import_faculties():
-    manager = TaxonomyManager()
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(path, "data", "faculties.csv")
     faculties_dict = f_rid_ic_dict()
+    universities = Taxonomy.get("universities")
 
     with open(path, newline='') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=",")
@@ -164,22 +162,20 @@ def import_faculties():
         for row in reader:
             ic = faculties_dict[row["rid_f"]].strip()
             counter += 1
-            try:
-                manager.get_from_path(f'/universities/{ic}/{row["rid_f"]}')
-                print(counter)
-            except AttributeError:
-                term = manager.create(row["rid_f"].strip(),
-                                      title={
-                                          "name": row["nazev_cz"],
-                                      },
-                                      path=f'/universities/{ic}',
-                                      extra_data={
-                                          "Název": row["nazev_cz"],
-                                          "Resortní identifikátor univerzity(RID)": row["rid"],
-                                          "Resortní identifikátor fakulty(RID)": row["rid_f"],
-                                          "Web": row["web"],
-                                      }
-                                      )
+            if not universities.get_term(row["rid_f"]):
+                term = universities.create_term(slug=row["rid_f"].strip(),
+
+                                                parent_path=ic,
+                                                extra_data={
+                                                    "title": {
+                                                        "name": row["nazev_cz"],
+                                                    },
+                                                    "Název": row["nazev_cz"],
+                                                    "Resortní identifikátor univerzity(RID)": row["rid"],
+                                                    "Resortní identifikátor fakulty(RID)": row["rid_f"],
+                                                    "Web": row["web"],
+                                                }
+                                                )
 
                 db.session.add(term)
                 db.session.commit()
@@ -189,9 +185,9 @@ def import_faculties():
 @nusl.command('import_doctype')
 @cli.with_appcontext
 def import_doctype():
-    manager = TaxonomyManager()
-    if manager.get_taxonomy('doctype') is None:
-        doctype = Taxonomy(code='doctype', extra_data={
+    doctype = Taxonomy.get('doctype')
+    if doctype is None:
+        doctype = Taxonomy.create_taxonomy(code='doctype', extra_data={
             "title": [
                 {
                     "name": "Typ dokumentu",
@@ -214,35 +210,30 @@ def import_doctype():
         counter = 0
         for row in reader:
             counter += 1
-            try:
-                manager.get_from_path(f'/doctype/{row["bterm"]}')
-                print(counter)
-            except AttributeError:
-                term = manager.create(row["bterm"].strip(),
-                                      title={
-                                          "name": row["nazev_bterm"],
-                                      },
-                                      path=f'/doctype/',
-                                      extra_data={
-                                          "Kód": row["bterm"],
-                                      }
-                                      )
+            if not doctype.get_term(row["bterm"]):
+                term = doctype.create_term(slug=row["bterm"].strip(),
+                                           extra_data={
+                                               "title": {
+                                                   "name": row["nazev_bterm"],
+                                               },
+                                               "Kód": row["bterm"],
+                                           }
+                                           )
                 db.session.add(term)
                 db.session.commit()
                 print(f"{counter}. {term}")
 
-            try:
-                manager.get_from_path(f'/doctype/{row["bterm"]}/{row["term"]}')
-            except AttributeError:
-                term = manager.create(row["term"].strip(),
-                                      title={
-                                          "name": row["nazev_term"],
-                                      },
-                                      path=f'/doctype/{row["bterm"]}',
-                                      extra_data={
-                                          "Kód": row["term"],
-                                      }
-                                      )
+            if not doctype.get_term(row["term"]):
+                term = doctype.create_term(slug=row["term"].strip(),
+
+                                           parent_path=row["bterm"],
+                                           extra_data={
+                                               "title": {
+                                                   "name": row["nazev_term"],
+                                               },
+                                               "Kód": row["term"],
+                                           }
+                                           )
                 db.session.add(term)
                 db.session.commit()
 
@@ -252,9 +243,9 @@ def import_doctype():
 @nusl.command('import_riv')
 @cli.with_appcontext
 def import_riv():
-    manager = TaxonomyManager()
-    if manager.get_taxonomy('doctype') is None:
-        doctype = Taxonomy(code='doctype', extra_data={
+    doctype = Taxonomy.get('doctype')
+    if doctype is None:
+        doctype = Taxonomy.create_taxonomy(code='doctype', extra_data={
             "title": [
                 {
                     "name": "Typ dokumentu",
@@ -278,57 +269,58 @@ def import_riv():
         for row in reader:
             counter += 1
             print(f"{counter}.", "#######################################################")
-            try:
-                manager.get_from_path(f'/doctype/RIV')
-            except AttributeError:
-                term = manager.create("RIV",
-                                      title={
-                                          "name": "RIV",
-                                      },
-                                      path=f'/doctype/',
-                                      )
+            if not doctype.get_term('RIV'):
+                term = doctype.create_term(
+                    slug="RIV",
+                    extra_data={
+                        "title": {
+                            "name": "RIV",
+                        }
+                    },
+                )
                 db.session.add(term)
                 db.session.commit()
                 print(f"/doctype/RIV")
 
-            try:
-                manager.get_from_path(f'/doctype/RIV/{row["base_code"]}')
-            except AttributeError:
+            if not doctype.get_term(f'{row["base_code"]}'):
                 if row["sub_code"] == "":
-                    term = manager.create(row["base_code"].strip(),
-                                          title={
-                                              "name": row["name"]
-                                          },
-                                          extra_data={
-                                              "definition": row["definice"]
-                                          },
-                                          path=f'/doctype/RIV',
-                                          )
+                    term = doctype.create_term(
+                        slug=row["base_code"].strip(),
+                        extra_data={
+                            "title": {
+                                "name": row["name"]
+                            },
+                            "definition": row["definice"]
+                        },
+                        parent_path='RIV',
+                    )
                 else:
-                    term = manager.create(row["base_code"].strip(),
-                                          title={
-                                              "name": row["base_code"]
-                                          },
-                                          path=f'/doctype/RIV',
-                                          )
+                    term = doctype.create_term(
+                        slug=row["base_code"].strip(),
+                        extra_data={
+                            "title": {
+                                "name": row["base_code"]
+                            }
+                        },
+                        parent_path='RIV',
+                    )
                 db.session.add(term)
                 db.session.commit()
-
                 print(f"/doctype/RIV/{row['base_code']}")
 
             if row["sub_code"] != "":
-                try:
-                    manager.get_from_path(f"/doctype/RIV/{row['base_code']}/{row['sub_code']}")
-                except AttributeError:
-                    term = manager.create(row["sub_code"].strip(),
-                                          title={
-                                              "name": row["name"],
-                                          },
-                                          extra_data={
-                                              "definition": row["definice"]
-                                          },
-                                          path=f"/doctype/RIV/{row['base_code']}"
-                                          )
+                if not doctype.get_term(row['sub_code']):
+                    term = doctype.create_term(
+                        slug=row["sub_code"].strip(),
+
+                        extra_data={
+                            "title": {
+                                "name": row["name"],
+                            },
+                            "definition": row["definice"]
+                        },
+                        parent_path=f"RIV/{row['base_code']}"
+                    )
 
                     print(f"/doctype/RIV/{row['base_code']}/{row['sub_code']}")
 
@@ -351,9 +343,8 @@ def import_providers():
         }
         return export_dict
 
-    manager = TaxonomyManager()
-    if manager.get_taxonomy('provider') is None:
-        provider = Taxonomy(code='provider', extra_data={
+    if Taxonomy.get('provider') is None:
+        provider = Taxonomy.create_taxonomy(code='provider', extra_data={
             "title": [
                 {
                     "name": "Poskytovatel záznamu",
@@ -368,6 +359,9 @@ def import_providers():
         db.session.add(provider)
         db.session.commit()
 
+    else:
+        provider = Taxonomy.get('provider')
+
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(path, "data", "Institutions_ids.csv")
 
@@ -377,61 +371,58 @@ def import_providers():
         for row in reader:
             counter += 1
             print(counter, "#######################################################")
-            try:
-                manager.get_from_path(f'/provider/{row["isPartOf2"]}')
-            except AttributeError:
-                term = manager.create(row["isPartOf2"].strip(),
-                                      title={
-                                          "name": row["name_isPartOf2"],
-                                      },
-                                      path=f'/provider/',
-                                      )
+            if not provider.get_term(row["isPartOf2"]):
+                term = provider.create_term(
+                    slug=row["isPartOf2"].strip(),
+                    extra_data={
+                        "title": {
+                            "name": row["name_isPartOf2"],
+                        }
+                    },
+                )
                 db.session.add(term)
                 db.session.commit()
                 print(f"/provider/{row['isPartOf2']}")
 
-            try:
-                manager.get_from_path(f'/provider/{row["isPartOf2"]}/{row["isPartOf"]}')
-            except AttributeError:
+            if not provider.get_term(row["isPartOf"]):
                 if row["isPartOf"] != "null":
-                    term = manager.create(row["isPartOf"].strip(),
-                                          title={
-                                              "name": row["name_isPartOf"],
-                                          },
-                                          path=f'/provider/{row["isPartOf2"]}/',
-                                          )
+                    term = provider.create_term(
+                        slug=row["isPartOf"].strip(),
+                        extra_data={
+                            "title": {
+                                "name": row["name_isPartOf"],
+                            }
+                        },
+                        parent_path=row["isPartOf2"],
+                    )
                     db.session.add(term)
                     db.session.commit()
 
                     print(f"/provider/{row['isPartOf2']}/{row['isPartOf']}")
 
-            try:
-                manager.get_from_path(f'/provider/{row["isPartOf2"]}/{row["isPartOf"]}/{row["id"]}')
-            except AttributeError:
+            if not provider.get_term(row["id"]):
+                provider_details = _split_export(row["EXPORT"])
                 if row["isPartOf"] != "null":
-                    term = manager.create(row["id"].strip(),
-                                          title={
-                                              "name": _split_export(row["EXPORT"])["name"],
-                                          },
-                                          path=f'/provider/{row["isPartOf2"]}/{row["isPartOf"]}',
-                                          extra_data=_split_export(row["EXPORT"])
-                                          )
+                    term = provider.create_term(
+                        slug=row["id"].strip(),
+
+                        parent_path=f'{row["isPartOf2"]}/{row["isPartOf"]}',
+                        extra_data=provider_details  # TODO: nemá title?
+                    )
 
                     print(f"/provider/{row['isPartOf2']}/{row['isPartOf']}/{row['id']}")
                 else:
-                    term = manager.create(row["id"].strip(),
-                                          title={
-                                              "name": _split_export(row["EXPORT"])["name"],
-                                          },
-                                          path=f'/provider/{row["isPartOf2"]}/',
-                                          extra_data=_split_export(row["EXPORT"])
-                                          )
+                    term = provider.create_term(slug=row["id"].strip(),
+                                                parent_path=row["isPartOf2"],
+                                                extra_data={
+                                                    **provider_details,
+                                                    "title": {
+                                                        "name": provider_details["name"]
+                                                    },
+                                                }
+                                                )
 
                     print(f"/provider/{row['isPartOf2']}/{row['id']}")
 
                 db.session.add(term)
                 db.session.commit()
-
-
-if __name__ == "__main__":
-    pass
