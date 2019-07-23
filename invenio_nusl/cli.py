@@ -20,7 +20,7 @@ def import_studyfields():
     studyfields = Taxonomy.get('studyfields')
     if not studyfields:
         studyfields = Taxonomy.create_taxonomy(code='studyfields', extra_data={
-            "title": [
+            "name": [
                 {
                     "name": "studijní obory",
                     "lang": "cze"
@@ -40,13 +40,25 @@ def import_studyfields():
         reader = csv.DictReader(csvfile, delimiter=",")
         counter = 0
         for row in reader:
+            name = [
+                {
+                    "name": row["NAZEV"],
+                    "lang": "cze"
+                }
+            ]
+            if row["ANAZEV"] != "":
+                name.append(
+                    {
+                        "name": row["ANAZEV"],
+                        "lang": "eng"
+                    }
+                )
             counter += 1
             term = studyfields.create_term(slug=row["KOD"],
-                                           extra_data={"code": row["KOD"],
-                                                       "title": {
-                                                           "name": row["NAZEV"],
-                                                       }
-                                                       })
+                                           extra_data={
+                                               "name": name
+                                           }
+                                           )
 
             db.session.add(term)
             db.session.commit()
@@ -57,7 +69,7 @@ def import_studyfields():
 @cli.with_appcontext
 def import_studyprogramme():
     studyprogramme = Taxonomy.create_taxonomy(code='studyprogramme', extra_data={
-        "title": [
+        "name": [
             {
                 "name": "studijní programy",
                 "lang": "cze"
@@ -77,20 +89,26 @@ def import_studyprogramme():
         reader = csv.DictReader(csvfile, delimiter=",")
         counter = 0
         for row in reader:
+            name = [
+                {
+                    "name": row["NAZEV"],
+                    "lang": "cze"
+                }
+            ]
+            if row["ANAZEV"] != "":
+                name.append(
+                    {
+                        "name": row["ANAZEV"],
+                        "lang": "eng"
+                    }
+                )
             counter += 1
             term = studyprogramme.create_term(
                 slug=row["KOD"],
-                extra_data={"code": row["KOD"],
-                            "title": {
-                                "name": [
-                                    {
-                                        "name": row["NAZEV"],
-                                        "lang": "cze"
-                                    },
-                                    {"name": row["ANAZEV"], "lang": "eng"} if row["ANAZEV"] != "" else {}
-                                ]
-                            }
-                            })
+                extra_data={
+                    "name": name
+                }
+            )
 
             db.session.add(term)
             db.session.commit()
@@ -100,20 +118,30 @@ def import_studyprogramme():
 @nusl.command('import_universities')
 @cli.with_appcontext
 def import_universities():
-    universities = Taxonomy.create_taxonomy(code='universities', extra_data={
-        "title": [
-            {
-                "name": "Univerzity",
-                "lang": "cze"
-            },
-            {
-                "name": "Universities",
-                "lang": "eng"
-            }
-        ]
-    })
-    db.session.add(universities)
-    db.session.commit()
+    def convert_dates(date):
+        if date != "":
+            array = date.split(".")
+            array = [f"0{X}" if len(X) == 1 else X for X in array]
+            array = array[::-1]
+            return "-".join(array)
+        return date
+
+    universities = Taxonomy.get('universities')
+    if not universities:
+        universities = Taxonomy.create_taxonomy(code='universities', extra_data={
+            "name": [
+                {
+                    "name": "Univerzity",
+                    "lang": "cze"
+                },
+                {
+                    "name": "Universities",
+                    "lang": "eng"
+                }
+            ]
+        })
+        db.session.add(universities)
+        db.session.commit()
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(path, "data", "universities.csv")
 
@@ -125,21 +153,23 @@ def import_universities():
             term = universities.create_term(
                 slug=row["ic"].strip(),
                 extra_data={
-                    "title": {
-                        "name": row["nazev_cz"].strip(),
-                    },
-                    "Název": row["nazev_cz"].strip(),
-                    "Typ VŠ": row["typ_VS"].strip(),
-                    "Forma VŠ": row["text_forma_VS"].strip(),
-                    "Kraj": row["kraj"].strip(),
-                    "Resortní identifikátor (RID)": row["rid"].strip(),
-                    "Sídlo": row["sidlo"].strip(),
+                    "name": [
+                        {
+                            "name": row["nazev_cz"].strip(),
+                            "lang": "cze"
+                        }
+                    ],
+                    "type": row["typ_VS"].strip(),
+                    "form": row["text_forma_VS"].strip(),
+                    "region": row["kraj"].strip(),
+                    "RID": row["rid"].strip(),
+                    "address": row["sidlo"].strip(),
                     "IČO": row["ic"].strip(),
-                    "Datová schránka": row["datova_schranka"].strip(),
-                    "Web": row["web"].strip(),
-                    "Statutární zástupce": row["statutarni_zastupce"].strip(),
-                    "Funkční období od": row["funkcni_obdobi_od"].strip(),
-                    "Funkční období do": row["funkcni_obdobi_do"].strip()
+                    "data_box": row["datova_schranka"].strip(),
+                    "url": row["web"].strip(),
+                    "deputy": row["statutarni_zastupce"].strip(),
+                    "term_of_office_from": convert_dates(row["funkcni_obdobi_od"].strip()),
+                    "term_of_office_until": convert_dates(row["funkcni_obdobi_do"].strip())
                 }
             )
 
@@ -164,16 +194,17 @@ def import_faculties():
             counter += 1
             if not universities.get_term(row["rid_f"]):
                 term = universities.create_term(slug=row["rid_f"].strip(),
-
                                                 parent_path=ic,
                                                 extra_data={
-                                                    "title": {
-                                                        "name": row["nazev_cz"],
-                                                    },
-                                                    "Název": row["nazev_cz"],
-                                                    "Resortní identifikátor univerzity(RID)": row["rid"],
-                                                    "Resortní identifikátor fakulty(RID)": row["rid_f"],
-                                                    "Web": row["web"],
+                                                    "name": [
+                                                        {
+                                                            "name": row["nazev_cz"],
+                                                            "lang": "cze"
+                                                        }
+                                                    ],
+                                                    "university_RID": row["rid"],
+                                                    "faculty_RID": row["rid_f"],
+                                                    "url": row["web"],
                                                 }
                                                 )
 
@@ -188,7 +219,7 @@ def import_doctype():
     doctype = Taxonomy.get('doctype')
     if doctype is None:
         doctype = Taxonomy.create_taxonomy(code='doctype', extra_data={
-            "title": [
+            "name": [
                 {
                     "name": "Typ dokumentu",
                     "lang": "cze"
@@ -213,10 +244,12 @@ def import_doctype():
             if not doctype.get_term(row["bterm"]):
                 term = doctype.create_term(slug=row["bterm"].strip(),
                                            extra_data={
-                                               "title": {
-                                                   "name": row["nazev_bterm"],
-                                               },
-                                               "Kód": row["bterm"],
+                                               "name": [
+                                                   {
+                                                       "name": row["nazev_bterm"],
+                                                       "lang": "cze"
+                                                   }
+                                               ]
                                            }
                                            )
                 db.session.add(term)
@@ -228,10 +261,12 @@ def import_doctype():
 
                                            parent_path=row["bterm"],
                                            extra_data={
-                                               "title": {
-                                                   "name": row["nazev_term"],
-                                               },
-                                               "Kód": row["term"],
+                                               "name": [
+                                                   {
+                                                       "name": row["nazev_term"],
+                                                       "lang": "cze"
+                                                   }
+                                               ]
                                            }
                                            )
                 db.session.add(term)
@@ -246,7 +281,7 @@ def import_riv():
     doctype = Taxonomy.get('doctype')
     if doctype is None:
         doctype = Taxonomy.create_taxonomy(code='doctype', extra_data={
-            "title": [
+            "name": [
                 {
                     "name": "Typ dokumentu",
                     "lang": "cze"
@@ -273,9 +308,12 @@ def import_riv():
                 term = doctype.create_term(
                     slug="RIV",
                     extra_data={
-                        "title": {
-                            "name": "RIV",
-                        }
+                        "name": [
+                            {
+                                "name": "Rejstřík informací o výsledcích",
+                                "lang": "cze"
+                            }
+                        ]
                     },
                 )
                 db.session.add(term)
@@ -287,9 +325,12 @@ def import_riv():
                     term = doctype.create_term(
                         slug=row["base_code"].strip(),
                         extra_data={
-                            "title": {
-                                "name": row["name"]
-                            },
+                            "name": [
+                                {
+                                    "name": row["name"],
+                                    "lang": "cze"
+                                }
+                            ],
                             "definition": row["definice"]
                         },
                         parent_path='RIV',
@@ -298,9 +339,12 @@ def import_riv():
                     term = doctype.create_term(
                         slug=row["base_code"].strip(),
                         extra_data={
-                            "title": {
-                                "name": row["base_code"]
-                            }
+                            "name": [
+                                {
+                                    "name": row["name"],
+                                    "lang": "cze"
+                                }
+                            ]
                         },
                         parent_path='RIV',
                     )
@@ -312,11 +356,13 @@ def import_riv():
                 if not doctype.get_term(row['sub_code']):
                     term = doctype.create_term(
                         slug=row["sub_code"].strip(),
-
                         extra_data={
-                            "title": {
-                                "name": row["name"],
-                            },
+                            "name": [
+                                {
+                                    "name": row["name"],
+                                    "lang": "cze"
+                                }
+                            ],
                             "definition": row["definice"]
                         },
                         parent_path=f"RIV/{row['base_code']}"
@@ -335,8 +381,12 @@ def import_providers():
         export = export.replace("---", "|||")
         export_array = export.split("|||")
         export_dict = {
-            "id": export_array[0],
-            "name": export_array[1],
+            "name": [
+                {
+                    "name": export_array[1],
+                    "lang": "cze"
+                }
+            ],
             "address": export_array[2],
             "url": export_array[3],
             "lib_url": export_array[4]
@@ -345,7 +395,7 @@ def import_providers():
 
     if Taxonomy.get('provider') is None:
         provider = Taxonomy.create_taxonomy(code='provider', extra_data={
-            "title": [
+            "name": [
                 {
                     "name": "Poskytovatel záznamu",
                     "lang": "cze"
@@ -375,9 +425,12 @@ def import_providers():
                 term = provider.create_term(
                     slug=row["isPartOf2"].strip(),
                     extra_data={
-                        "title": {
-                            "name": row["name_isPartOf2"],
-                        }
+                        "name": [
+                            {
+                                "name": row["name_isPartOf2"],
+                                "lang": "cze"
+                            }
+                        ]
                     },
                 )
                 db.session.add(term)
@@ -389,9 +442,12 @@ def import_providers():
                     term = provider.create_term(
                         slug=row["isPartOf"].strip(),
                         extra_data={
-                            "title": {
-                                "name": row["name_isPartOf"],
-                            }
+                            "name": [
+                                {
+                                    "name": row["name_isPartOf"],
+                                    "lang": "cze"
+                                }
+                            ]
                         },
                         parent_path=row["isPartOf2"],
                     )
@@ -407,7 +463,7 @@ def import_providers():
                         slug=row["id"].strip(),
 
                         parent_path=f'{row["isPartOf2"]}/{row["isPartOf"]}',
-                        extra_data=provider_details  # TODO: nemá title?
+                        extra_data=provider_details
                     )
 
                     print(f"/provider/{row['isPartOf2']}/{row['isPartOf']}/{row['id']}")
@@ -415,10 +471,7 @@ def import_providers():
                     term = provider.create_term(slug=row["id"].strip(),
                                                 parent_path=row["isPartOf2"],
                                                 extra_data={
-                                                    **provider_details,
-                                                    "title": {
-                                                        "name": provider_details["name"]
-                                                    },
+                                                    **provider_details
                                                 }
                                                 )
 
