@@ -7,6 +7,7 @@ from invenio_db import db
 
 from flask_taxonomies.models import Taxonomy
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
+from invenio_nusl_theses.marshmallow.data.fields_refactor import create_aliases
 
 
 @click.group()
@@ -17,6 +18,7 @@ def nusl():
 @nusl.command('import_studyfields')
 @cli.with_appcontext
 def import_studyfields():
+    ALIASES = create_aliases()
     studyfields = Taxonomy.get('studyfields')
     if not studyfields:
         studyfields = Taxonomy.create_taxonomy(code='studyfields', extra_data={
@@ -56,7 +58,8 @@ def import_studyfields():
             counter += 1
             term = studyfields.create_term(slug=row["KOD"],
                                            extra_data={
-                                               "name": name
+                                               "name": name,
+                                               "aliases": ALIASES.get(name[0]["name"])
                                            }
                                            )
 
