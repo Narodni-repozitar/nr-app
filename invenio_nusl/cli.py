@@ -4,8 +4,9 @@ import os
 import click
 from flask import cli
 from invenio_db import db
+from sqlalchemy.orm.exc import NoResultFound
 
-from flask_taxonomies.models import Taxonomy
+from flask_taxonomies.models import Taxonomy, TaxonomyTerm
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
 from invenio_nusl_theses.marshmallow.data.fields_refactor import create_aliases
 
@@ -13,109 +14,6 @@ from invenio_nusl_theses.marshmallow.data.fields_refactor import create_aliases
 @click.group()
 def nusl():
     """Nusl commands."""
-
-
-@nusl.command('import_studyfields')
-@cli.with_appcontext
-def import_studyfields():
-    ALIASES = create_aliases()
-    studyfields = Taxonomy.get('studyfields')
-    if not studyfields:
-        studyfields = Taxonomy.create_taxonomy(code='studyfields', extra_data={
-            "name": [
-                {
-                    "name": "studijní obory",
-                    "lang": "cze"
-                },
-                {
-                    "name": "study fields",
-                    "lang": "eng"
-                }
-            ]
-        })
-        db.session.add(studyfields)
-        db.session.commit()
-    path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(path, "data", "field.csv")
-
-    with open(path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=",")
-        counter = 0
-        for row in reader:
-            name = [
-                {
-                    "name": row["NAZEV"],
-                    "lang": "cze"
-                }
-            ]
-            if row["ANAZEV"] != "":
-                name.append(
-                    {
-                        "name": row["ANAZEV"],
-                        "lang": "eng"
-                    }
-                )
-            counter += 1
-            term = studyfields.create_term(slug=row["KOD"],
-                                           extra_data={
-                                               "name": name,
-                                               "aliases": ALIASES.get(name[0]["name"])
-                                           }
-                                           )
-
-            db.session.add(term)
-            db.session.commit()
-            print(f"{counter}. {term}")
-
-
-@nusl.command('import_studyprogramme')
-@cli.with_appcontext
-def import_studyprogramme():
-    studyprogramme = Taxonomy.create_taxonomy(code='studyprogramme', extra_data={
-        "name": [
-            {
-                "name": "studijní programy",
-                "lang": "cze"
-            },
-            {
-                "name": "study programmes",
-                "lang": "eng"
-            }
-        ]
-    })
-    db.session.add(studyprogramme)
-    db.session.commit()
-    path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(path, "data", "programme.csv")
-
-    with open(path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=",")
-        counter = 0
-        for row in reader:
-            name = [
-                {
-                    "name": row["NAZEV"],
-                    "lang": "cze"
-                }
-            ]
-            if row["ANAZEV"] != "":
-                name.append(
-                    {
-                        "name": row["ANAZEV"],
-                        "lang": "eng"
-                    }
-                )
-            counter += 1
-            term = studyprogramme.create_term(
-                slug=row["KOD"],
-                extra_data={
-                    "name": name
-                }
-            )
-
-            db.session.add(term)
-            db.session.commit()
-            print(f"{counter}. {term}")
 
 
 @nusl.command('import_universities')
@@ -482,3 +380,195 @@ def import_providers():
 
                 db.session.add(term)
                 db.session.commit()
+
+
+@nusl.command('import_studyfields')
+@cli.with_appcontext
+def import_studyfields():
+    ALIASES = create_aliases()
+    studyfields = Taxonomy.get('studyfields')
+    if not studyfields:
+        studyfields = Taxonomy.create_taxonomy(code='studyfields', extra_data={
+            "name": [
+                {
+                    "name": "studijní obory",
+                    "lang": "cze"
+                },
+                {
+                    "name": "study fields",
+                    "lang": "eng"
+                }
+            ]
+        })
+        db.session.add(studyfields)
+        db.session.commit()
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "data", "field.csv")
+
+    with open(path, newline='') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=",")
+        counter = 0
+        for row in reader:
+            name = [
+                {
+                    "name": row["NAZEV"],
+                    "lang": "cze"
+                }
+            ]
+            if row["ANAZEV"] != "":
+                name.append(
+                    {
+                        "name": row["ANAZEV"],
+                        "lang": "eng"
+                    }
+                )
+            counter += 1
+            term = studyfields.create_term(slug=row["KOD"],
+                                           extra_data={
+                                               "name": name,
+                                               "aliases": ALIASES.get(name[0]["name"])
+                                           }
+                                           )
+
+            db.session.add(term)
+            db.session.commit()
+            print(f"{counter}. {term}")
+
+
+@nusl.command('import_studyprogramme')
+@cli.with_appcontext
+def import_studyprogramme():
+    studyprogramme = Taxonomy.create_taxonomy(code='studyprogramme', extra_data={
+        "name": [
+            {
+                "name": "studijní programy",
+                "lang": "cze"
+            },
+            {
+                "name": "study programmes",
+                "lang": "eng"
+            }
+        ]
+    })
+    db.session.add(studyprogramme)
+    db.session.commit()
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "data", "programme.csv")
+
+    with open(path, newline='') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=",")
+        counter = 0
+        for row in reader:
+            name = [
+                {
+                    "name": row["NAZEV"],
+                    "lang": "cze"
+                }
+            ]
+            if row["ANAZEV"] != "":
+                name.append(
+                    {
+                        "name": row["ANAZEV"],
+                        "lang": "eng"
+                    }
+                )
+            counter += 1
+            term = studyprogramme.create_term(
+                slug=row["KOD"],
+                extra_data={
+                    "name": name
+                }
+            )
+
+            db.session.add(term)
+            db.session.commit()
+            print(f"{counter}. {term}")
+
+
+@nusl.command('import_studyfields_uni')
+@cli.with_appcontext
+def import_studyfields_uni():
+    errors = set()
+
+    def find_faculty(uni_name, fac_name):
+        tax = Taxonomy.get("universities", required=True)
+        try:
+            university = tax.descendants.filter(
+                TaxonomyTerm.extra_data[("name", 0, "name")].astext == uni_name).one()
+            faculty = university.descendants.filter(
+                TaxonomyTerm.extra_data[("name", 0, "name")].astext == fac_name).one()
+            return faculty.tree_path
+        except NoResultFound:
+            print("ERROR ", uni_name, fac_name)
+            errors.add((uni_name, fac_name))
+            return None
+
+    universities = Taxonomy.get("universities")
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "data", "studijni_obory.csv")
+
+    with open(path, newline='') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=";")
+        counter = 0
+        for row in reader:
+            if row["Jazyk výuky"] == "Česky":
+                name = [
+                    {
+                        "name": row["Název oboru"],
+                        "lang": "cze"
+                    }
+                ]
+            elif row["Jazyk výuky"] == "Anglicky":
+                name = [
+                    {
+                        "name": row["Název oboru"],
+                        "lang": "eng"
+                    }
+                ]
+            elif row["Jazyk výuky"] == "Německy":
+                name = [
+                    {
+                        "name": row["Název oboru"],
+                        "lang": "ger"
+                    }
+                ]
+            elif row["Jazyk výuky"] == "Francouzsky":
+                name = [
+                    {
+                        "name": row["Název oboru"],
+                        "lang": "fra"
+                    }
+                ]
+            else:
+                name = [
+                    {
+                        "name": row["Název oboru"],
+                        "lang": None
+                    }
+                ]
+
+            counter += 1
+
+            if row["Název VŠ"] == "" or row["Součást vysoké školy"] == "" or row["AKVO"] == "":
+                continue
+            tree_path = find_faculty(row["Název VŠ"], row["Součást vysoké školy"])
+            if tree_path is None:
+                continue
+            if not universities.get_term(row["AKVO"]):
+                term = universities.create_term(slug=row["AKVO"].strip(),
+                                                parent_path=tree_path,
+                                                extra_data={
+                                                    "name": name,
+                                                    "faculty": row["Součást vysoké školy"],
+                                                    "programme": row["Název programu"],
+                                                    "programmeType": row["Typ programu"],
+                                                    "studyForm": row["Forma studia"],
+                                                    "duration": row["Doba studia"],
+                                                    "programmeCode": row["STUDPROG"]
+                                                }
+                                                )
+
+                db.session.add(term)
+                db.session.commit()
+            print(f"{counter}. {row['Název VŠ']}, {row['Součást vysoké školy']}, {row['AKVO']}")
+        print(errors)
