@@ -382,7 +382,8 @@ def import_studyfields():
                     "lang": "eng"
                 }
             ]
-        })
+        }
+                                               )
         db.session.add(studyfields)
         db.session.commit()
     path = os.path.dirname(os.path.abspath(__file__))
