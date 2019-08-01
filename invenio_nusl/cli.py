@@ -4,9 +4,8 @@ import os
 import click
 from flask import cli
 from invenio_db import db
-from sqlalchemy.orm.exc import NoResultFound
 
-from flask_taxonomies.models import Taxonomy, TaxonomyTerm
+from flask_taxonomies.models import Taxonomy
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
 from invenio_nusl_theses.marshmallow.data.fields_refactor import create_aliases
 
@@ -94,20 +93,20 @@ def import_faculties():
             ic = faculties_dict[row["rid_f"]].strip()
             counter += 1
             if not universities.get_term(row["rid_f"]):
-                term = universities.create_term(slug=row["rid_f"].strip(),
-                                                parent_path=ic,
-                                                extra_data={
-                                                    "name": [
-                                                        {
-                                                            "name": row["nazev_cz"],
-                                                            "lang": "cze"
-                                                        }
-                                                    ],
-                                                    "university_RID": row["rid"],
-                                                    "faculty_RID": row["rid_f"],
-                                                    "url": row["web"],
-                                                }
-                                                )
+                university = universities.get_term(ic)
+                term = university.create_term(slug=row["rid_f"].strip(),
+                                              extra_data={
+                                                  "name": [
+                                                      {
+                                                          "name": row["nazev_cz"],
+                                                          "lang": "cze"
+                                                      }
+                                                  ],
+                                                  "university_RID": row["rid"],
+                                                  "faculty_RID": row["rid_f"],
+                                                  "url": row["web"],
+                                              }
+                                              )
 
                 db.session.add(term)
                 db.session.commit()
@@ -142,34 +141,33 @@ def import_doctype():
         counter = 0
         for row in reader:
             counter += 1
-            if not doctype.get_term(row["bterm"]):
-                term = doctype.create_term(slug=row["bterm"].strip(),
-                                           extra_data={
-                                               "name": [
-                                                   {
-                                                       "name": row["nazev_bterm"],
-                                                       "lang": "cze"
-                                                   }
-                                               ]
-                                           }
-                                           )
-                db.session.add(term)
+            bterm = doctype.get_term(row["bterm"])
+            if not bterm:
+                bterm = doctype.create_term(slug=row["bterm"].strip(),
+                                            extra_data={
+                                                "name": [
+                                                    {
+                                                        "name": row["nazev_bterm"],
+                                                        "lang": "cze"
+                                                    }
+                                                ]
+                                            }
+                                            )
+                db.session.add(bterm)
                 db.session.commit()
-                print(f"{counter}. {term}")
+                print(f"{counter}. {bterm}")
 
             if not doctype.get_term(row["term"]):
-                term = doctype.create_term(slug=row["term"].strip(),
-
-                                           parent_path=row["bterm"],
-                                           extra_data={
-                                               "name": [
-                                                   {
-                                                       "name": row["nazev_term"],
-                                                       "lang": "cze"
-                                                   }
-                                               ]
-                                           }
-                                           )
+                term = bterm.create_term(slug=row["term"].strip(),
+                                         extra_data={
+                                             "name": [
+                                                 {
+                                                     "name": row["nazev_term"],
+                                                     "lang": "cze"
+                                                 }
+                                             ]
+                                         }
+                                         )
                 db.session.add(term)
                 db.session.commit()
 
@@ -205,8 +203,9 @@ def import_riv():
         for row in reader:
             counter += 1
             print(f"{counter}.", "#######################################################")
-            if not doctype.get_term('RIV'):
-                term = doctype.create_term(
+            riv = doctype.get_term('RIV')
+            if not riv:
+                riv = doctype.create_term(
                     slug="RIV",
                     extra_data={
                         "name": [
@@ -217,45 +216,32 @@ def import_riv():
                         ]
                     },
                 )
-                db.session.add(term)
+                db.session.add(riv)
                 db.session.commit()
                 print(f"/doctype/RIV")
 
             if not doctype.get_term(f'{row["base_code"]}'):
+                base_code = riv.create_term(
+                    slug=row["base_code"].strip(),
+                    extra_data={
+                        "name": [
+                            {
+                                "name": row["name"],
+                                "lang": "cze"
+                            }
+                        ]
+                    },
+                )
                 if row["sub_code"] == "":
-                    term = doctype.create_term(
-                        slug=row["base_code"].strip(),
-                        extra_data={
-                            "name": [
-                                {
-                                    "name": row["name"],
-                                    "lang": "cze"
-                                }
-                            ],
-                            "definition": row["definice"]
-                        },
-                        parent_path='RIV',
-                    )
-                else:
-                    term = doctype.create_term(
-                        slug=row["base_code"].strip(),
-                        extra_data={
-                            "name": [
-                                {
-                                    "name": row["name"],
-                                    "lang": "cze"
-                                }
-                            ]
-                        },
-                        parent_path='RIV',
-                    )
-                db.session.add(term)
+                    base_code.extra_data["definition"] = row["definice"]
+
+                db.session.add(base_code)
                 db.session.commit()
                 print(f"/doctype/RIV/{row['base_code']}")
 
             if row["sub_code"] != "":
                 if not doctype.get_term(row['sub_code']):
-                    term = doctype.create_term(
+                    term = base_code.create_term(
                         slug=row["sub_code"].strip(),
                         extra_data={
                             "name": [
@@ -266,7 +252,6 @@ def import_riv():
                             ],
                             "definition": row["definice"]
                         },
-                        parent_path=f"RIV/{row['base_code']}"
                     )
 
                     print(f"/doctype/RIV/{row['base_code']}/{row['sub_code']}")
@@ -322,8 +307,9 @@ def import_providers():
         for row in reader:
             counter += 1
             print(counter, "#######################################################")
-            if not provider.get_term(row["isPartOf2"]):
-                term = provider.create_term(
+            ispartof2 = provider.get_term(row["isPartOf2"])
+            if not ispartof2:
+                ispartof2 = provider.create_term(
                     slug=row["isPartOf2"].strip(),
                     extra_data={
                         "name": [
@@ -334,13 +320,14 @@ def import_providers():
                         ]
                     },
                 )
-                db.session.add(term)
+                db.session.add(ispartof2)
                 db.session.commit()
                 print(f"/provider/{row['isPartOf2']}")
 
-            if not provider.get_term(row["isPartOf"]):
+            ispartof = provider.get_term(row["isPartOf"])
+            if not ispartof:
                 if row["isPartOf"] != "null":
-                    term = provider.create_term(
+                    ispartof = ispartof2.create_term(
                         slug=row["isPartOf"].strip(),
                         extra_data={
                             "name": [
@@ -350,9 +337,8 @@ def import_providers():
                                 }
                             ]
                         },
-                        parent_path=row["isPartOf2"],
                     )
-                    db.session.add(term)
+                    db.session.add(ispartof)
                     db.session.commit()
 
                     print(f"/provider/{row['isPartOf2']}/{row['isPartOf']}")
@@ -360,21 +346,18 @@ def import_providers():
             if not provider.get_term(row["id"]):
                 provider_details = _split_export(row["EXPORT"])
                 if row["isPartOf"] != "null":
-                    term = provider.create_term(
+                    term = ispartof.create_term(
                         slug=row["id"].strip(),
-
-                        parent_path=f'{row["isPartOf2"]}/{row["isPartOf"]}',
                         extra_data=provider_details
                     )
 
                     print(f"/provider/{row['isPartOf2']}/{row['isPartOf']}/{row['id']}")
                 else:
-                    term = provider.create_term(slug=row["id"].strip(),
-                                                parent_path=row["isPartOf2"],
-                                                extra_data={
-                                                    **provider_details
-                                                }
-                                                )
+                    term = ispartof2.create_term(slug=row["id"].strip(),
+                                                 extra_data={
+                                                     **provider_details
+                                                 }
+                                                 )
 
                     print(f"/provider/{row['isPartOf2']}/{row['id']}")
 
@@ -483,92 +466,3 @@ def import_studyprogramme():
             db.session.add(term)
             db.session.commit()
             print(f"{counter}. {term}")
-
-
-@nusl.command('import_studyfields_uni')
-@cli.with_appcontext
-def import_studyfields_uni():
-    errors = set()
-
-    def find_faculty(uni_name, fac_name):
-        tax = Taxonomy.get("universities", required=True)
-        try:
-            university = tax.descendants.filter(
-                TaxonomyTerm.extra_data[("name", 0, "name")].astext == uni_name).one()
-            faculty = university.descendants.filter(
-                TaxonomyTerm.extra_data[("name", 0, "name")].astext == fac_name).one()
-            return faculty.tree_path
-        except NoResultFound:
-            print("ERROR ", uni_name, fac_name)
-            errors.add((uni_name, fac_name))
-            return None
-
-    universities = Taxonomy.get("universities")
-    path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(path, "data", "studijni_obory.csv")
-
-    with open(path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=";")
-        counter = 0
-        for row in reader:
-            if row["Jazyk výuky"] == "Česky":
-                name = [
-                    {
-                        "name": row["Název oboru"],
-                        "lang": "cze"
-                    }
-                ]
-            elif row["Jazyk výuky"] == "Anglicky":
-                name = [
-                    {
-                        "name": row["Název oboru"],
-                        "lang": "eng"
-                    }
-                ]
-            elif row["Jazyk výuky"] == "Německy":
-                name = [
-                    {
-                        "name": row["Název oboru"],
-                        "lang": "ger"
-                    }
-                ]
-            elif row["Jazyk výuky"] == "Francouzsky":
-                name = [
-                    {
-                        "name": row["Název oboru"],
-                        "lang": "fra"
-                    }
-                ]
-            else:
-                name = [
-                    {
-                        "name": row["Název oboru"],
-                        "lang": None
-                    }
-                ]
-
-            counter += 1
-
-            if row["Název VŠ"] == "" or row["Součást vysoké školy"] == "" or row["AKVO"] == "":
-                continue
-            tree_path = find_faculty(row["Název VŠ"], row["Součást vysoké školy"])
-            if tree_path is None:
-                continue
-            if not universities.get_term(row["AKVO"]):
-                term = universities.create_term(slug=row["AKVO"].strip(),
-                                                parent_path=tree_path,
-                                                extra_data={
-                                                    "name": name,
-                                                    "faculty": row["Součást vysoké školy"],
-                                                    "programme": row["Název programu"],
-                                                    "programmeType": row["Typ programu"],
-                                                    "studyForm": row["Forma studia"],
-                                                    "duration": row["Doba studia"],
-                                                    "programmeCode": row["STUDPROG"]
-                                                }
-                                                )
-
-                db.session.add(term)
-                db.session.commit()
-            print(f"{counter}. {row['Název VŠ']}, {row['Součást vysoké školy']}, {row['AKVO']}")
-        print(errors)
