@@ -1,13 +1,16 @@
 import csv
+import json
 import os
+import unicodedata
 
 import click
 from flask import cli
 from invenio_db import db
 
-from flask_taxonomies.models import Taxonomy
+from flask_taxonomies.models import Taxonomy, TaxonomyTerm
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
 from invenio_nusl_theses.marshmallow.data.fields_refactor import create_aliases
+from invenio_nusl_theses.marshmallow.data.aliases import ALIASES
 
 
 @click.group()
@@ -111,6 +114,86 @@ def import_faculties():
                 db.session.add(term)
                 db.session.commit()
                 print(f"{counter}. {term}")
+
+
+@nusl.command('import_departments')
+@cli.with_appcontext
+def import_departments():
+    counter = 0
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "data", "departments.json")
+    universities = Taxonomy.get("universities")
+
+    with open(path, newline='') as jsonfile:
+        org_units = json.load(jsonfile)
+        org_units = [org_unit for org_unit in org_units if
+                     org_unit[3] == "cze" and org_unit[1] is not None and org_unit[2] is not None]
+        for unit in org_units:
+            counter += 1
+            university = unit[0].strip()
+            faculty = unit[1].strip()
+            department = unit[2].strip()
+
+            university_tax = universities.descendants.filter(
+                TaxonomyTerm.extra_data[("name", 0, "name")].astext == university).all()
+            if len(university_tax) != 1:
+                continue
+            faculty_tax = university_tax[0].descendants.filter(
+                TaxonomyTerm.extra_data[("name", 0, "name")].astext == faculty).all()
+            if len(faculty_tax) != 1:
+                continue
+
+            slug = create_slug(department)
+            term = universities.get_term(slug)
+            if term is not None:
+                continue
+            term = faculty_tax[0].create_term(slug=slug,
+                                              extra_data={
+                                                  "title": {
+                                                      "value": department,
+                                                      "lang": "cze"
+                                                  }
+                                              }
+                                              )
+            db.session.add(term)
+            db.session.commit()
+            print(f"{counter}. {university}, {faculty}, {department}")
+
+
+def create_slug(department):
+    l = len(department)
+    slug = remove_diacritics(department).lower()
+    slug_array = slug.split(" ")
+    if l > 64:
+        new_slug = ""
+        old_slug = ""
+        i = 0
+        j = -1
+        l = 0
+        while l < 64:
+            new_slug += f"{slug_array[i]}_"
+            if j >= 0:
+                old_slug += f"{slug_array[j]}_"
+            i += 1
+            j += 1
+            l = len(new_slug)
+        slug = old_slug
+        if slug.endswith("_"):
+            slug = slug[:-1]
+    else:
+        slug = "_".join(slug_array)
+    return slug
+
+
+def remove_diacritics(text):
+    text = unicodedata.normalize('NFKD', text)
+    output = ''
+    for c in text:
+        if not unicodedata.combining(c):
+            output += c
+    return output
+
+
 
 
 @nusl.command('import_doctype')
@@ -368,7 +451,7 @@ def import_providers():
 @nusl.command('import_studyfields')
 @cli.with_appcontext
 def import_studyfields():
-    ALIASES = create_aliases()
+    # ALIASES = create_aliases()
     studyfields = Taxonomy.get('studyfields')
     if not studyfields:
         studyfields = Taxonomy.create_taxonomy(code='studyfields', extra_data={
