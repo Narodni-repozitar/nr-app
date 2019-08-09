@@ -133,7 +133,7 @@ def check_programme(row):
 
 
 def add_aliases(row):
-    alias = ALIASES.get(row["Název oboru"])
+    alias = ALIASES.get(row.get("Název oboru"))
     return alias
 
 
@@ -205,11 +205,8 @@ def extract_fieldnames(path):
 def run():
     if not os.path.isfile('/home/semtex/Projekty/nusl/invenio-nusl/invenio_nusl/data/studijni_obory_edit.json'):
         data_dict = stud_obory_json()
-        check_for_array(data_dict)
         data_dict = add_data(data_dict)
-        check_for_array(data_dict)
         data_dict += add_missing_fields()
-        check_for_array(data_dict)
         data_dict += add_missing_programmes()
 
         with open('/home/semtex/Projekty/nusl/invenio-nusl/invenio_nusl/data/studijni_obory_edit.json', "w") as f:

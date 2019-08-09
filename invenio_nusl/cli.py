@@ -6,11 +6,11 @@ import unicodedata
 import click
 from flask import cli
 from invenio_db import db
+from sqlalchemy.exc import IntegrityError
 
 from flask_taxonomies.models import Taxonomy, TaxonomyTerm
+from invenio_nusl.scripts.data_unification import add_aliases
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
-from invenio_nusl_theses.marshmallow.data.fields_refactor import create_aliases
-from invenio_nusl_theses.marshmallow.data.aliases import ALIASES
 
 
 @click.group()
@@ -192,8 +192,6 @@ def remove_diacritics(text):
         if not unicodedata.combining(c):
             output += c
     return output
-
-
 
 
 @nusl.command('import_doctype')
@@ -451,105 +449,333 @@ def import_providers():
 @nusl.command('import_studyfields')
 @cli.with_appcontext
 def import_studyfields():
-    # ALIASES = create_aliases()
-    studyfields = Taxonomy.get('studyfields')
-    if not studyfields:
-        studyfields = Taxonomy.create_taxonomy(code='studyfields', extra_data={
-            "name": [
-                {
-                    "name": "studijní obory",
-                    "lang": "cze"
-                },
-                {
-                    "name": "study fields",
-                    "lang": "eng"
-                }
-            ]
-        }
-                                               )
-        db.session.add(studyfields)
-        db.session.commit()
-    path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(path, "data", "field.csv")
-
-    with open(path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=",")
-        counter = 0
-        for row in reader:
-            name = [
-                {
-                    "name": row["NAZEV"],
-                    "lang": "cze"
-                }
-            ]
-            if row["ANAZEV"] != "":
-                name.append(
-                    {
-                        "name": row["ANAZEV"],
-                        "lang": "eng"
-                    }
-                )
+    studyfields = Taxonomy.get("studyfields")
+    fields_json = create_field_json()
+    dicrepancy_fields = {}
+    error_fields = {}
+    counter = 0
+    for k, v in fields_json.items():
+        programme = studyfields.get_term(k)
+        for key, value in v.items():
             counter += 1
-            term = studyfields.create_term(slug=row["KOD"],
-                                           extra_data={
-                                               "name": name,
-                                               "aliases": ALIASES.get(name[0]["name"])
-                                           }
-                                           )
+            if k[1:] == key[:4]:
+                try:
+                    term = programme.create_term(
+                        slug=key,
+                        extra_data=value
+                    )
 
-            db.session.add(term)
-            db.session.commit()
-            print(f"{counter}. {term}")
+                    db.session.add(term)
+                    db.session.commit()
+                    print(f"{counter}. {key} {value}")
+                except IntegrityError:
+                    if error_fields.get(k) is None:
+                        error_fields[k] = {
+                            key: value
+                        }
+                    else:
+                        error_fields[k][key] = value
+            else:
+                if dicrepancy_fields.get(k) is None:
+                    dicrepancy_fields[k] = {
+                        key: value
+                    }
+                else:
+                    dicrepancy_fields[k][key] = value
+
+    counter = 0
+    print("#####################        DISCREPANCY_FIELDS            ################################################")
+    for k, v in dicrepancy_fields.items():
+        programme = studyfields.get_term(k)
+        if programme is None:
+            continue
+        for key, value in v.items():
+            counter += 1
+            try:
+                term = programme.create_term(
+                    slug=key,
+                    extra_data=value
+                )
+
+                db.session.add(term)
+                db.session.commit()
+                print(f"{counter}. {key} {value}")
+            except IntegrityError:
+                if error_fields.get(k) is None:
+                    error_fields[k] = {
+                        key: value
+                    }
+                else:
+                    error_fields[k][key] = value
+
+    with open("/home/semtex/Projekty/nusl/invenio-nusl/invenio_nusl/data/error_fields.json", "w") as f:
+        json.dump(error_fields, f)
+
+
+def create_field_json():
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "data", "studijni_obory_edit.json")
+    with open(path, "r") as file:
+        data = json.load(file)
+    fields = {}
+    for row in data:
+        language = row.get("Jazyk výuky")
+        if language != "Česky":
+            continue
+        akvo = row.get("AKVO")
+        studprog = row.get("STUDPROG")
+        if akvo is None or studprog is None:
+            continue
+        if fields.get(studprog) is None:
+            fields[studprog] = {
+                akvo:
+                    {
+                        "title": [
+                            {
+                                "value": row.get("Název oboru"),
+                                "lang": "cze"
+                            }
+                        ],
+                        "grantor": [
+                            {
+                                "university": row.get("Název VŠ"),
+                                "faculty": row.get("Součást vysoké školy")
+                            }
+                        ],
+                        "type": "obor",
+                        "duration": row.get("Doba studia"),
+                        "date_of_accreditation_validity": row.get("Datum platnosti akreditace"),
+                        "reference_number": row.get("Číslo jednací"),
+                        "aliases": row.get("aliases")
+
+                    }
+            }
+        else:
+            if fields[studprog].get(akvo) is None:
+                fields[studprog][akvo] = {
+                    "title": [
+                        {
+                            "value": row.get("Název oboru"),
+                            "lang": "cze"
+                        }
+                    ],
+                    "grantor": [
+                        {
+                            "university": row.get("Název VŠ"),
+                            "faculty": row.get("Součást vysoké školy")
+                        }
+                    ],
+                    "type": "obor",
+                    "duration": row.get("Doba studia"),
+                    "date_of_accreditation_validity": row.get("Datum platnosti akreditace"),
+                    "reference_number": row.get("Číslo jednací"),
+                    "aliases": row.get("aliases")
+
+                }
+            else:
+                if fields[studprog][akvo].get("title") is None:
+                    fields[studprog][akvo]["tittle"] = [
+                        {
+                            "value": row.get("Název programu"),
+                            "lang": "cze"
+                        }
+                    ]
+                if fields[studprog][akvo].get("grantor") is not None:
+                    added_grantor = {
+                        "university": row.get("Název VŠ"),
+                        "faculty": row.get("Součást vysoké školy")
+                    }
+                    same = False
+                    for grantor in fields[studprog][akvo]["grantor"]:
+                        if grantor == added_grantor:
+                            same = True
+                    if same == False:
+                        fields[studprog][akvo]["grantor"].append(
+                            added_grantor
+                        )
+                else:
+                    fields[studprog][akvo]["grantor"] = [
+                        {
+                            "university": row.get("Název VŠ"),
+                            "faculty": row.get("Součást vysoké školy")
+                        }
+                    ]
+    return fields
 
 
 @nusl.command('import_studyprogramme')
 @cli.with_appcontext
 def import_studyprogramme():
-    studyprogramme = Taxonomy.create_taxonomy(code='studyprogramme', extra_data={
-        "name": [
-            {
-                "name": "studijní programy",
-                "lang": "cze"
-            },
-            {
-                "name": "study programmes",
-                "lang": "eng"
-            }
-        ]
-    })
-    db.session.add(studyprogramme)
-    db.session.commit()
-    path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(path, "data", "programme.csv")
-
-    with open(path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=",")
-        counter = 0
-        for row in reader:
-            name = [
+    studyfields = Taxonomy.get("studyfileds")
+    if studyfields is None:
+        studyfields = Taxonomy.create_taxonomy(code='studyfields', extra_data={
+            "title": [
                 {
-                    "name": row["NAZEV"],
+                    "value": "Studijní obory",
                     "lang": "cze"
+                },
+                {
+                    "value": "Study fields",
+                    "lang": "eng"
                 }
             ]
-            if row["ANAZEV"] != "":
-                name.append(
-                    {
-                        "name": row["ANAZEV"],
-                        "lang": "eng"
-                    }
-                )
+        })
+        db.session.add(studyfields)
+        db.session.commit()
+
+        programme_json = create_programme_json()
+
+        counter = 0
+        for k, v in programme_json.items():
             counter += 1
-            term = studyprogramme.create_term(
-                slug=row["KOD"],
-                extra_data={
-                    "name": name
-                }
+            term = studyfields.create_term(
+                slug=k,
+                extra_data=v
             )
 
             db.session.add(term)
             db.session.commit()
-            print(f"{counter}. {term}")
+            print(f"{counter}. {k} {v}")
 
 
+def create_programme_json():
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "data", "studijni_obory_edit.json")
+    with open(path, "r") as file:
+        data = json.load(file)
+    programmes = {}
+    for row in data:
+        language = row.get("Jazyk výuky")
+        if language != "Česky":
+            continue
+        studprog = row.get("STUDPROG")
+        if studprog is None:
+            continue
+        if programmes.get(studprog) is None:
+            programmes[studprog] = {
+                "title": [
+                    {
+                        "value": row.get("Název programu"),
+                        "lang": "cze"
+                    }
+                ],
+                "grantor": [
+                    {
+                        "university": row.get("Název VŠ"),
+                        "faculty": row.get("Součást vysoké školy")
+                    }
+                ],
+                "type": "program",
+                "degree_level": row.get("Typ programu"),
+                "form_of_study": row.get("Forma studia"),
+            }
+            if row.get("Název oboru") is None:
+                programmes[studprog].update(
+                    {
+                        "duration": row.get("Doba studia"),
+                        "date_of_accreditation_validity": row.get("Datum platnosti akreditace"),
+                        "reference_number": row.get("Číslo jednací")
+                    }
+                )
+        else:
+            if programmes[studprog].get("title") is None:
+                programmes[studprog]["tittle"] = [
+                    {
+                        "value": row.get("Název programu"),
+                        "lang": "cze"
+                    }
+                ]
+            if programmes[studprog].get("grantor") is not None:
+                added_grantor = {
+                    "university": row.get("Název VŠ"),
+                    "faculty": row.get("Součást vysoké školy")
+                }
+                same = False
+                for grantor in programmes[studprog]["grantor"]:
+                    if grantor == added_grantor:
+                        same = True
+                if same == False:
+                    programmes[studprog]["grantor"].append(
+                        added_grantor
+                    )
+            else:
+                programmes[studprog]["grantor"] = [
+                    {
+                        "university": row.get("Název VŠ"),
+                        "faculty": row.get("Součást vysoké školy")
+                    }
+                ]
+    return programmes
 
+
+@nusl.command('import_other_studyfields')
+@cli.with_appcontext
+def import_other_studyfields():
+    studyfields = Taxonomy.get("studyfields")
+    fields_json = create_other_json()
+    fields_json = delete_none(fields_json)
+    fields_json = delete_none(fields_json)
+    fields_json = delete_none(fields_json)
+    counter = 0
+
+    programme = studyfields.create_term(
+        slug="others"
+    )
+    for key, value in fields_json.items():
+        counter += 1
+        if studyfields.get_term(key) is None:
+            term = programme.create_term(
+                slug=key,
+                extra_data=value
+            )
+
+            db.session.add(term)
+            db.session.commit()
+            print(f"{counter}. {key} {value}")
+
+
+def create_other_json():
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "data", "studijni_obory_edit.json")
+    with open(path, "r") as file:
+        data = json.load(file)
+    fields = {}
+    for row in data:
+        language = row.get("Jazyk výuky")
+        if language == "" or language is None:
+            row["aliases"] = add_aliases(row)
+            akvo = row.get("AKVO")
+            if akvo is None:
+                continue
+            if fields.get(akvo) is None:
+                fields[akvo] = {
+                    "title": [
+                        {
+                            "value": row.get("Název oboru"),
+                        }
+                    ],
+                    "grantor": [
+                        {
+                            "university": row.get("Název VŠ"),
+                            "faculty": row.get("Součást vysoké školy")
+                        }
+                    ],
+                    "type": "obor",
+                    "duration": row.get("Doba studia"),
+                    "date_of_accreditation_validity": row.get("Datum platnosti akreditace"),
+                    "reference_number": row.get("Číslo jednací"),
+                    "aliases": row.get("aliases")
+
+                }
+
+    return fields
+
+
+def delete_none(x):
+    if isinstance(x, dict):
+        return {k: delete_none(v) for k, v in x.items() if
+                v is not None and len(v) != 0}
+    elif isinstance(x, list) or isinstance(x, tuple):
+        return [delete_none(v) for v in x if
+                v is not None and len(v) != 0]
+    return x
