@@ -32,13 +32,13 @@ def import_universities():
     universities = Taxonomy.get('universities')
     if not universities:
         universities = Taxonomy.create_taxonomy(code='universities', extra_data={
-            "name": [
+            "title": [
                 {
-                    "name": "Univerzity",
+                    "value": "Univerzity",
                     "lang": "cze"
                 },
                 {
-                    "name": "Universities",
+                    "value": "Universities",
                     "lang": "eng"
                 }
             ]
@@ -56,9 +56,9 @@ def import_universities():
             term = universities.create_term(
                 slug=row["ic"].strip(),
                 extra_data={
-                    "name": [
+                    "title": [
                         {
-                            "name": row["nazev_cz"].strip(),
+                            "value": row["nazev_cz"].strip(),
                             "lang": "cze"
                         }
                     ],
@@ -99,9 +99,9 @@ def import_faculties():
                 university = universities.get_term(ic)
                 term = university.create_term(slug=row["rid_f"].strip(),
                                               extra_data={
-                                                  "name": [
+                                                  "title": [
                                                       {
-                                                          "name": row["nazev_cz"],
+                                                          "value": row["nazev_cz"],
                                                           "lang": "cze"
                                                       }
                                                   ],
@@ -135,11 +135,11 @@ def import_departments():
             department = unit[2].strip()
 
             university_tax = universities.descendants.filter(
-                TaxonomyTerm.extra_data[("name", 0, "name")].astext == university).all()
+                TaxonomyTerm.extra_data[("title", 0, "value")].astext == university).all()
             if len(university_tax) != 1:
                 continue
             faculty_tax = university_tax[0].descendants.filter(
-                TaxonomyTerm.extra_data[("name", 0, "name")].astext == faculty).all()
+                TaxonomyTerm.extra_data[("title", 0, "value")].astext == faculty).all()
             if len(faculty_tax) != 1:
                 continue
 
@@ -200,13 +200,13 @@ def import_doctype():
     doctype = Taxonomy.get('doctype')
     if doctype is None:
         doctype = Taxonomy.create_taxonomy(code='doctype', extra_data={
-            "name": [
+            "title": [
                 {
-                    "name": "Typ dokumentu",
+                    "value": "Typ dokumentu",
                     "lang": "cze"
                 },
                 {
-                    "name": "Type of document",
+                    "value": "Type of document",
                     "lang": "eng"
                 }
             ]
@@ -226,9 +226,9 @@ def import_doctype():
             if not bterm:
                 bterm = doctype.create_term(slug=row["bterm"].strip(),
                                             extra_data={
-                                                "name": [
+                                                "title": [
                                                     {
-                                                        "name": row["nazev_bterm"],
+                                                        "value": row["nazev_bterm"],
                                                         "lang": "cze"
                                                     }
                                                 ]
@@ -241,9 +241,9 @@ def import_doctype():
             if not doctype.get_term(row["term"]):
                 term = bterm.create_term(slug=row["term"].strip(),
                                          extra_data={
-                                             "name": [
+                                             "title": [
                                                  {
-                                                     "name": row["nazev_term"],
+                                                     "value": row["nazev_term"],
                                                      "lang": "cze"
                                                  }
                                              ]
@@ -261,13 +261,13 @@ def import_riv():
     doctype = Taxonomy.get('doctype')
     if doctype is None:
         doctype = Taxonomy.create_taxonomy(code='doctype', extra_data={
-            "name": [
+            "title": [
                 {
-                    "name": "Typ dokumentu",
+                    "value": "Typ dokumentu",
                     "lang": "cze"
                 },
                 {
-                    "name": "Type of document",
+                    "title": "Type of document",
                     "lang": "eng"
                 }
             ]
@@ -289,9 +289,9 @@ def import_riv():
                 riv = doctype.create_term(
                     slug="RIV",
                     extra_data={
-                        "name": [
+                        "title": [
                             {
-                                "name": "Rejstřík informací o výsledcích",
+                                "value": "Rejstřík informací o výsledcích",
                                 "lang": "cze"
                             }
                         ]
@@ -305,9 +305,9 @@ def import_riv():
                 base_code = riv.create_term(
                     slug=row["base_code"].strip(),
                     extra_data={
-                        "name": [
+                        "title": [
                             {
-                                "name": row["name"],
+                                "value": row["name"],
                                 "lang": "cze"
                             }
                         ]
@@ -325,9 +325,9 @@ def import_riv():
                     term = base_code.create_term(
                         slug=row["sub_code"].strip(),
                         extra_data={
-                            "name": [
+                            "title": [
                                 {
-                                    "name": row["name"],
+                                    "value": row["name"],
                                     "lang": "cze"
                                 }
                             ],
@@ -348,9 +348,9 @@ def import_providers():
         export = export.replace("---", "|||")
         export_array = export.split("|||")
         export_dict = {
-            "name": [
+            "title": [
                 {
-                    "name": export_array[1],
+                    "value": export_array[1],
                     "lang": "cze"
                 }
             ],
@@ -362,13 +362,13 @@ def import_providers():
 
     if Taxonomy.get('provider') is None:
         provider = Taxonomy.create_taxonomy(code='provider', extra_data={
-            "name": [
+            "title": [
                 {
-                    "name": "Poskytovatel záznamu",
+                    "value": "Poskytovatel záznamu",
                     "lang": "cze"
                 },
                 {
-                    "name": "Provider of record",
+                    "value": "Provider of record",
                     "lang": "eng"
                 }
             ]
@@ -393,9 +393,9 @@ def import_providers():
                 ispartof2 = provider.create_term(
                     slug=row["isPartOf2"].strip(),
                     extra_data={
-                        "name": [
+                        "title": [
                             {
-                                "name": row["name_isPartOf2"],
+                                "value": row["name_isPartOf2"],
                                 "lang": "cze"
                             }
                         ]
@@ -411,9 +411,9 @@ def import_providers():
                     ispartof = ispartof2.create_term(
                         slug=row["isPartOf"].strip(),
                         extra_data={
-                            "name": [
+                            "title": [
                                 {
-                                    "name": row["name_isPartOf"],
+                                    "value": row["name_isPartOf"],
                                     "lang": "cze"
                                 }
                             ]
