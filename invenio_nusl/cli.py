@@ -543,6 +543,8 @@ def create_field_json():
                             }
                         ],
                         "type": "obor",
+                        "degree_level": row.get("Typ programu"),
+                        "form_of_study": row.get("Forma studia"),
                         "duration": row.get("Doba studia"),
                         "date_of_accreditation_validity": row.get("Datum platnosti akreditace"),
                         "reference_number": row.get("Číslo jednací"),
@@ -566,6 +568,8 @@ def create_field_json():
                         }
                     ],
                     "type": "obor",
+                    "degree_level": row.get("Typ programu"),
+                    "form_of_study": row.get("Forma studia"),
                     "duration": row.get("Doba studia"),
                     "date_of_accreditation_validity": row.get("Datum platnosti akreditace"),
                     "reference_number": row.get("Číslo jednací"),
@@ -761,6 +765,8 @@ def create_other_json():
                         }
                     ],
                     "type": "obor",
+                    "degree_level": degree_level(akvo),
+                    "form_of_study": row.get("Forma studia"),
                     "duration": row.get("Doba studia"),
                     "date_of_accreditation_validity": row.get("Datum platnosti akreditace"),
                     "reference_number": row.get("Číslo jednací"),
@@ -779,3 +785,12 @@ def delete_none(x):
         return [delete_none(v) for v in x if
                 v is not None and len(v) != 0]
     return x
+
+
+def degree_level(code):
+    degree_dict = {
+        "R": "Bakalářský",
+        "T": "Magisterský",
+        "V": "Doktorský"
+    }
+    return degree_dict.get(code[4])
