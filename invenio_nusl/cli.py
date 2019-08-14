@@ -796,3 +796,100 @@ def degree_level(code):
         "V": "Doktorský"
     }
     return degree_dict.get(code[4])
+
+
+@nusl.command('import_subjects')
+@cli.with_appcontext
+def import_subjects():
+    subject = Taxonomy.get('subject')
+    if not subject:
+        subject = Taxonomy.create_taxonomy(code='subject', extra_data={
+            "title": [
+                {
+                    "value": "Klíčová slova",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Keywords",
+                    "lang": "eng"
+                }
+            ]
+        })
+        db.session.add(subject)
+        db.session.commit()
+
+    taxonomies = {
+        "PSH": {
+            "title": [
+                {
+                    "value": "Polytematický strukturovaný heslář",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Polythematic Structured Subject Heading System",
+                    "lang": "eng"
+                }
+            ],
+            "url": "https://psh.techlib.cz/skos/"
+        },
+        "CZMESH": {
+            "title": [
+                {
+                    "value": "Tezaurus Medical Subject Headings",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Medical Subject Headings",
+                    "lang": "eng"
+                }
+            ],
+            "url": "https://www.medvik.cz/bmc/subject.do"
+        },
+        "MEDNAS": {
+            "title": [
+                {
+                    "value": "Autoritní soubor oborů – Národní lékařská knihovna, Praha (MEDNAS)",
+                    "lang": "cze"
+                },
+            ],
+            "url": "https://www.medvik.cz/bmc/subject.do"
+        },
+        "CZENAS": {
+            "title": [
+                {
+                    "value": "Soubor vĕcných autorit Národní knihovny ČR",
+                    "lang": "cze"
+                },
+                {
+                    "value": "CZENAS thesaurus: a list of subject terms used in the National Library of the Czech Republic",
+                    "lang": "eng"
+                }
+            ],
+            "url": ""
+        },
+        "keyword": {
+            "title": [
+                {
+                    "value": "Klíčová slova",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Keywords",
+                    "lang": "eng"
+                }
+            ],
+        }
+    }
+
+    counter = 0
+    for k, v in taxonomies.items():
+        counter += 1
+        if subject.get_term(k) is None:
+            term = subject.create_term(
+                slug=k,
+                extra_data=v
+            )
+
+            db.session.add(term)
+            db.session.commit()
+            print(f"{counter}. {k} {v}")
