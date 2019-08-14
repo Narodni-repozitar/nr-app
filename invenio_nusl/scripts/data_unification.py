@@ -58,7 +58,6 @@ def add_data(data_dict):
         if row['Jazyk výuky'] == "Česky":
             row = check_field(row)
             row = check_programme(row)
-            row["aliases"] = add_aliases(row)
     return data_dict
 
 
@@ -97,6 +96,20 @@ def load_programme_code():
     return programme_code
 
 
+def create_akvo_aliases_json():
+    field_code = load_field_code()
+    code_alias = {field_code.get(k): v for k, v in ALIASES.items()}
+    with open('/home/semtex/Projekty/nusl/invenio-nusl/invenio_nusl/data/code_aliases.json', "w") as f:
+        json.dump(code_alias, f)
+
+
+@lru_cache()
+def load_akvo_aliases_json():
+    with open('/home/semtex/Projekty/nusl/invenio-nusl/invenio_nusl/data/code_aliases.json') as f:
+        code_alias = json.load(f)
+    return code_alias
+
+
 def check_field(row):
     field_code = load_field_code()
     code_field = load_code_field()
@@ -132,9 +145,12 @@ def check_programme(row):
     return row
 
 
-def add_aliases(row):
-    alias = ALIASES.get(row.get("Název oboru"))
-    return alias
+def add_aliases(data):
+    for row in data:
+        aliases = load_akvo_aliases_json()
+        alias = aliases.get(row.get("AKVO"))
+        row["aliases"] = alias
+    return data
 
 
 def add_missing_fields():
@@ -208,6 +224,7 @@ def run():
         data_dict = add_data(data_dict)
         data_dict += add_missing_fields()
         data_dict += add_missing_programmes()
+        data_dict = add_aliases(data_dict)
 
         with open('/home/semtex/Projekty/nusl/invenio-nusl/invenio_nusl/data/studijni_obory_edit.json', "w") as f:
             json.dump(data_dict, f)

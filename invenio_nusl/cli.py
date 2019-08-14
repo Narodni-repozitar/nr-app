@@ -108,12 +108,13 @@ def import_faculties():
                                                   "university_RID": row["rid"],
                                                   "faculty_RID": row["rid_f"],
                                                   "url": row["web"],
+                                                  "aliases": row["aliases"]
                                               }
                                               )
 
                 db.session.add(term)
                 db.session.commit()
-                print(f"{counter}. {term}")
+                print(f"{counter}. {row['nazev_cz']}")
 
 
 @nusl.command('import_departments')
@@ -149,10 +150,12 @@ def import_departments():
                 continue
             term = faculty_tax[0].create_term(slug=slug,
                                               extra_data={
-                                                  "title": {
-                                                      "value": department,
-                                                      "lang": "cze"
-                                                  }
+                                                  "title": [
+                                                      {
+                                                          "value": department,
+                                                          "lang": "cze"
+                                                      }
+                                                  ]
                                               }
                                               )
             db.session.add(term)
@@ -747,7 +750,6 @@ def create_other_json():
     for row in data:
         language = row.get("Jazyk výuky")
         if language == "" or language is None:
-            row["aliases"] = add_aliases(row)
             akvo = row.get("AKVO")
             if akvo is None:
                 continue
