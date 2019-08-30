@@ -4,16 +4,15 @@ import os
 import unicodedata
 
 import click
+import invenio_indexer.api
+import invenio_indexer.cli
 from flask import cli
 from invenio_db import db
 from sqlalchemy.exc import IntegrityError
 
 from flask_taxonomies.models import Taxonomy, TaxonomyTerm
-from invenio_nusl.scripts.data_unification import add_aliases
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
 from invenio_oarepo.current_api import current_api
-import invenio_indexer.cli
-import invenio_indexer.api
 
 
 @click.group()
@@ -30,6 +29,10 @@ def reindex(ctx):
         invenio_indexer.api.RecordIndexer(version_type=None).process_bulk_queue(
             es_bulk_kwargs={'raise_on_error': True})
 
+
+################################################################################################################
+#                                           Taxonomies                                                         #
+################################################################################################################
 
 @nusl.command('import_universities')
 @cli.with_appcontext
