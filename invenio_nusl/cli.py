@@ -20,6 +20,11 @@ def nusl():
     """Nusl commands."""
 
 
+################################################################################################################
+#                                           Index                                                              #
+################################################################################################################
+
+
 @nusl.command('reindex')
 @cli.with_appcontext
 @click.pass_context
@@ -69,32 +74,50 @@ def import_universities():
         counter = 0
         for row in reader:
             counter += 1
-            term = universities.create_term(
-                slug=row["ic"].strip(),
-                extra_data={
-                    "title": [
-                        {
-                            "value": row["nazev_cz"].strip(),
-                            "lang": "cze"
-                        }
-                    ],
-                    "type": row["typ_VS"].strip(),
-                    "form": row["text_forma_VS"].strip(),
-                    "region": row["kraj"].strip(),
-                    "RID": row["rid"].strip(),
-                    "address": row["sidlo"].strip(),
-                    "IČO": row["ic"].strip(),
-                    "data_box": row["datova_schranka"].strip(),
-                    "url": row["web"].strip(),
-                    "deputy": row["statutarni_zastupce"].strip(),
-                    "term_of_office_from": convert_dates(row["funkcni_obdobi_od"].strip()),
-                    "term_of_office_until": convert_dates(row["funkcni_obdobi_do"].strip())
-                }
-            )
+            if universities.get_term(row["ic"].strip()) is None:
+                university = universities.create_term(
+                    slug=row["ic"].strip(),
+                    extra_data={
+                        "title": [
+                            {
+                                "value": row["nazev_cz"].strip(),
+                                "lang": "cze"
+                            }
+                        ],
+                        "type": row["typ_VS"].strip(),
+                        "form": row["text_forma_VS"].strip(),
+                        "region": row["kraj"].strip(),
+                        "RID": row["rid"].strip(),
+                        "address": row["sidlo"].strip(),
+                        "IČO": row["ic"].strip(),
+                        "data_box": row["datova_schranka"].strip(),
+                        "url": row["web"].strip(),
+                        "deputy": row["statutarni_zastupce"].strip(),
+                        "term_of_office_from": convert_dates(row["funkcni_obdobi_od"].strip()),
+                        "term_of_office_until": convert_dates(row["funkcni_obdobi_do"].strip())
+                    }
+                )
 
-            db.session.add(term)
-            db.session.commit()
-            print(f"{counter}. {term}")
+                db.session.add(university)
+                db.session.commit()
+                print(f"{counter}. {row['nazev_cz']}")
+
+            university = universities.get_term(slug=row["ic"].strip())
+            if universities.get_term(slug=f"{row['ic'].strip()}_no_faculty") is None:
+                no_faculty = university.create_term(
+                    slug=f"{row['ic'].strip()}_no_faculty",
+                    extra_data={
+                        "title": [
+                            {
+                                "value": "Bez fakulty",
+                                "lang": "cze"
+                            }
+                        ]
+                    }
+                )
+                db.session.add(no_faculty)
+                db.session.commit()
+                print(f"{counter}. {row['nazev_cz']} no_faculty")
 
 
 @nusl.command('import_faculties')
@@ -109,9 +132,13 @@ def import_faculties():
         reader = csv.DictReader(csvfile, delimiter=",")
         counter = 0
         for row in reader:
-            ic = faculties_dict[row["rid_f"]].strip()
+            ic = faculties_dict.get(row["rid_f"])
+            if ic is not None:
+                ic = ic.strip()
+            if ic is None:
+                continue
             counter += 1
-            if not universities.get_term(row["rid_f"]):
+            if universities.get_term(row["rid_f"]) is None:
                 university = universities.get_term(ic)
                 term = university.create_term(slug=row["rid_f"].strip(),
                                               extra_data={
@@ -127,10 +154,43 @@ def import_faculties():
                                                   "aliases": row["aliases"]
                                               }
                                               )
-
                 db.session.add(term)
                 db.session.commit()
                 print(f"{counter}. {row['nazev_cz']}")
+
+            faculty = universities.get_term(slug=row["rid_f"].strip())
+            if universities.get_term(slug=f"{row['rid_f'].strip()}_no_department") is None:
+                no_department = faculty.create_term(
+                    slug=f"{row['rid_f'].strip()}_no_department",
+                    extra_data={
+                        "title": [
+                            {
+                                "value": "Bez katedry",
+                                "lang": "cze"
+                            }
+                        ]
+                    }
+                )
+                db.session.add(no_department)
+                db.session.commit()
+                print(f"{counter}. {row['nazev_cz']}_no_department")
+
+            if universities.get_term(slug=f"{ic.strip()}_no_faculty_no_department") is None:
+                faculty = universities.get_term(slug=f"{ic.strip()}_no_faculty")
+                no_department = faculty.create_term(
+                    slug=f"{ic.strip()}_no_faculty_no_department",
+                    extra_data={
+                        "title": [
+                            {
+                                "value": "Bez katedry",
+                                "lang": "cze"
+                            }
+                        ]
+                    }
+                )
+                db.session.add(no_department)
+                db.session.commit()
+                print(f"{counter}. {row['nazev_cz']}_no_department")
 
 
 @nusl.command('import_departments')
