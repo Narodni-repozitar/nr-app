@@ -533,6 +533,18 @@ def import_studyfields():
     dicrepancy_fields = {}
     error_fields = {}
     counter = 0
+    if studyfields.get_term("no_valid_studyfield") is None:
+        not_valid = studyfields.create_term(
+            slug="no_valid_studyfield",
+            extra_data={
+                "title": {
+                    "value": "Neplatný obor",
+                    "lang": "cze"
+                }
+            }
+        )
+        db.session.add(not_valid)
+        db.session.commit()
     for k, v in fields_json.items():
         programme = studyfields.get_term(k)
         for key, value in v.items():
