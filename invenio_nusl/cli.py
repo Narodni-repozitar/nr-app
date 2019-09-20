@@ -6,6 +6,7 @@ import unicodedata
 import click
 import invenio_indexer.api
 import invenio_indexer.cli
+import pycountry
 from flask import cli
 from invenio_db import db
 from sqlalchemy.exc import IntegrityError
@@ -13,6 +14,7 @@ from sqlalchemy.exc import IntegrityError
 from flask_taxonomies.models import Taxonomy, TaxonomyTerm
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
 from invenio_oarepo.current_api import current_api
+from langcodes import Language
 
 
 @click.group()
@@ -981,3 +983,61 @@ def import_subjects():
             db.session.add(term)
             db.session.commit()
             print(f"{counter}. {k} {v}")
+
+
+@nusl.command('import_languages')
+@cli.with_appcontext
+def import_languages():
+    languages = Taxonomy.get("languages")
+    if languages is None:
+        languages = Taxonomy.create_taxonomy(code='languages', extra_data={
+            "title": [
+                {
+                    "value": "Jazyky",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Languages",
+                    "lang": "eng"
+                }
+            ]
+        })
+        db.session.add(languages)
+        db.session.commit()
+
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "data", "languages.csv")
+    with open(path) as csvfile:
+        reader = csv.reader(csvfile, delimiter=",")
+        counter = 0
+        for row in reader:
+            counter += 1
+            lang = language_code(row[0])
+            if languages.get_term(lang) is None:
+                term = languages.create_term(slug=lang, extra_data={
+                    "title": [
+                        {
+                            "value": Language.get(lang).language_name("cze"),
+                            "lang": "cze"
+                        },
+                        {
+                            "value": Language.get(lang).language_name("eng"),
+                            "lang": "eng"
+                        }
+                    ]
+                })
+                db.session.add(term)
+                db.session.commit()
+                print(f"{counter}. {row[0]}")
+
+
+def language_code(language):
+    alpha3 = pycountry.languages.get(alpha_3=language)
+    bib = pycountry.languages.get(bibliographic=language)
+    if bib is not None:
+        lang = bib.bibliographic
+    elif alpha3 is not None:
+        lang = alpha3.alpha_3
+    else:
+        raise ValueError("The language  is not known.")
+    return lang
