@@ -7,14 +7,15 @@ import click
 import invenio_indexer.api
 import invenio_indexer.cli
 import pycountry
+import requests
 from flask import cli
 from invenio_db import db
+from langcodes import Language
 from sqlalchemy.exc import IntegrityError
 
 from flask_taxonomies.models import Taxonomy, TaxonomyTerm
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
 from invenio_oarepo.current_api import current_api
-from langcodes import Language
 
 
 @click.group()
@@ -1041,3 +1042,132 @@ def language_code(language):
     else:
         raise ValueError("The language  is not known.")
     return lang
+
+
+@nusl.command('import_psh')
+@cli.with_appcontext
+def get_psh():
+    top_terms = get_top_terms()['@graph']
+    subject = Taxonomy.get('subject')
+    psh_term = subject.get_term('PSH')
+    for term in top_terms:
+        save_all_terms_recursively(subject, term, psh_term)
+    print("All terms were saved")
+
+
+def save_all_terms_recursively(taxonomy, term, parent_term):
+    slug = term.pop('pshid')
+    narrower = term['narrower']
+    if len(term['altLabel']) > 0:
+        print("SLUG", slug)
+        alt_title = make_multilang_list(term['altLabel'])
+        del term['altLabel']
+        if alt_title is not None:
+            term['altTitle'] = alt_title
+            print(f"{slug} ALT_title: ", alt_title)
+    title = make_multilang_title(term['prefLabel'])
+    del term['prefLabel']
+    term['title'] = title
+    parent_term = save_term(taxonomy, parent_term, slug, extra_data=term)
+    for id_ in narrower:
+        term = get_term(id_).get("@graph")
+        if term is None:
+            continue
+        save_all_terms_recursively(taxonomy, term, parent_term)
+    print(f"All children of term {slug} were created")
+
+
+def get_top_terms():
+    response = requests.get("https://psh.techlib.cz/api/concepts/top")
+    return json.loads(response.text)
+
+
+def get_term(psh_id):
+    response = requests.get(f"https://psh.techlib.cz/api/concepts/{psh_id}")
+    return json.loads(response.text)
+
+
+def make_multilang_list(old_dict: dict):
+    multi_langlist = []
+    # num_lang = len(old_dict)
+    # num_values = 0
+    num_items = []
+    for value in old_dict.values():
+        num_items.append(len(value))
+    for i in range(max(num_items)):
+        multi_langlist.append([])
+        for j in num_items:
+            if j > 0:
+                multi_langlist[i].append(
+                    {
+                        "value": None,
+                        "lang": None
+                    }
+                )
+
+    return fill_multilang_list(old_dict, multi_langlist)
+    # for value in old_dict.values():
+    #     if len(value) > num_values:
+    #         num_values = len(value)
+    # if (num_lang == 0) or (num_values == 0):
+    #     return None
+    # for value in range(num_values):
+    #     item_list = []
+    #     for lang in range(num_lang):
+    #         item_list.append(
+    #             {
+    #                 "value": None,
+    #                 "lang": None
+    #             }
+    #         )
+    #     multi_langlist.append(item_list)
+    # return fill_multilang_list(old_dict, multi_langlist)
+
+
+def make_multilang_title(old_dict: dict):
+    multilang_list = []
+    for k, v in old_dict.items():
+        new_lang = language_three_place(k)
+        multilang_list.append(
+            {
+                "value": v,
+                "lang": new_lang
+            }
+        )
+    return multilang_list
+
+
+def language_three_place(old_lang):
+    lang_pycountry = pycountry.languages.get(alpha_2=old_lang)
+    if lang_pycountry is None:
+        return None
+    new_lang = getattr(lang_pycountry, "bibliographic", None)
+    if new_lang is None:
+        new_lang = getattr(lang_pycountry, "alpha_3", None)
+    if new_lang is None:
+        return None
+    return new_lang
+
+
+def fill_multilang_list(old_dict, multilang_list):
+    m = 0
+    for i, (k, v) in enumerate(old_dict.items()):
+        j = 0
+        if len(v) == 0:
+            m -= 1
+        for value in v:
+            multilang_list[j][m]["value"] = value
+            multilang_list[j][m]["lang"] = language_three_place(k)
+            j += 1
+        m += 1
+    return multilang_list
+
+
+def save_term(taxonomy, parent_term, slug, extra_data: dict = None):
+    term = taxonomy.get_term(slug)
+    if term is None:
+        term = parent_term.create_term(slug=slug, extra_data=extra_data)
+        db.session.add(term)
+        db.session.commit()
+        print(slug)
+    return term
