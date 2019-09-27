@@ -1089,8 +1089,6 @@ def get_term(psh_id):
 
 def make_multilang_list(old_dict: dict):
     multi_langlist = []
-    # num_lang = len(old_dict)
-    # num_values = 0
     num_items = []
     for value in old_dict.values():
         num_items.append(len(value))
@@ -1105,23 +1103,7 @@ def make_multilang_list(old_dict: dict):
                     }
                 )
 
-    return fill_multilang_list(old_dict, multi_langlist)
-    # for value in old_dict.values():
-    #     if len(value) > num_values:
-    #         num_values = len(value)
-    # if (num_lang == 0) or (num_values == 0):
-    #     return None
-    # for value in range(num_values):
-    #     item_list = []
-    #     for lang in range(num_lang):
-    #         item_list.append(
-    #             {
-    #                 "value": None,
-    #                 "lang": None
-    #             }
-    #         )
-    #     multi_langlist.append(item_list)
-    # return fill_multilang_list(old_dict, multi_langlist)
+    return filter_none((fill_multilang_list(old_dict, multi_langlist)))
 
 
 def make_multilang_title(old_dict: dict):
@@ -1161,6 +1143,19 @@ def fill_multilang_list(old_dict, multilang_list):
             j += 1
         m += 1
     return multilang_list
+
+
+def filter_none(old_list):
+    new_list = []
+    for item in old_list:
+        item_list = []
+        for dict in item:
+            new_dict = {k: v for k, v in dict.items() if v is not None}
+            if len(new_dict) > 0:
+                item_list.append(new_dict)
+        if len(item_list) > 0:
+            new_list.append(item_list)
+    return new_list
 
 
 def save_term(taxonomy, parent_term, slug, extra_data: dict = None):
