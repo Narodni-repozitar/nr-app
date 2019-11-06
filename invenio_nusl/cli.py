@@ -4,19 +4,43 @@ import os
 import unicodedata
 
 import click
+import invenio_indexer.api
+import invenio_indexer.cli
+import pycountry
+import requests
 from flask import cli
 from invenio_db import db
+from langcodes import Language
 from sqlalchemy.exc import IntegrityError
 
 from flask_taxonomies.models import Taxonomy, TaxonomyTerm
-from invenio_nusl.scripts.data_unification import add_aliases
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
+from invenio_oarepo.current_api import current_api
 
 
 @click.group()
 def nusl():
     """Nusl commands."""
 
+
+################################################################################################################
+#                                           Index                                                              #
+################################################################################################################
+
+
+@nusl.command('reindex')
+@cli.with_appcontext
+@click.pass_context
+def reindex(ctx):
+    with current_api.app_context():
+        ctx.invoke(invenio_indexer.cli.reindex, pid_type='dnusl')
+        invenio_indexer.api.RecordIndexer(version_type=None).process_bulk_queue(
+            es_bulk_kwargs={'raise_on_error': True})
+
+
+################################################################################################################
+#                                           Taxonomies                                                         #
+################################################################################################################
 
 @nusl.command('import_universities')
 @cli.with_appcontext
@@ -53,32 +77,50 @@ def import_universities():
         counter = 0
         for row in reader:
             counter += 1
-            term = universities.create_term(
-                slug=row["ic"].strip(),
-                extra_data={
-                    "title": [
-                        {
-                            "value": row["nazev_cz"].strip(),
-                            "lang": "cze"
-                        }
-                    ],
-                    "type": row["typ_VS"].strip(),
-                    "form": row["text_forma_VS"].strip(),
-                    "region": row["kraj"].strip(),
-                    "RID": row["rid"].strip(),
-                    "address": row["sidlo"].strip(),
-                    "IČO": row["ic"].strip(),
-                    "data_box": row["datova_schranka"].strip(),
-                    "url": row["web"].strip(),
-                    "deputy": row["statutarni_zastupce"].strip(),
-                    "term_of_office_from": convert_dates(row["funkcni_obdobi_od"].strip()),
-                    "term_of_office_until": convert_dates(row["funkcni_obdobi_do"].strip())
-                }
-            )
+            if universities.get_term(row["ic"].strip()) is None:
+                university = universities.create_term(
+                    slug=row["ic"].strip(),
+                    extra_data={
+                        "title": [
+                            {
+                                "value": row["nazev_cz"].strip(),
+                                "lang": "cze"
+                            }
+                        ],
+                        "type": row["typ_VS"].strip(),
+                        "form": row["text_forma_VS"].strip(),
+                        "region": row["kraj"].strip(),
+                        "RID": row["rid"].strip(),
+                        "address": row["sidlo"].strip(),
+                        "IČO": row["ic"].strip(),
+                        "data_box": row["datova_schranka"].strip(),
+                        "url": row["web"].strip(),
+                        "deputy": row["statutarni_zastupce"].strip(),
+                        "term_of_office_from": convert_dates(row["funkcni_obdobi_od"].strip()),
+                        "term_of_office_until": convert_dates(row["funkcni_obdobi_do"].strip())
+                    }
+                )
 
-            db.session.add(term)
-            db.session.commit()
-            print(f"{counter}. {term}")
+                db.session.add(university)
+                db.session.commit()
+                print(f"{counter}. {row['nazev_cz']}")
+
+            university = universities.get_term(slug=row["ic"].strip())
+            if universities.get_term(slug=f"{row['ic'].strip()}_no_faculty") is None:
+                no_faculty = university.create_term(
+                    slug=f"{row['ic'].strip()}_no_faculty",
+                    extra_data={
+                        "title": [
+                            {
+                                "value": "Bez fakulty",
+                                "lang": "cze"
+                            }
+                        ]
+                    }
+                )
+                db.session.add(no_faculty)
+                db.session.commit()
+                print(f"{counter}. {row['nazev_cz']} no_faculty")
 
 
 @nusl.command('import_faculties')
@@ -93,9 +135,13 @@ def import_faculties():
         reader = csv.DictReader(csvfile, delimiter=",")
         counter = 0
         for row in reader:
-            ic = faculties_dict[row["rid_f"]].strip()
+            ic = faculties_dict.get(row["rid_f"])
+            if ic is not None:
+                ic = ic.strip()
+            if ic is None:
+                continue
             counter += 1
-            if not universities.get_term(row["rid_f"]):
+            if universities.get_term(row["rid_f"]) is None:
                 university = universities.get_term(ic)
                 term = university.create_term(slug=row["rid_f"].strip(),
                                               extra_data={
@@ -111,10 +157,43 @@ def import_faculties():
                                                   "aliases": row["aliases"]
                                               }
                                               )
-
                 db.session.add(term)
                 db.session.commit()
                 print(f"{counter}. {row['nazev_cz']}")
+
+            faculty = universities.get_term(slug=row["rid_f"].strip())
+            if universities.get_term(slug=f"{row['rid_f'].strip()}_no_department") is None:
+                no_department = faculty.create_term(
+                    slug=f"{row['rid_f'].strip()}_no_department",
+                    extra_data={
+                        "title": [
+                            {
+                                "value": "Bez katedry",
+                                "lang": "cze"
+                            }
+                        ]
+                    }
+                )
+                db.session.add(no_department)
+                db.session.commit()
+                print(f"{counter}. {row['nazev_cz']}_no_department")
+
+            if universities.get_term(slug=f"{ic.strip()}_no_faculty_no_department") is None:
+                faculty = universities.get_term(slug=f"{ic.strip()}_no_faculty")
+                no_department = faculty.create_term(
+                    slug=f"{ic.strip()}_no_faculty_no_department",
+                    extra_data={
+                        "title": [
+                            {
+                                "value": "Bez katedry",
+                                "lang": "cze"
+                            }
+                        ]
+                    }
+                )
+                db.session.add(no_department)
+                db.session.commit()
+                print(f"{counter}. {row['nazev_cz']}_no_department")
 
 
 @nusl.command('import_departments')
@@ -457,6 +536,18 @@ def import_studyfields():
     dicrepancy_fields = {}
     error_fields = {}
     counter = 0
+    if studyfields.get_term("no_valid_studyfield") is None:
+        not_valid = studyfields.create_term(
+            slug="no_valid_studyfield",
+            extra_data={
+                "title": {
+                    "value": "Neplatný obor",
+                    "lang": "cze"
+                }
+            }
+        )
+        db.session.add(not_valid)
+        db.session.commit()
     for k, v in fields_json.items():
         programme = studyfields.get_term(k)
         for key, value in v.items():
@@ -796,3 +887,282 @@ def degree_level(code):
         "V": "Doktorský"
     }
     return degree_dict.get(code[4])
+
+
+@nusl.command('import_subjects')
+@cli.with_appcontext
+def import_subjects():
+    subject = Taxonomy.get('subject')
+    if not subject:
+        subject = Taxonomy.create_taxonomy(code='subject', extra_data={
+            "title": [
+                {
+                    "value": "Klíčová slova",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Keywords",
+                    "lang": "eng"
+                }
+            ]
+        })
+        db.session.add(subject)
+        db.session.commit()
+
+    taxonomies = {
+        "PSH": {
+            "title": [
+                {
+                    "value": "Polytematický strukturovaný heslář",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Polythematic Structured Subject Heading System",
+                    "lang": "eng"
+                }
+            ],
+            "url": "https://psh.techlib.cz/skos/"
+        },
+        "CZMESH": {
+            "title": [
+                {
+                    "value": "Tezaurus Medical Subject Headings",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Medical Subject Headings",
+                    "lang": "eng"
+                }
+            ],
+            "url": "https://www.medvik.cz/bmc/subject.do"
+        },
+        "MEDNAS": {
+            "title": [
+                {
+                    "value": "Autoritní soubor oborů – Národní lékařská knihovna, Praha (MEDNAS)",
+                    "lang": "cze"
+                },
+            ],
+            "url": "https://www.medvik.cz/bmc/subject.do"
+        },
+        "CZENAS": {
+            "title": [
+                {
+                    "value": "Soubor vĕcných autorit Národní knihovny ČR",
+                    "lang": "cze"
+                },
+                {
+                    "value": "CZENAS thesaurus: a list of subject terms used in the National Library of the Czech Republic",
+                    "lang": "eng"
+                }
+            ],
+            "url": ""
+        },
+        "keyword": {
+            "title": [
+                {
+                    "value": "Klíčová slova",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Keywords",
+                    "lang": "eng"
+                }
+            ],
+        }
+    }
+
+    counter = 0
+    for k, v in taxonomies.items():
+        counter += 1
+        if subject.get_term(k) is None:
+            term = subject.create_term(
+                slug=k,
+                extra_data=v
+            )
+
+            db.session.add(term)
+            db.session.commit()
+            print(f"{counter}. {k} {v}")
+
+
+@nusl.command('import_languages')
+@cli.with_appcontext
+def import_languages():
+    languages = Taxonomy.get("languages")
+    if languages is None:
+        languages = Taxonomy.create_taxonomy(code='languages', extra_data={
+            "title": [
+                {
+                    "value": "Jazyky",
+                    "lang": "cze"
+                },
+                {
+                    "value": "Languages",
+                    "lang": "eng"
+                }
+            ]
+        })
+        db.session.add(languages)
+        db.session.commit()
+
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, "data", "languages.csv")
+    with open(path) as csvfile:
+        reader = csv.reader(csvfile, delimiter=",")
+        counter = 0
+        for row in reader:
+            counter += 1
+            lang = language_code(row[0])
+            if languages.get_term(lang) is None:
+                term = languages.create_term(slug=lang, extra_data={
+                    "title": [
+                        {
+                            "value": Language.get(lang).language_name("cze"),
+                            "lang": "cze"
+                        },
+                        {
+                            "value": Language.get(lang).language_name("eng"),
+                            "lang": "eng"
+                        }
+                    ]
+                })
+                db.session.add(term)
+                db.session.commit()
+                print(f"{counter}. {row[0]}")
+
+
+def language_code(language):
+    alpha3 = pycountry.languages.get(alpha_3=language)
+    bib = pycountry.languages.get(bibliographic=language)
+    if bib is not None:
+        lang = bib.bibliographic
+    elif alpha3 is not None:
+        lang = alpha3.alpha_3
+    else:
+        raise ValueError("The language  is not known.")
+    return lang
+
+
+@nusl.command('import_psh')
+@cli.with_appcontext
+def get_psh():
+    top_terms = get_top_terms()['@graph']
+    subject = Taxonomy.get('subject')
+    psh_term = subject.get_term('PSH')
+    for term in top_terms:
+        save_all_terms_recursively(subject, term, psh_term)
+    print("All terms were saved")
+
+
+def save_all_terms_recursively(taxonomy, term, parent_term):
+    slug = term.pop('pshid')
+    narrower = term['narrower']
+    if len(term['altLabel']) > 0:
+        print("SLUG", slug)
+        alt_title = make_multilang_list(term['altLabel'])
+        del term['altLabel']
+        if alt_title is not None:
+            term['altTitle'] = alt_title
+            print(f"{slug} ALT_title: ", alt_title)
+    title = make_multilang_title(term['prefLabel'])
+    del term['prefLabel']
+    term['title'] = title
+    parent_term = save_term(taxonomy, parent_term, slug, extra_data=term)
+    for id_ in narrower:
+        term = get_term(id_).get("@graph")
+        if term is None:
+            continue
+        save_all_terms_recursively(taxonomy, term, parent_term)
+    print(f"All children of term {slug} were created")
+
+
+def get_top_terms():
+    response = requests.get("https://psh.techlib.cz/api/concepts/top")
+    return json.loads(response.text)
+
+
+def get_term(psh_id):
+    response = requests.get(f"https://psh.techlib.cz/api/concepts/{psh_id}")
+    return json.loads(response.text)
+
+
+def make_multilang_list(old_dict: dict):
+    multi_langlist = []
+    num_items = []
+    for value in old_dict.values():
+        num_items.append(len(value))
+    for i in range(max(num_items)):
+        multi_langlist.append([])
+        for j in num_items:
+            if j > 0:
+                multi_langlist[i].append(
+                    {
+                        "value": None,
+                        "lang": None
+                    }
+                )
+
+    return filter_none((fill_multilang_list(old_dict, multi_langlist)))
+
+
+def make_multilang_title(old_dict: dict):
+    multilang_list = []
+    for k, v in old_dict.items():
+        new_lang = language_three_place(k)
+        multilang_list.append(
+            {
+                "value": v,
+                "lang": new_lang
+            }
+        )
+    return multilang_list
+
+
+def language_three_place(old_lang):
+    lang_pycountry = pycountry.languages.get(alpha_2=old_lang)
+    if lang_pycountry is None:
+        return None
+    new_lang = getattr(lang_pycountry, "bibliographic", None)
+    if new_lang is None:
+        new_lang = getattr(lang_pycountry, "alpha_3", None)
+    if new_lang is None:
+        return None
+    return new_lang
+
+
+def fill_multilang_list(old_dict, multilang_list):
+    m = 0
+    for i, (k, v) in enumerate(old_dict.items()):
+        j = 0
+        if len(v) == 0:
+            m -= 1
+        for value in v:
+            multilang_list[j][m]["value"] = value
+            multilang_list[j][m]["lang"] = language_three_place(k)
+            j += 1
+        m += 1
+    return multilang_list
+
+
+def filter_none(old_list):
+    new_list = []
+    for item in old_list:
+        item_list = []
+        for dict in item:
+            new_dict = {k: v for k, v in dict.items() if v is not None}
+            if len(new_dict) > 0:
+                item_list.append(new_dict)
+        if len(item_list) > 0:
+            new_list.append(item_list)
+    return new_list
+
+
+def save_term(taxonomy, parent_term, slug, extra_data: dict = None):
+    term = taxonomy.get_term(slug)
+    if term is None:
+        term = parent_term.create_term(slug=slug, extra_data=extra_data)
+        db.session.add(term)
+        db.session.commit()
+        print(slug)
+    return term
