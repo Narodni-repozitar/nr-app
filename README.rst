@@ -84,7 +84,7 @@ Změnu otestujeme (tests/test_rules.py)
 
     invenio index init
 
-4. Kontrola jestli se nové indexy vytvořili (měly by být přítomné dva indexy draft a "ostrý")
+4. Kontrola jestli se nové indexy vytvořily (měly by být přítomné dva indexy draft a "ostrý")
 
 .. code-block:: bash
 

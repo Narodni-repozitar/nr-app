@@ -17,3 +17,4 @@
 include .editorconfig
 prune docs/_build
 recursive-include invenio_nusl *.po *.pot *.mo
+graft invenio_nusl
