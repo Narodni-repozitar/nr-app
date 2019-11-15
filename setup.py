@@ -44,6 +44,12 @@ install_requires = [
     'invenio-oarepo>=1.0.0',
     'invenio-nusl-common>=1.0.0',
     'invenio-oarepo-ui>=1.0.0',
+    'click',
+    'pycountry',
+    'requests',
+    'flask',
+    'langcodes',
+    'sqlalchemy'
     # 'invenio-nusl-theses>=1.0.0'
 
 ]
