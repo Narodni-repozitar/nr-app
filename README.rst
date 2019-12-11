@@ -5,6 +5,29 @@ Nušl repozitář
 Datový model
 *************
 
+Elasticsearch
+==============
+Řešení možných komplikací
+---------------------------
+1. Nedostatek místa na disku:
+
+Projevuje se tímto tracebackem:
+
+.. code-block:: bash
+
+    elasticsearch.exceptions.AuthorizationException: AuthorizationException(403, 'cluster_block_exception', 'blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];') at 13
+    12/02/2019 09:40:36 AM ERROR data {'modified': '2017-06-29T11:15:10', 'contributor': [{'role': 'advisor', 'name': 'Taušer, Josef'}, {'role': 'referee', 'name': 'Taušer, Josef'}], 'doctype': {'$ref': 'https://nusl2.test.ntkcz.cz/api/taxonomies/doctype/diplomove_prace'}, 'accessibility': [{'lang': 'cze', 'name': 'Dostupné v digitálním repozitáři VŠE.'}, {'lang': 'eng', 'name': 'Available in the digital repository of the University of Economics, Prague.'}], 'id': '13', 'abstract': [{'lang': 'cze', 'name': 'Diplomová práce se zabývá efekty přímých zahraničních investic v české ekonomice a zejména jejich vlivem na vnější ekonomickou rovnováhu České republiky. V první části je definován pojem PZI (přímá zahraniční investice), je zde rovněž popsán základní vztah PZI a základních makroekonomických veličin a jak PZI tvarují vnější ekonomickou rovnováhu. Druhá část se zabývá analýzou dynamiky a struktury PZI do české ekonomiky a konečně v třetí stěžejní části práce je analyzován vliv PZI na vnější ekonomickou rovnováhu. Postupně je analyzována platební bilanci, zejména pak projevy PZI v jejích jednotlivých částech. V závěru práce autor zkoumá možnost spojitosti PZI a vyvolání měnové krize.'}], 'language': [{'$ref': 'https://nusl2.test.ntkcz.cz/api/taxonomies/languages/cze'}], 'degreeGrantor': [{'$ref': 'https://nusl2.test.ntkcz.cz/api/taxonomies/universities/61384399_no_faculty_no_department'}], 'title': [{'lang': 'cze', 'name': 'Přímé zahraniční investice a vnější ekonomická rovnováha České republiky'}], 'dateAccepted': '2006-05-21', 'studyField': [{'$ref': 'https://nusl2.test.ntkcz.cz/api/taxonomies/studyfields/6210T010'}], 'creator': [{'name': 'Stříteský, Jan'}], 'pr
+    ovider': {'$ref': 'https://nusl2.test.ntkcz.cz/api/taxonomies/provider/vysoka_skola_ekonomicka_v_praze'}, 'identifier': [{'value': 'http://www.vse.cz/vskp/eid/13', 'type': 'originalRecord'}, {'value': 'http://www.nusl.cz/ntk/nusl-13', 'type': 'nusl'}, {'value': 'oai:vse.cz:vskp/13', 'type': 'originalOAI'}, {'value': 'oai:invenio.nusl.cz:13', 'type': 'nuslOAI'}], 'accessRights': 'open'} at 13
+
+Oprava:
+ viz: https://github.com/elastic/kibana/issues/13685
+
+.. code-block:: bash
+
+    curl -XPUT -H "Content-Type: application/json" https://[YOUR_ELASTICSEARCH_ENDPOINT]:9200/_all/_settings -d '{"index.blocks.read_only_allow_delete": null}'
+
+Často tato oprava nemusí pomoci. Potom je nutné index smazat, znovu vytvořit a spustit reindex.
+
 Změna datového modelu
 ======================
 
