@@ -14,6 +14,7 @@ from langcodes import Language
 from sqlalchemy.exc import IntegrityError
 
 from flask_taxonomies.models import Taxonomy, TaxonomyTerm
+from flask_taxonomies.utils import find_in_json
 from invenio_nusl.scripts.university_taxonomies import f_rid_ic_dict
 from invenio_oarepo.current_api import current_api
 
@@ -214,12 +215,10 @@ def import_departments():
             faculty = unit[1].strip()
             department = unit[2].strip()
 
-            university_tax = universities.descendants.filter(
-                TaxonomyTerm.extra_data[("title", 0, "value")].astext == university).all()
+            university_tax = find_in_json(university, universities, tree_address=("title", 0, "value")).all()
             if len(university_tax) != 1:
                 continue
-            faculty_tax = university_tax[0].descendants.filter(
-                TaxonomyTerm.extra_data[("title", 0, "value")].astext == faculty).all()
+            faculty_tax = find_in_json(faculty, university_tax[0]).all()
             if len(faculty_tax) != 1:
                 continue
 
