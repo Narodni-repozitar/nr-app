@@ -65,3 +65,5 @@ target/
 .*.sw?
 
 *.csv#
+
+.python-version
