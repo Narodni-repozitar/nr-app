@@ -39,9 +39,9 @@ def reindex(ctx):
             es_bulk_kwargs={'raise_on_error': True})
 
 
-################################################################################################################
-#                                           Taxonomies                                                         #
-################################################################################################################
+#############################################################################################
+#                                           Taxonomies                                      #
+#############################################################################################
 
 @nusl.command('import_universities')
 @cli.with_appcontext
@@ -215,7 +215,8 @@ def import_departments():
             faculty = unit[1].strip()
             department = unit[2].strip()
 
-            university_tax = find_in_json(university, universities, tree_address=("title", 0, "value")).all()
+            university_tax = find_in_json(university, universities,
+                                          tree_address=("title", 0, "value")).all()
             if len(university_tax) != 1:
                 continue
             faculty_tax = find_in_json(faculty, university_tax[0]).all()
@@ -577,7 +578,8 @@ def import_studyfields():
                     dicrepancy_fields[k][key] = value
 
     counter = 0
-    print("#####################        DISCREPANCY_FIELDS            ################################################")
+    print(
+        "#####################        DISCREPANCY_FIELDS            ################################################")
     for k, v in dicrepancy_fields.items():
         programme = studyfields.get_term(k)
         if programme is None:
@@ -601,7 +603,8 @@ def import_studyfields():
                 else:
                     error_fields[k][key] = value
 
-    with open("/home/semtex/Projekty/nusl/invenio-nusl/invenio_nusl/data/error_fields.json", "w") as f:
+    with open("/home/semtex/Projekty/nusl/invenio-nusl/invenio_nusl/data/error_fields.json",
+              "w") as f:
         json.dump(error_fields, f)
 
 
