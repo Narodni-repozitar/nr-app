@@ -67,3 +67,5 @@ target/
 *.csv#
 
 .python-version
+
+requirements.txt
