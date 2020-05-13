@@ -43,6 +43,7 @@ setup_requires = [
 install_requires = [
     # 'invenio-nusl-common>=1.0.0',
     'oarepo[deploy-es7,taxonomies,draft]>=3.2.1.2',
+    # 'invenio-initial-theses-conversion>=1.0.0'
     # 'invenio-nusl-theses>=1.0.0'
 
 ]
