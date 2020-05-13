@@ -133,8 +133,46 @@ Instalace ze zdrojového kódu
     invenio access allow superuser-access role admin
 
 Instalace přes pip repozitář
------------------------------
+=============================
 
 .. todo::
 
     Dopsat až budou všechny balíčky v pip repozitáři.
+
+Instalace pomocí pip-tools přes requirements
+==============================================
+#. Nainstalujeme nástroj **pip-tools**
+
+    .. code-block::
+
+        pip install pip-tools
+
+#. Vytvoříme soubor s názvem requirements.in se závislostmi. Poslední funkční in file má tuto podobu:
+
+    .. code-block::
+
+        oarepo[deploy-es7,heartbeat,models,files,includes]~=3.2.1
+        Babel>=2.4.0
+        Flask-BabelEx>=0.9.3
+        lxml>=3.5.0,<4.2.6
+        marshmallow>=3.0.0,<4.0.0
+        lorem>=0.1.1
+        names>=0.3.0
+        uwsgi>=2.0
+        uwsgi-tools>=1.1.1
+        uwsgitop>=0.11
+        WTForms==2.2.1
+
+#. Zkompilujeme závislost do requirements.txt:
+
+    .. code-block::
+
+        pip-compile requirements.in > requirements.txt
+
+#. Invenio nainstalujeme přes pip:
+
+    .. code-block::
+
+        pip install -r requirements.txt
+
+Dále pokračujeme bodem 1. jako u instalace ze zdrojového kódu

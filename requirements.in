@@ -1,1 +1,11 @@
--e .
+oarepo[deploy-es7,heartbeat,models,files,includes]~=3.2.1
+Babel>=2.4.0
+Flask-BabelEx>=0.9.3
+lxml>=3.5.0,<4.2.6
+marshmallow>=3.0.0,<4.0.0
+lorem>=0.1.1
+names>=0.3.0
+uwsgi>=2.0
+uwsgi-tools>=1.1.1
+uwsgitop>=0.11
+WTForms==2.2.1
