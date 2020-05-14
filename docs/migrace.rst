@@ -13,6 +13,29 @@ Tato kapitola předpokládá, že proběhla úspěšně :doc:`instalace <instala
 Postup
 =======
 
+#. Import starého NUŠL do Elasticsearch
+
+    XML se převede na JSON a uloží se do ES. Tento krok je nutný pro správný import taxonomii.
+    Některé taxonomies se importují z metadat starého NUŠLu.
+
+    .. code-block::
+
+        invenio nusl migration es
+
+#. Import taxonomii
+
+    Import taxonomii do datáze se spouští skriptem:
+
+    .. code-block::
+
+        invenio nusl taxonomies import_all
+
+#. Import taxonomii do Elasticsearch
+
+    .. code-block::
+
+        invenio taxonomies es reindex
+
 CLI skripty
 =============
 
@@ -22,7 +45,7 @@ Za migraci metadat je zodpovědný modul invenio-initial-theses-conversion. Vol�
 
 .. code-block::
 
-    ivneio initial_theses_conversion [OPTIONS]
+    ivenio initial_theses_conversion [OPTIONS]
 
 | OPTIONS:
 | --url: počáteční adresa odkud se mají stahovat metadata
