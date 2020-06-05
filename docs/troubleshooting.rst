@@ -13,6 +13,45 @@ Je nutné zkontrolovat celou URL adresu:
 * HOST by se měl shodovat se SERVER_NAME v konfiguraci (invenio.cfg)
 * PATH by na konci měla končit lomítkem (jedná se o bug ve Flasku)
 
+2. SERVER_NAME změna
+---------------------
+
+Pokud některá cesta routuje na špatný server name, nejčastěji kvůli rozdílnému portu (5000 vs. 8080),
+tak je nutné veškerý výskyt špatného **SERVER_NAME** přepsat.
+
+Místa, kde se může objevit špatný **SERVER_NAME**:
+
+* databáze:
+    * records_metadata
+    * records_metadata_version
+    * oarepo_records_references
+    * oarepo_records_references_version
+* Elasticsearch:
+    * index záznamů (ostrý/drafty)
+    * Flask-Taxonomies-ES
+
+**Oprava:**
+
+* databáze:
+    Update SQLQuery s replace viz (/scripts/sql/replace_server_name.sql)
+* Elasticsearch:
+    Nutné smazat indexy a reindexovat
+
+    #. Záznamy:
+
+        .. code-block:: bash
+
+            invenio index queue purge
+            invenio index reindex -t dnusl
+            invenio index run
+
+    #. Flask-Taxonomies-ES:
+
+        .. code-block:: bash
+
+            invenio taxonomies es reindex
+
+
 Flask-Taxonomies
 =================
 
@@ -58,6 +97,15 @@ Flask-Taxonomies
         api = current_app.wsgi_app.mounts['/api']
         with api.app_context():
             <kód, který vyžaduje kontext>
+
+    Alternativně lze api kontext poskytnout takto:
+
+    .. code-block:: python
+
+        from invenio_oarepo.current_api import current_api
+
+        with current_api.app_context():
+            # kus kódu
 
 Elasticsearch
 ==============

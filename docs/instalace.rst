@@ -116,9 +116,9 @@ Instalace ze zdrojového kódu
         Pro příkaz invenio webpack **buildall** je nutné mít nainstalované **NodeJS** a **npm**.
         Alternativou je zkopírovat složky: /assets a /static z /venv/var/instance.
 
-7. Invenio setup
+#. Invenio setup
 
-    V této části se nastavuje databáze, elasticsearch, redis a vytváří se admin uživatel. V `cookiecutter-invenio-instance <https://github.com/inveniosoftware/cookiecutter-invenio-instance>`_
+    V této části se nastavuje databáze, elasticsearch a redis. V `cookiecutter-invenio-instance <https://github.com/inveniosoftware/cookiecutter-invenio-instance>`_
     se skript nazývá *setup*.
 
     .. code-block::
@@ -135,6 +135,19 @@ Instalace ze zdrojového kódu
         # Create admin role to restrict access
         invenio roles create admin
         invenio access allow superuser-access role admin
+
+#. Nastavení administrátora (super-user)
+
+    .. code-block:: bash
+
+        invenio users create --password <moje_heslo> <moje_emailová_adresa>
+        invenio users activate <moje_emailová_adresa>
+        invenio roles create admin
+        invenio access allow superuser-access role admin
+        invenio roles add <moje_emailová_adresa> admin
+
+    První dva řádky se vytváří a aktivuje uživatel, třetí řádek vytváří roli se jménem admin,
+    čtvrtý řádek přířazuje roli admin superuser práva. Poslední řádek přířazuje účet k administrátorské roli.
 
 Instalace přes pip repozitář
 =============================
