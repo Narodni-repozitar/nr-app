@@ -12,8 +12,9 @@ from invenio_records.models import RecordMetadata
 from invenio_search import current_search_client
 from sqlalchemy.exc import IntegrityError
 
-from invenio_oarepo_oai_pmh_harvester.migration import OAIMigration
-from invenio_oarepo_oai_pmh_harvester.models import OAIProvider
+
+# from invenio_oarepo_oai_pmh_harvester.migration import OAIMigration
+# from invenio_oarepo_oai_pmh_harvester.models import OAIProvider
 
 
 @click.group()
@@ -50,32 +51,33 @@ def migration():
     pass
 
 
-@migration.command('oai')
-@cli.with_appcontext
-def migrate_oai():
-    def oai_id_handler(json):
-        id_ = json["id"]
-        try:
-            doc = current_search_client.get(index="nusl_marcxml", id=id_)
-        except NotFoundError:
-            return
-        oai_id = doc["_source"].get("035__") or {}
-        oai_id = oai_id.get("a")
-        if oai_id:
-            return oai_id
-
-    provider = OAIProvider.query.filter_by(code="nusl").one_or_none()
-    if not provider:
-        provider = OAIProvider(
-            code="nusl",
-            description="Původní NUŠL na Invenio v1",
-            oai_endpoint="https://invenio.nusl.cz/oai2d/",
-            metadata_prefix="marcxml"
-        )
-        db.session.add(provider)
-        db.session.commit()
-    migrator = OAIMigration(handler=oai_id_handler, provider=provider)
-    migrator.run()
+# TODO: vložit do OAI-PMH knihovny
+# @migration.command('oai')
+# @cli.with_appcontext
+# def migrate_oai():
+#     def oai_id_handler(json):
+#         id_ = json["id"]
+#         try:
+#             doc = current_search_client.get(index="nusl_marcxml", id=id_)
+#         except NotFoundError:
+#             return
+#         oai_id = doc["_source"].get("035__") or {}
+#         oai_id = oai_id.get("a")
+#         if oai_id:
+#             return oai_id
+#
+#     provider = OAIProvider.query.filter_by(code="nusl").one_or_none()
+#     if not provider:
+#         provider = OAIProvider(
+#             code="nusl",
+#             description="Původní NUŠL na Invenio v1",
+#             oai_endpoint="https://invenio.nusl.cz/oai2d/",
+#             metadata_prefix="marcxml"
+#         )
+#         db.session.add(provider)
+#         db.session.commit()
+#     migrator = OAIMigration(handler=oai_id_handler, provider=provider)
+#     migrator.run()
 
 
 @migration.command('pid')
@@ -100,7 +102,7 @@ def migrate_old_pid():
                     print("Session was commited")
             while_condition = records.has_next
             records = records.next()
-    except IntegrityError: # pragma: no cover
+    except IntegrityError:  # pragma: no cover
         db.session.rollback()
         raise
     else:
