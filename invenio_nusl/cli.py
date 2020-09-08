@@ -1,3 +1,5 @@
+import time
+
 import click
 import invenio_indexer.api
 import invenio_indexer.cli
@@ -29,9 +31,15 @@ def nusl():
 @click.pass_context
 def reindex(ctx):
     with current_api.app_context():
-        ctx.invoke(invenio_indexer.cli.reindex, pid_type='dnusl')
-        invenio_indexer.api.RecordIndexer(version_type=None).process_bulk_queue(
-            es_bulk_kwargs={'raise_on_error': True})
+        print("Purging queue...")
+        ctx.invoke(invenio_indexer.cli.purge_queue)
+        print("Push index to the queue...")
+        ctx.invoke(invenio_indexer.cli.reindex, pid_type='dnusl', yes_i_know=True)
+        time.sleep(2)
+        print("Running reindex...")
+        ctx.invoke(invenio_indexer.cli.run)
+        # invenio_indexer.api.RecordIndexer(version_type=None).process_bulk_queue(
+        #     es_bulk_kwargs={'raise_on_error': True})
 
 
 ########################################################################################
