@@ -1,0 +1,25 @@
+[tool]
+[tool.poetry]
+name = "invenio-nusl"
+version = "1.1.2"
+description = "NUSL app"
+license = "MIT"
+keywords = ["NUSL", "Invenio"]
+classifiers = ["Environment :: Web Environment", "Intended Audience :: Developers", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent", "Programming Language :: Python", "Topic :: Internet :: WWW/HTTP :: Dynamic Content", "Topic :: Software Development :: Libraries :: Python Modules", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3.7", "Development Status :: 3 - Planning"]
+authors = ["Daniel Kopecký <Daniel.Kopecky@techlib.cz>"]
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+oarepo = "^3.3.0.4"
+invenio-nusl-theses = { git = "https://github.com/Narodni-repozitar/invenio-nusl-theses.git" }
+invenio-nusl-common = { git = "https://github.com/Narodni-repozitar/invenio-nusl-common.git" }
+invenio-initial-theses-conversion = { git = "https://github.com/Narodni-repozitar/invenio-initial-theses-conversion.git" }
+oarepo-references = "<1.8.1"
+oarepo-invenio-records-draft = "<5.0.0"
+xmltodict = "^0.12.0"
+
+[tool.poetry.extras]
+tests = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "pytest-cache", "pytest-cov", "pytest-invenio", "pytest-mock", "pytest-pep8", "pytest-random-order", "selenium"]
+all = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "pytest-cache", "pytest-cov", "pytest-invenio", "pytest-mock", "pytest-pep8", "pytest-random-order", "selenium", "sphinx"]
+docs = ["sphinx"]
