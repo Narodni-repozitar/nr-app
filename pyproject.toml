@@ -14,6 +14,7 @@ python = "^3.8"
 oarepo = "^3.3.0.4"
 invenio-nusl-theses = { git = "https://github.com/Narodni-repozitar/invenio-nusl-theses.git", branch = "new-oarepo-libraries" }
 invenio-nusl-common = { git = "https://github.com/Narodni-repozitar/invenio-nusl-common.git", branch = "new_oarepo_libraries" }
+nr-taxonomies = {git = "https://github.com/Narodni-repozitar/nr-taxonomies.git"}
 #invenio-initial-theses-conversion = { git = "https://github.com/Narodni-repozitar/invenio-initial-theses-conversion.git" }
 xmltodict = "^0.12.0"
 

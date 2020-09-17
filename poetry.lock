@@ -4,7 +4,7 @@ description = "A database migration tool for SQLAlchemy."
 name = "alembic"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "1.4.2"
+version = "1.4.3"
 
 [package.dependencies]
 Mako = "*"
@@ -148,7 +148,7 @@ description = "An easy safelist-based HTML-sanitizing tool."
 name = "bleach"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-version = "3.1.5"
+version = "3.2.0"
 
 [package.dependencies]
 packaging = "*"
@@ -1361,7 +1361,7 @@ docs = ["Sphinx (>=1.5.1)"]
 tests = ["check-manifest (>=0.25)", "coverage (>=4.0)", "isort (>=4.3.3)", "mock (>=2.0.0)", "pydocstyle (>=1.0.0)", "pytest-cache (>=1.0)", "pytest-cov (>=1.8.0)", "pytest-invenio (>=1.0.2,<1.1.0)", "pytest-mock (>=1.6.0)", "pytest-pep8 (>=1.0.6)", "pytest-random-order (>=0.5.4)", "pytest (>=2.8.0)", "selenium (>=3.4.3)"]
 
 [package.source]
-reference = "7d22fca28fcaba02e574cf1b67a2c14df655d16c"
+reference = "1f64d735ab1531dd305065c3e8ff629f95ed1d70"
 type = "git"
 url = "https://github.com/Narodni-repozitar/invenio-nusl-common.git"
 [[package]]
@@ -1385,7 +1385,7 @@ docs = ["Sphinx (>=1.5.1)"]
 tests = ["oarepo (>=3.3.0.4,<3.4.0.0)", "pytest (>=6.0.0,<7.0.0)"]
 
 [package.source]
-reference = "5f8654e1082ea9f23fb5c76525d113279c8b5ad7"
+reference = "86ecefa77cdd9756c9e08da21c13f89eb2966cc6"
 type = "git"
 url = "https://github.com/Narodni-repozitar/invenio-nusl-theses.git"
 [[package]]
@@ -1971,11 +1971,11 @@ description = "A lightweight library for converting complex datatypes to and fro
 name = "marshmallow"
 optional = false
 python-versions = ">=3.5"
-version = "3.7.1"
+version = "3.8.0"
 
 [package.extras]
 dev = ["pytest", "pytz", "simplejson", "mypy (0.782)", "flake8 (3.8.3)", "flake8-bugbear (20.1.4)", "pre-commit (>=2.4,<3.0)", "tox"]
-docs = ["sphinx (3.1.2)", "sphinx-issues (1.2.0)", "alabaster (0.7.12)", "sphinx-version-warning (1.1.2)", "autodocsumm (0.1.13)"]
+docs = ["sphinx (3.2.1)", "sphinx-issues (1.2.0)", "alabaster (0.7.12)", "sphinx-version-warning (1.1.2)", "autodocsumm (0.2.0)"]
 lint = ["mypy (0.782)", "flake8 (3.8.3)", "flake8-bugbear (20.1.4)", "pre-commit (>=2.4,<3.0)"]
 tests = ["pytest", "pytz", "simplejson"]
 
@@ -2107,6 +2107,22 @@ version = "1.3.7"
 
 [[package]]
 category = "main"
+description = "NUSL theses data model."
+name = "nr-taxonomies"
+optional = false
+python-versions = "*"
+version = "1.0.0a1"
+
+[package.dependencies]
+oarepo-taxonomies = ">=2.4.1,<3.0.0"
+requests = "*"
+
+[package.source]
+reference = "339bd888662289332e8574eb722a33c4b533101f"
+type = "git"
+url = "https://github.com/Narodni-repozitar/nr-taxonomies.git"
+[[package]]
+category = "main"
 description = "NumPy is the fundamental package for array computing with Python."
 name = "numpy"
 optional = false
@@ -2119,7 +2135,7 @@ description = "CESNET, UCT Prague and NTK wrapper around Invenio v3."
 name = "oarepo"
 optional = false
 python-versions = "*"
-version = "3.3.0.7"
+version = "3.3.0.9"
 
 [package.dependencies]
 Babel = "2.8.0"
@@ -2149,14 +2165,14 @@ Mako = "1.1.3"
 MarkupSafe = "1.1.1"
 Pillow = "7.2.0"
 PyJWT = "1.7.1"
-Pygments = "2.6.1"
+Pygments = "2.7.0"
 SQLAlchemy = "1.3.19"
 SQLAlchemy-Continuum = "1.3.11"
 SQLAlchemy-Utils = "0.35.0"
 WTForms = "2.3.3"
-Wand = "0.6.2"
+Wand = "0.6.3"
 Werkzeug = "1.0.1"
-alembic = "1.4.2"
+alembic = "1.4.3"
 amqp = "2.6.1"
 angular-gettext-babel = "0.3"
 aniso8601 = "8.0.0"
@@ -2166,7 +2182,7 @@ attrs = "20.2.0"
 backcall = "0.2.0"
 base32-lib = "1.0.2"
 billiard = "3.6.3.0"
-bleach = "3.1.5"
+bleach = "3.2.0"
 blinker = "1.4"
 cachelib = "0.1.1"
 cchardet = "2.1.6"
@@ -2237,7 +2253,7 @@ jupyter-core = "4.6.3"
 kombu = "4.6.11"
 limits = "1.5.1"
 lxml = "4.5.2"
-marshmallow = "3.7.1"
+marshmallow = "3.8.0"
 maxminddb = "2.0.2"
 maxminddb-geolite2 = "2018.703"
 mistune = "0.8.4"
@@ -2265,7 +2281,7 @@ py = "1.9.0"
 pycparser = "2.20"
 pynpm = "0.1.2"
 pyparsing = "2.4.7"
-pyrsistent = "0.16.0"
+pyrsistent = "0.17.3"
 pytest = "5.2.1"
 python-dateutil = "2.8.1"
 python-editor = "1.0.4"
@@ -2379,7 +2395,7 @@ description = "Wrapper that connect flask-taxonomies with Invenio"
 name = "oarepo-taxonomies"
 optional = false
 python-versions = "*"
-version = "2.4.1"
+version = "2.4.2"
 
 [package.dependencies]
 boltons = ">=20.0.0"
@@ -2606,7 +2622,7 @@ description = "Pygments is a syntax highlighting package written in Python."
 name = "pygments"
 optional = false
 python-versions = ">=3.5"
-version = "2.6.1"
+version = "2.7.0"
 
 [[package]]
 category = "main"
@@ -2647,11 +2663,8 @@ category = "main"
 description = "Persistent/Functional/Immutable data structures"
 name = "pyrsistent"
 optional = false
-python-versions = "*"
-version = "0.16.0"
-
-[package.dependencies]
-six = "*"
+python-versions = ">=3.5"
+version = "0.17.3"
 
 [[package]]
 category = "main"
@@ -3012,7 +3025,7 @@ description = "Ctypes-based simple MagickWand API binding for Python"
 name = "wand"
 optional = false
 python-versions = "*"
-version = "0.6.2"
+version = "0.6.3"
 
 [package.extras]
 doc = ["Sphinx (>=2.4.1)"]
@@ -3111,13 +3124,14 @@ docs = []
 tests = []
 
 [metadata]
-content-hash = "2960fb4d3eead95c9b89445b7da71362774fa853229570f42c634b193280e356"
+content-hash = "aa09b2c0986ff2f9c65d81160a128b1ae85c177815d23d5cfbb06871b521d8ea"
 lock-version = "1.0"
 python-versions = "^3.8"
 
 [metadata.files]
 alembic = [
-    {file = "alembic-1.4.2.tar.gz", hash = "sha256:035ab00497217628bf5d0be82d664d8713ab13d37b630084da8e1f98facf4dbf"},
+    {file = "alembic-1.4.3-py2.py3-none-any.whl", hash = "sha256:4e02ed2aa796bd179965041afa092c55b51fb077de19d61835673cc80672c01c"},
+    {file = "alembic-1.4.3.tar.gz", hash = "sha256:5334f32314fb2a56d86b4c4dd1ae34b08c03cae4cb888bc699942104d66bc245"},
 ]
 amqp = [
     {file = "amqp-2.6.1-py2.py3-none-any.whl", hash = "sha256:aa7f313fb887c91f15474c1229907a04dac0b8135822d6603437803424c0aa59"},
@@ -3166,8 +3180,8 @@ billiard = [
     {file = "billiard-3.6.3.0.tar.gz", hash = "sha256:d91725ce6425f33a97dfa72fb6bfef0e47d4652acd98a032bd1a7fbf06d5fa6a"},
 ]
 bleach = [
-    {file = "bleach-3.1.5-py2.py3-none-any.whl", hash = "sha256:2bce3d8fab545a6528c8fa5d9f9ae8ebc85a56da365c7f85180bfe96a35ef22f"},
-    {file = "bleach-3.1.5.tar.gz", hash = "sha256:3c4c520fdb9db59ef139915a5db79f8b51bc2a7257ea0389f30c846883430a4b"},
+    {file = "bleach-3.2.0-py2.py3-none-any.whl", hash = "sha256:769483204d247465c0b001ead257fb86bba6944bce6fe1b6759c812cceb54e3d"},
+    {file = "bleach-3.2.0.tar.gz", hash = "sha256:f9e0205cc57b558c21bdfc11034f9d96b14c4052c25be60885d94f4277c792e0"},
 ]
 blinker = [
     {file = "blinker-1.4.tar.gz", hash = "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"},
@@ -3728,8 +3742,8 @@ markupsafe = [
     {file = "MarkupSafe-1.1.1.tar.gz", hash = "sha256:29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b"},
 ]
 marshmallow = [
-    {file = "marshmallow-3.7.1-py2.py3-none-any.whl", hash = "sha256:67bf4cae9d3275b3fc74bd7ff88a7c98ee8c57c94b251a67b031dc293ecc4b76"},
-    {file = "marshmallow-3.7.1.tar.gz", hash = "sha256:a2a5eefb4b75a3b43f05be1cca0b6686adf56af7465c3ca629e5ad8d1e1fe13d"},
+    {file = "marshmallow-3.8.0-py2.py3-none-any.whl", hash = "sha256:2272273505f1644580fbc66c6b220cc78f893eb31f1ecde2af98ad28011e9811"},
+    {file = "marshmallow-3.8.0.tar.gz", hash = "sha256:47911dd7c641a27160f0df5fd0fe94667160ffe97f70a42c3cc18388d86098cc"},
 ]
 maxminddb = [
     {file = "maxminddb-2.0.2.tar.gz", hash = "sha256:b95d8ed21799e6604683669c7ed3c6a184fcd92434d5762dccdb139b4f29e597"},
@@ -3785,6 +3799,7 @@ nose = [
     {file = "nose-1.3.7-py3-none-any.whl", hash = "sha256:9ff7c6cc443f8c51994b34a667bbcf45afd6d945be7477b52e97516fd17c53ac"},
     {file = "nose-1.3.7.tar.gz", hash = "sha256:f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98"},
 ]
+nr-taxonomies = []
 numpy = [
     {file = "numpy-1.17.2-cp35-cp35m-macosx_10_6_intel.whl", hash = "sha256:3d0b0989dd2d066db006158de7220802899a1e5c8cf622abe2d0bd158fd01c2c"},
     {file = "numpy-1.17.2-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:7bd355ad7496f4ce1d235e9814ec81ee3d28308d591c067ce92e49f745ba2c2f"},
@@ -3804,8 +3819,8 @@ numpy = [
     {file = "numpy-1.17.2.zip", hash = "sha256:73615d3edc84dd7c4aeb212fa3748fb83217e00d201875a47327f55363cef2df"},
 ]
 oarepo = [
-    {file = "oarepo-3.3.0.7-py2.py3-none-any.whl", hash = "sha256:c17648b86d5cf2f31f0e627c1c010cb62855483a799c390590bcef0bb25be2f6"},
-    {file = "oarepo-3.3.0.7.tar.gz", hash = "sha256:01a2c40d0e34b2ac320471bdcd7b5e8e448ddb9c9417ee1d43397c27b0d89f90"},
+    {file = "oarepo-3.3.0.9-py2.py3-none-any.whl", hash = "sha256:fdfed353395cd1097a17335673d9e50bcf1e0389c99f7ebe39546d9bfca20651"},
+    {file = "oarepo-3.3.0.9.tar.gz", hash = "sha256:24b525ef7ee6aaa6be8a4fed0146c3921882596a328170df99c042ffcca5451e"},
 ]
 oarepo-invenio-model = [
     {file = "oarepo_invenio_model-2.0.1-py3-none-any.whl", hash = "sha256:77b97f64d19a5ae96d665e8beec84421b1999f57ba9c458cf623d1f9624713e8"},
@@ -3828,8 +3843,8 @@ oarepo-references = [
     {file = "oarepo_references-1.8.3-py2.py3-none-any.whl", hash = "sha256:469ab2e1f086ebd2aebf586c58e99e1e59a11c8f32c165981402be7d892ec63d"},
 ]
 oarepo-taxonomies = [
-    {file = "oarepo_taxonomies-2.4.1-py2.py3-none-any.whl", hash = "sha256:c01953cb027debd42ed718ac95eec7c12e90f47981ab619e5ae6c9ae34436bc2"},
-    {file = "oarepo_taxonomies-2.4.1.tar.gz", hash = "sha256:6bcc7902a5aebaeec3ada6eea2f1e95d5153b50b5820195fc48c4ac2ae6ec355"},
+    {file = "oarepo_taxonomies-2.4.2-py2.py3-none-any.whl", hash = "sha256:5567c7f3e42b3bfa5f40bce28b435000239e3429c7e7fe5fc01124969712ba24"},
+    {file = "oarepo_taxonomies-2.4.2.tar.gz", hash = "sha256:430659c3cd13bc333606e5c49e1c83e4ae0e3b5fd0cbd5b233b81fc0fcf09112"},
 ]
 oarepo-validate = [
     {file = "oarepo-validate-1.2.8.tar.gz", hash = "sha256:07eaf62de476e07c71e23dd2c098eeb5e0f3e46cd3c54f3c6250d12d83b7785f"},
@@ -3963,8 +3978,8 @@ pycparser = [
     {file = "pycparser-2.20.tar.gz", hash = "sha256:2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0"},
 ]
 pygments = [
-    {file = "Pygments-2.6.1-py3-none-any.whl", hash = "sha256:ff7a40b4860b727ab48fad6360eb351cc1b33cbf9b15a0f689ca5353e9463324"},
-    {file = "Pygments-2.6.1.tar.gz", hash = "sha256:647344a061c249a3b74e230c739f434d7ea4d8b1d5f3721bc0f3558049b38f44"},
+    {file = "Pygments-2.7.0-py3-none-any.whl", hash = "sha256:2df50d16b45b977217e02cba6c8422aaddb859f3d0570a88e09b00eafae89c6e"},
+    {file = "Pygments-2.7.0.tar.gz", hash = "sha256:2594e8fdb06fef91552f86f4fd3a244d148ab24b66042036e64f29a291515048"},
 ]
 pyjwt = [
     {file = "PyJWT-1.7.1-py2.py3-none-any.whl", hash = "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e"},
@@ -3979,7 +3994,7 @@ pyparsing = [
     {file = "pyparsing-2.4.7.tar.gz", hash = "sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"},
 ]
 pyrsistent = [
-    {file = "pyrsistent-0.16.0.tar.gz", hash = "sha256:28669905fe725965daa16184933676547c5bb40a5153055a8dee2a4bd7933ad3"},
+    {file = "pyrsistent-0.17.3.tar.gz", hash = "sha256:2e636185d9eb976a18a8a8e96efce62f2905fea90041958d8cc2a189756ebf3e"},
 ]
 pytest = [
     {file = "pytest-5.2.1-py3-none-any.whl", hash = "sha256:7e4800063ccfc306a53c461442526c5571e1462f61583506ce97e4da6a1d88c8"},
@@ -4212,8 +4227,8 @@ virtualenv-clone = [
     {file = "virtualenv_clone-0.5.3-py2.py3-none-any.whl", hash = "sha256:532f789a5c88adf339506e3ca03326f20ee82fd08ee5586b44dc859b5b4468c5"},
 ]
 wand = [
-    {file = "Wand-0.6.2-py2.py3-none-any.whl", hash = "sha256:b56b96189df2ac3db586afdc6ba67ca37c886d234c3fd98d94172f03248a8e3b"},
-    {file = "Wand-0.6.2.tar.gz", hash = "sha256:65440e478b595aaa18483e25091adacf6d4458c49c2fd8d59e0fd44a7393a14a"},
+    {file = "Wand-0.6.3-py2.py3-none-any.whl", hash = "sha256:566b3d049858efa879096a7ab2e0516d67a240e6c3ffd7a267298c41e81c14b7"},
+    {file = "Wand-0.6.3.tar.gz", hash = "sha256:d21429288fe0de63d829dbbfb26736ebaed9fd0792c2a0dc5943c5cab803a708"},
 ]
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},

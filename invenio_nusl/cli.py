@@ -22,6 +22,11 @@ import click
 @click.group()
 def nusl():
     """Nusl commands."""
+    pass
+
+@nusl.command("test")
+def test_command():
+    print("Test command")
 #
 #
 # ########################################################################################
