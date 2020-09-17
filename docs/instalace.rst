@@ -80,15 +80,6 @@ Instalace ze zdrojového kódu
         #    cis_login=CISLoginAuthRemote().remote_app(),
         #)
 
-#. Invenio Nušl vyžaduje schéma pro drafty. Je nutné nainstalovat **oarepo-invenio-records-draft** ,
-    a poté vytvořit JSON schéma a Elasticseacrh mapping. Více v dokumentaci balíčku
-    `zde <https://github.com/oarepo/invenio-records-draft>`_.
-
-    .. code-block::
-
-        pip install oarepo-invenio-records-draft
-        invenio draft make-schemas
-        invenio draft make-mappings
 
 #. Nasazení services
 
@@ -99,6 +90,28 @@ Instalace ze zdrojového kódu
     .. code-block::
 
         docker-compose up
+
+    .. warning::
+
+        Taxonomie vyžadují verzi PostgreSQL větší než ??? a rozšíření ltree.
+
+    Po nabootování Postgres databáze je nutné doinstalovat ltree rozšíření. Je nutné se přihlásit do psql.
+
+    .. code-block::
+
+        psql -h <HOST:localhost> -p <PORT:5432> -U <USER:oarepo> -W <PASSWORD:oarepo>
+
+    Uvnitř psql se zavolá:
+
+    .. code-block::
+
+        create extension ltree;
+
+    Ověří se jsetli se ltree nachází v extensions:
+
+    .. code-block::
+
+        SELECT * FROM pg_extension;
 
 #. Invenio bootstrap
 
