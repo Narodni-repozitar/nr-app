@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Invenio Nusl'
+project = 'Czech National Repository'
 copyright = '2020, Daniel Kopecký'
 author = 'Daniel Kopecký'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.2'
+release = '2.0.0a1'
 
 # -- General configuration ---------------------------------------------------
 

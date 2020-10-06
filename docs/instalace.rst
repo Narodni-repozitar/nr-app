@@ -7,19 +7,19 @@ Instalace ze zdrojového kódu
 
 0. Instalace Invenia a Invenio-Oarepo
 
-    Invenio NUSL předpokládá nainstalované `Invenio <https://invenio.readthedocs.io/en/stable/quickstart.html>`_ a
+    NR-app předpokládá nainstalované `Invenio <https://invenio.readthedocs.io/en/stable/quickstart.html>`_ a
     `Invenio OARepo <https://pypi.org/project/invenio-oarepo/>`_.
 
 #. Instalace závislostí
 
     Nejprve musíme nainstalovat moduly, které chceme pod Inveniem provozovat.
-    V tuto chvíli se jedná o **invenio-nusl-common** a **invenio-nusl-theses**
+    V tuto chvíli se jedná o **inr-common** a **nr-theses**
 
     .. code-block::
 
         pip instal -e <<cesta do složky se setup.py>>
 
-#. Instalace samotného invenio-nusl
+#. Instalace samotné nr-app
 
     Instalaci spustíme stejně jako předchozí instalace závislostí.
 

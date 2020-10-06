@@ -1,5 +1,5 @@
 ################
-Nušl repozitář
+Národní repozitář
 ################
 *************
 Datový model
@@ -38,12 +38,12 @@ Změnu otestujeme (tests/test_rules.py)
 
 2. Marshmallow
 ----------------------------------------------------------
-* V souboru invenio_nusl_***/marshmallow/json.py se změní marshmallow schéma
+* V souboru nr_***/marshmallow/json.py se změní marshmallow schéma
 * Změna modulu se náležitě otestuje (tests/test_marshmallow.py)
 
 3. JSON-schema
 ----------------------------------------------------------
-* Schéma se mění v souboru invenio_nusl_***/jsonschemas/invenio_nusl_***/nusl-theses-v1.0.0.json
+* Schéma se mění v souboru nr_***/jsonschemas/nr_***/nr-theses-v1.0.0.json
 * Pokud je položka taxonomie, tak se jen odkáže na taxonomická schémata např.:
 
 .. code-block:: javascript
@@ -55,13 +55,13 @@ Změnu otestujeme (tests/test_rules.py)
 
 4. Elasticsearch mappings
 ----------------------------
-* Schéma se mění v souboru invenio_nusl_***/mappings/v6/invenio_nusl_***/nusl-theses-v1.0.0.json
-* Rozvětvená schémata se ukládají do složky invenio_nusl_***/included_mappings/v6 a odkazuje se na ně pomocí slova type:
+* Schéma se mění v souboru nr_***/mappings/v6/nr_***/nr-theses-v1.0.0.json
+* Rozvětvená schémata se ukládají do složky nr_***/included_mappings/v6 a odkazuje se na ně pomocí slova type:
 
 .. code-block:: javascript
 
     "title": {
-                    "type": "nusl-common-v1.0.0.json#/multilanguage"
+                    "type": "nr-common-v1.0.0.json#/multilingual"
                 }
 
 * Na taxonomická schémata se odkazuje:

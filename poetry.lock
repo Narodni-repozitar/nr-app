@@ -276,7 +276,7 @@ description = "Check MANIFEST.in in a Python source package for completeness"
 name = "check-manifest"
 optional = false
 python-versions = ">=3.5"
-version = "0.43"
+version = "0.44"
 
 [package.dependencies]
 pep517 = "*"
@@ -1404,61 +1404,6 @@ tests = ["check-manifest (>=0.25)", "coverage (>=4.0)", "isort (>=4.2.2)", "pydo
 
 [[package]]
 category = "main"
-description = "NUSL common data types"
-name = "invenio-nusl-common"
-optional = false
-python-versions = "*"
-version = "3.0.0a6"
-
-[package.dependencies]
-IDUtils = ">=1.1.8,<2.0.0"
-arrow = "*"
-isbnlib = ">=3.10.3,<4.0.0"
-oarepo-invenio-model = ">=2.0.0,<3.0.0"
-oarepo-multilingual = ">=2.0.0,<3.0.0"
-oarepo-taxonomies = ">=2.5.0,<3.0.0"
-pycountry = ">=19.0.0"
-pytest-invenio = "1.3.4"
-python-stdnum = ">=1.14,<2.0"
-
-[package.extras]
-all = ["Sphinx (>=1.5.1)", "Sphinx (>=1.5.1)", "oarepo", "oarepo", "pytest", "pytest", "pytest-cov", "pytest-cov"]
-docs = ["Sphinx (>=1.5.1)"]
-tests = ["oarepo", "pytest", "pytest-cov"]
-
-[package.source]
-reference = "bceacafda13bcef68a3c5ef3ec501c3b12ac20a2"
-type = "git"
-url = "https://github.com/Narodni-repozitar/invenio-nusl-common.git"
-[[package]]
-category = "main"
-description = ""
-name = "invenio-nusl-theses"
-optional = false
-python-versions = "^3.8"
-version = "3.0.0a2"
-
-[package.dependencies]
-invenio-nusl-common = "branch master"
-oarepo-invenio-model = "^2.0.1"
-oarepo-multilingual = "^2.2.0"
-oarepo-records-draft = "^5.0.0a7"
-oarepo-references = "^1.8.1"
-oarepo-taxonomies = "^2.4.1"
-oarepo-validate = "^1.2.8"
-pytest-cov = "^2.10.1"
-pytest-runner = "^5.2"
-
-[package.extras]
-docs = ["sphinx (>=1.5.1)"]
-tests = ["oarepo (^3.3)", "pytest (^5.0.0)"]
-
-[package.source]
-reference = "e9fd713a2f3c6bb9d4e67211851f5f4d109b3d63"
-type = "git"
-url = "https://github.com/Narodni-repozitar/invenio-nusl-theses.git"
-[[package]]
-category = "main"
 description = "Invenio module that implements OAI-PMH server."
 name = "invenio-oaiserver"
 optional = false
@@ -2190,13 +2135,54 @@ version = "1.3.7"
 [[package]]
 category = "main"
 description = ""
+name = "nr-cli"
+optional = false
+python-versions = "^3.8"
+version = "1.0.0a1"
+
+[package.source]
+reference = "743e09e0394126300d4a4c1aeae18e6409d96ace"
+type = "git"
+url = "https://github.com/Narodni-repozitar/nr-cli.git"
+[[package]]
+category = "main"
+description = "NR common data types"
+name = "nr-common"
+optional = false
+python-versions = "*"
+version = "3.0.0a7"
+
+[package.dependencies]
+IDUtils = ">=1.1.8,<2.0.0"
+arrow = "*"
+isbnlib = ">=3.10.3,<4.0.0"
+oarepo-invenio-model = ">=2.0.0,<3.0.0"
+oarepo-mapping-includes = "1.2.0"
+oarepo-multilingual = ">=2.0.0,<3.0.0"
+oarepo-taxonomies = ">=2.5.0,<3.0.0"
+pycountry = ">=19.0.0"
+pytest-invenio = "1.3.4"
+python-stdnum = ">=1.14,<2.0"
+
+[package.extras]
+all = ["Sphinx (>=1.5.1)", "Sphinx (>=1.5.1)", "oarepo", "oarepo", "pytest", "pytest", "pytest-cov", "pytest-cov"]
+docs = ["Sphinx (>=1.5.1)"]
+tests = ["oarepo", "pytest", "pytest-cov"]
+
+[package.source]
+reference = "c4c401ee4bdb27cbd5f597f7f5d0db2abfa4d894"
+type = "git"
+url = "https://github.com/Narodni-repozitar/nr-common.git"
+[[package]]
+category = "main"
+description = ""
 name = "nr-events"
 optional = false
 python-versions = "^3.8"
 version = "1.0.0a1"
 
 [package.dependencies]
-invenio-nusl-common = "branch master"
+nr-common = "branch master"
 oarepo-invenio-model = "^2.0.1"
 oarepo-multilingual = "^2.2.0"
 oarepo-records-draft = "^5.0.0a7"
@@ -2209,7 +2195,7 @@ pytest-runner = "^5.2"
 tests = ["oarepo (^3.3)", "pytest (^5.0.0)", "pytest-cov (^2.10.1)"]
 
 [package.source]
-reference = "7eaafd7b2ca8a9dacebb50f125d6cd473a8d4921"
+reference = "402b19c2154e5328aa46662c94330aa7b3bbed10"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-events.git"
 [[package]]
@@ -2221,7 +2207,7 @@ python-versions = "^3.8"
 version = "1.0.0a1"
 
 [package.dependencies]
-invenio-nusl-common = "branch master"
+nr-common = "branch master"
 oarepo-invenio-model = "^2.0.1"
 oarepo-multilingual = "^2.2.0"
 oarepo-records-draft = "^5.0.0a7"
@@ -2234,25 +2220,56 @@ pytest-runner = "^5.2"
 tests = ["oarepo (^3.3)", "pytest (^5.0.0)", "pytest-cov (^2.10.1)"]
 
 [package.source]
-reference = "e3021e22c3ba3928a8032f80ed84c8e11f1366ce"
+reference = "c23edc1274dfd0a4d9d95f92c6691e06dc5377d9"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-Nresults.git"
 [[package]]
 category = "main"
-description = "NUSL theses data model."
+description = ""
 name = "nr-taxonomies"
 optional = false
-python-versions = "*"
-version = "1.0.0a1"
+python-versions = "^3.8"
+version = "1.0.0a2"
 
 [package.dependencies]
-oarepo-taxonomies = ">=2.4.1,<3.0.0"
+nr-cli = "branch master"
+oarepo-taxonomies = "<3.0.0,>=2.4.1"
 requests = "*"
 
+[package.extras]
+tests = ["oarepo (^3.3.0)", "pytest (^5.0.0)", "pytest-cov (^2.10.1)"]
+
 [package.source]
-reference = "42d50f91ca4de66e29e1898b3876f367120cc0fd"
+reference = "4990c602a03113cf03599d38e4d29d0b49132ba7"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-taxonomies.git"
+[[package]]
+category = "main"
+description = ""
+name = "nr-theses"
+optional = false
+python-versions = "^3.8"
+version = "3.0.0a2"
+
+[package.dependencies]
+nr-common = "branch master"
+oarepo-invenio-model = "^2.0.1"
+oarepo-multilingual = "^2.2.0"
+oarepo-records-draft = "^5.0.0a7"
+oarepo-references = "^1.8.1"
+oarepo-taxonomies = "^2.4.1"
+oarepo-validate = "^1.2.8"
+pytest-cov = "^2.10.1"
+pytest-runner = "^5.2"
+
+[package.extras]
+docs = ["sphinx (>=1.5.1)"]
+tests = ["oarepo (^3.3)", "pytest (^5.0.0)"]
+
+[package.source]
+reference = "84f11540ec3213b3f1bbd772a8d0aabfa01e289b"
+type = "git"
+url = "https://github.com/Narodni-repozitar/nr-theses.git"
 [[package]]
 category = "main"
 description = "NumPy is the fundamental package for array computing with Python."
@@ -2449,14 +2466,14 @@ description = "Invenio data model for OARepo"
 name = "oarepo-invenio-model"
 optional = false
 python-versions = "*"
-version = "2.0.2"
+version = "2.1.2"
 
 [package.dependencies]
 flask = "*"
 marshmallow = "*"
 
 [package.extras]
-tests = ["pytest (>=4.6.3)", "oarepo-mapping-includes", "oarepo"]
+tests = ["pytest-invenio (1.3.4)", "pytest (>=4.6.3)", "oarepo-mapping-includes", "oarepo"]
 validate = ["oarepo-validate"]
 
 [[package]]
@@ -2481,14 +2498,14 @@ description = "Multilingual support for OARepo"
 name = "oarepo-multilingual"
 optional = false
 python-versions = "*"
-version = "2.2.0"
+version = "2.4.0"
 
 [package.dependencies]
 flask = "*"
 marshmallow = "*"
 
 [package.extras]
-tests = ["oarepo-mapping-includes", "oarepo"]
+tests = ["pytest-invenio (1.3.4)", "oarepo-mapping-includes", "oarepo"]
 
 [[package]]
 category = "main"
@@ -2496,7 +2513,7 @@ description = "Handling Draft and Production invenio records in one package"
 name = "oarepo-records-draft"
 optional = false
 python-versions = "*"
-version = "5.0.0a16"
+version = "5.0.0a18"
 
 [package.dependencies]
 deepmerge = "*"
@@ -2549,7 +2566,7 @@ description = "OArepo Validate library for record metadata validation"
 name = "oarepo-validate"
 optional = false
 python-versions = "*"
-version = "1.3.1"
+version = "1.3.2"
 
 [package.dependencies]
 invenio-jsonschemas = "*"
@@ -3405,7 +3422,7 @@ docs = []
 tests = []
 
 [metadata]
-content-hash = "50d904634df1d703503813304cf9036a8d54ceba597add512aae9b0bdfc0551b"
+content-hash = "736a095f100c1d66278512a7369a651b18a8df80a6f36923446f9fde908ac754"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -3553,8 +3570,8 @@ chardet = [
     {file = "chardet-3.0.4.tar.gz", hash = "sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae"},
 ]
 check-manifest = [
-    {file = "check-manifest-0.43.tar.gz", hash = "sha256:1f787b81e5a2a3c69a9e4a2a44788ab672efbac43d7d5bd0b9e8fe49a0929e55"},
-    {file = "check_manifest-0.43-py2.py3-none-any.whl", hash = "sha256:885a867d6d3f6ed68bb2862f2580c3bc3ec52d20d49ad601f1b112a89d74ae15"},
+    {file = "check-manifest-0.44.tar.gz", hash = "sha256:1d09db87162a70aa2877660c0ac1a1153e62b8e69bbde5e6155af7507e417af1"},
+    {file = "check_manifest-0.44-py2.py3-none-any.whl", hash = "sha256:5866028482fb05c411f5e0dc27d4d86209959c1334645f223667cec445be363d"},
 ]
 click = [
     {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},
@@ -3877,8 +3894,6 @@ invenio-mail = [
     {file = "invenio-mail-1.0.2.tar.gz", hash = "sha256:898952aa8984426074fd92b60bbe3ac67117cae0c724724aa63476416a7b7647"},
     {file = "invenio_mail-1.0.2-py2.py3-none-any.whl", hash = "sha256:fcd9ec4a89e0e68d09a9b9a638ee625e260ef98d6bc9d7aa172ec3969a95933f"},
 ]
-invenio-nusl-common = []
-invenio-nusl-theses = []
 invenio-oaiserver = [
     {file = "invenio-oaiserver-1.2.0.tar.gz", hash = "sha256:dc3225d1a096e5072f0c90bcff6405e3448bf6e9216ff905535f6aae6ffed2b4"},
     {file = "invenio_oaiserver-1.2.0-py2.py3-none-any.whl", hash = "sha256:4e219e61340a541ec4568ba8993532d37837a6356a8c9dbf20ee8c60bd3de297"},
@@ -4134,9 +4149,12 @@ nose = [
     {file = "nose-1.3.7-py3-none-any.whl", hash = "sha256:9ff7c6cc443f8c51994b34a667bbcf45afd6d945be7477b52e97516fd17c53ac"},
     {file = "nose-1.3.7.tar.gz", hash = "sha256:f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98"},
 ]
+nr-cli = []
+nr-common = []
 nr-events = []
 nr-nresults = []
 nr-taxonomies = []
+nr-theses = []
 numpy = [
     {file = "numpy-1.17.2-cp35-cp35m-macosx_10_6_intel.whl", hash = "sha256:3d0b0989dd2d066db006158de7220802899a1e5c8cf622abe2d0bd158fd01c2c"},
     {file = "numpy-1.17.2-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:7bd355ad7496f4ce1d235e9814ec81ee3d28308d591c067ce92e49f745ba2c2f"},
@@ -4160,20 +4178,20 @@ oarepo = [
     {file = "oarepo-3.3.0.10.tar.gz", hash = "sha256:57a037d9b9ae8dc65464058ab8618fc68f696fba4e1c88187837be760df42bbf"},
 ]
 oarepo-invenio-model = [
-    {file = "oarepo_invenio_model-2.0.2-py3-none-any.whl", hash = "sha256:fd446ba6409e3741e0a268289621676bd74a6e787071e176691a6287ec09e1d0"},
-    {file = "oarepo_invenio_model-2.0.2.tar.gz", hash = "sha256:24f150e9cdff93b6f5df6ab223022866f08b016d6347a132398a1ceb913b8104"},
+    {file = "oarepo_invenio_model-2.1.2-py3-none-any.whl", hash = "sha256:c957cc6cf3a793c8266d6527de5c6613672b5f474d1c53450203cfed608216c7"},
+    {file = "oarepo_invenio_model-2.1.2.tar.gz", hash = "sha256:41bbd997976c93fbc9abd33638c1b70139c2780ff8db16382411def7bdef7e12"},
 ]
 oarepo-mapping-includes = [
     {file = "oarepo-mapping-includes-1.2.0.tar.gz", hash = "sha256:82177fe88082db1235f47dbf33e78d915758dde04798c097e95c2f5584327adb"},
     {file = "oarepo_mapping_includes-1.2.0-py3-none-any.whl", hash = "sha256:05fd0f561e63db1ada9619e84752ebebe6e0e8cfe9b16362e349045c4d6aebc8"},
 ]
 oarepo-multilingual = [
-    {file = "oarepo_multilingual-2.2.0-py3-none-any.whl", hash = "sha256:dcaf014275b801b2706a7438a07d66ad4d6c0c2ae3de37e10ef091dffda370aa"},
-    {file = "oarepo_multilingual-2.2.0.tar.gz", hash = "sha256:e2f9667e0bab31ba0dc4aeaf1c253065711c8c8f3fe3e5c63d469e72ebf2a66f"},
+    {file = "oarepo_multilingual-2.4.0-py3-none-any.whl", hash = "sha256:fe60b9a1ce2f51796c741e7ba2b497dedfcc2cd1f2a4090b78cf492a86f03b80"},
+    {file = "oarepo_multilingual-2.4.0.tar.gz", hash = "sha256:8492b7b335a7189033424cd47df4f32ede31aa17dea81347ade0b3315f98c1e8"},
 ]
 oarepo-records-draft = [
-    {file = "oarepo-records-draft-5.0.0a16.tar.gz", hash = "sha256:e51751f11a008b20223475d6df8c33f2d048d68dfc5ccb9cfba18c07daf6f423"},
-    {file = "oarepo_records_draft-5.0.0a16-py3-none-any.whl", hash = "sha256:4b96a3be6f18e9c631f0805e645207798561aaa566c044c64bfdac2236b73475"},
+    {file = "oarepo-records-draft-5.0.0a18.tar.gz", hash = "sha256:84f5d28c68a9adbc9f16a6dfd5ce549ba388116d7d20fc112bed2b5b8f05ea98"},
+    {file = "oarepo_records_draft-5.0.0a18-py3-none-any.whl", hash = "sha256:dcc920c3b8196150132540645f1617236f8b4a5e3732bc64c825f67020fe6371"},
 ]
 oarepo-references = [
     {file = "oarepo-references-1.8.3.tar.gz", hash = "sha256:27baae3d26dfb590b1a5db41f124f5147a2409fde08bd0357f40ae6fb09f0605"},
@@ -4184,8 +4202,8 @@ oarepo-taxonomies = [
     {file = "oarepo_taxonomies-2.5.0.tar.gz", hash = "sha256:13410ffe1c555c95bb1b8eb860b51ce6d540c7bd7c54726535aec67fc191323b"},
 ]
 oarepo-validate = [
-    {file = "oarepo-validate-1.3.1.tar.gz", hash = "sha256:92f285434c0e64450d417ad017d5b0888314ce3f2d4ea3a0b4b4db7c9df0261c"},
-    {file = "oarepo_validate-1.3.1-py2.py3-none-any.whl", hash = "sha256:ab0d6ce95eba6a302e0913743697f0f3b354cd5d58af939a19fc7063d6a71b27"},
+    {file = "oarepo-validate-1.3.2.tar.gz", hash = "sha256:fb18118d7d6d27abe1f8f4e7037f0980902d8562d4bf4e207d2ee20c865da8b6"},
+    {file = "oarepo_validate-1.3.2-py2.py3-none-any.whl", hash = "sha256:c919ba7c6c84b3db2f10217830398e582cb220922656099d8032943d8e6992e8"},
 ]
 openpyxl = [
     {file = "openpyxl-3.0.5-py2.py3-none-any.whl", hash = "sha256:f7d666b569f729257082cf7ddc56262431878f602dcc2bc3980775c59439cdab"},
