@@ -2,6 +2,10 @@
 Migrace
 *****************
 
+.. todo::
+
+    Přepracovat až budou napsané nové migrační skripty
+
 Migrací se rozumí migrace dat a perzistentních identifikátorů ze staré služby Národního uložiště šedé literatury (NUŠL)
 běžící na systému Invenio verze 1 do nové služby Národního repozitáře (NR) pracovně nazývaného Chiméra.
 

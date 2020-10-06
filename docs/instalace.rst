@@ -7,19 +7,19 @@ Instalace ze zdrojového kódu
 
 0. Instalace Invenia a Invenio-Oarepo
 
-    Invenio NUSL předpokládá nainstalované `Invenio <https://invenio.readthedocs.io/en/stable/quickstart.html>`_ a
+    NR-app předpokládá nainstalované `Invenio <https://invenio.readthedocs.io/en/stable/quickstart.html>`_ a
     `Invenio OARepo <https://pypi.org/project/invenio-oarepo/>`_.
 
 #. Instalace závislostí
 
     Nejprve musíme nainstalovat moduly, které chceme pod Inveniem provozovat.
-    V tuto chvíli se jedná o **invenio-nusl-common** a **invenio-nusl-theses**
+    V tuto chvíli se jedná o **inr-common** a **nr-theses**
 
     .. code-block::
 
         pip instal -e <<cesta do složky se setup.py>>
 
-#. Instalace samotného invenio-nusl
+#. Instalace samotné nr-app
 
     Instalaci spustíme stejně jako předchozí instalace závislostí.
 
@@ -80,15 +80,6 @@ Instalace ze zdrojového kódu
         #    cis_login=CISLoginAuthRemote().remote_app(),
         #)
 
-#. Invenio Nušl vyžaduje schéma pro drafty. Je nutné nainstalovat **oarepo-invenio-records-draft** ,
-    a poté vytvořit JSON schéma a Elasticseacrh mapping. Více v dokumentaci balíčku
-    `zde <https://github.com/oarepo/invenio-records-draft>`_.
-
-    .. code-block::
-
-        pip install oarepo-invenio-records-draft
-        invenio draft make-schemas
-        invenio draft make-mappings
 
 #. Nasazení services
 
@@ -99,6 +90,28 @@ Instalace ze zdrojového kódu
     .. code-block::
 
         docker-compose up
+
+    .. warning::
+
+        Taxonomie vyžadují verzi PostgreSQL větší než ??? a rozšíření ltree.
+
+    Po nabootování Postgres databáze je nutné doinstalovat ltree rozšíření. Je nutné se přihlásit do psql.
+
+    .. code-block::
+
+        psql -h <HOST:localhost> -p <PORT:5432> -U <USER:oarepo> -W <PASSWORD:oarepo>
+
+    Uvnitř psql se zavolá:
+
+    .. code-block::
+
+        create extension ltree;
+
+    Ověří se jsetli se ltree nachází v extensions:
+
+    .. code-block::
+
+        SELECT * FROM pg_extension;
 
 #. Invenio bootstrap
 
