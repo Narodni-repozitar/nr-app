@@ -4,6 +4,8 @@ from copy import deepcopy
 from invenio_records_draft.utils import parse_marshmallow_messages
 from sqlalchemy import create_engine, MetaData, update
 
+# TODO: přepracovat s novými migračními skripty
+
 logger = logging.getLogger("fix_valid_error")
 formatter = logging.Formatter(
     '%(asctime)s | %(name)s |  %(levelname)s: %(message)s')
