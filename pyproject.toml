@@ -14,6 +14,7 @@ python = "^3.8"
 oarepo = "^3.3.0.4"
 nr-all = { git = "https://github.com/Narodni-repozitar/nr-all.git", branch = "main" }
 nr-taxonomies = { git = "https://github.com/Narodni-repozitar/nr-taxonomies.git" }
+nr-oai-pmh-harvester = {git = "https://github.com/Narodni-repozitar/nr-oai-pmh-harvester.git", branch = "main"}
 xmltodict = "^0.12.0"
 
 [tool.poetry.extras]
