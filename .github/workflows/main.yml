@@ -1,0 +1,42 @@
+name: Nationa repository test dependencies
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ 3.8, 3.9 ]
+    steps:
+      - name: Checkout oarepo/oarepo
+        uses: actions/checkout@v2
+      - name: Set up Python ver.${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Before install
+        run: |
+          pip install --upgrade pip setuptools py
+          pip install twine wheel coveralls
+          pip install poetry==1.0.10
+          poetry config virtualenvs.create false
+      - name: Install dependencies
+        run: |
+          poetry install --extras tests
+          cat poetry.lock
+      - name: Run-tests
+        run: |
+          ./run-tests.sh
+      #      - name: Check manifest
+      #        run: |
+      #          check-manifest
+#      - name: Build package to publish
+#        run: |
+#          python setup.py sdist bdist_wheel
+#      - name: Publish package
+#        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+#        uses: pypa/gh-action-pypi-publish@master
+#        with:
+#          user: __token__
+#          password: ${{ secrets.PYPI_PASSWORD }}
