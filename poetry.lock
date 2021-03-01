@@ -211,7 +211,7 @@ description = "A simple, correct PEP517 package builder"
 name = "build"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
-version = "0.2.1"
+version = "0.3.0"
 
 [package.dependencies]
 packaging = "*"
@@ -219,7 +219,7 @@ pep517 = ">=0.9"
 toml = "*"
 
 [package.extras]
-docs = ["furo (>=2020.11.19b18)", "sphinx (>=3.0,<4.0)", "sphinx-autodoc-typehints (>=1.10)", "sphinxcontrib-autoprogram (>=0.1)"]
+docs = ["furo (>=2020.11.19b18)", "sphinx (>=3.0,<4.0)", "sphinx-argparse-cli (>=1.5)", "sphinx-autodoc-typehints (>=1.10)"]
 test = ["filelock (>=3)", "pytest (>=4)", "pytest-cov (>=2)", "pytest-mock (>=2)", "pytest-xdist (>=1.34)"]
 typing = ["mypy (0.800)", "typing-extensions (>=3.7.4.3)"]
 virtualenv = ["virtualenv (>=20.0.35)"]
@@ -997,7 +997,10 @@ description = "Flatten JSON objects"
 name = "flatten-json"
 optional = false
 python-versions = "*"
-version = "0.1.7"
+version = "0.1.13"
+
+[package.dependencies]
+six = "*"
 
 [[package]]
 category = "main"
@@ -2322,7 +2325,6 @@ tests = ["oarepo (^3.3)", "pytest (^5.0.0)", "pytest-cov (^2.10.1)"]
 reference = "7a18cbb178dd0417ec9bf64b4a1db852624eea63"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-all.git"
-
 [[package]]
 category = "main"
 description = ""
@@ -2335,7 +2337,6 @@ version = "1.0.0a1"
 reference = "743e09e0394126300d4a4c1aeae18e6409d96ace"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-cli.git"
-
 [[package]]
 category = "main"
 description = ""
@@ -2366,7 +2367,6 @@ tests = ["oarepo (^3.3)", "pytest (^5.0.0)", "pytest-cov (^2.10.1)"]
 reference = "fab77e1d1ba901af3d82fa2c585e5340e2f8bb89"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-common.git"
-
 [[package]]
 category = "main"
 description = ""
@@ -2392,7 +2392,6 @@ tests = ["oarepo (^3.3)", "pytest (^5.0.0)", "pytest-cov (^2.10.1)"]
 reference = "a5e2cfc0fcfae87befb2ffd82e046cdbc2c2c090"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-events.git"
-
 [[package]]
 category = "main"
 description = ""
@@ -2418,7 +2417,6 @@ tests = ["oarepo (^3.3)", "pytest (^5.0.0)", "pytest-cov (^2.10.1)"]
 reference = "8bd2b1c600337746afaaee072dd0f727d14fc04b"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-Nresults.git"
-
 [[package]]
 category = "main"
 description = ""
@@ -2445,7 +2443,6 @@ tests = ["oarepo (^3.3)", "pytest (^5.0.0)", "pytest-cov (^2.10.1)"]
 reference = "1334fd3e8b5d3a44451ecf696949bb35942f8ae4"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-oai-pmh-harvester.git"
-
 [[package]]
 category = "main"
 description = ""
@@ -2466,7 +2463,6 @@ tests = ["oarepo (^3.3.0)", "pytest (^5.0.0)", "pytest-cov (^2.10.1)"]
 reference = "0fb2b2cbbdb71bd59d4a245070c788f58f993050"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-taxonomies.git"
-
 [[package]]
 category = "main"
 description = ""
@@ -2494,7 +2490,6 @@ tests = ["oarepo (^3.3)", "pytest (^5.0.0)"]
 reference = "d21eb194ffa9070bd8fddd63cfe6de6276402363"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-theses.git"
-
 [[package]]
 category = "main"
 description = "CESNET, UCT Prague and NTK wrapper around Invenio v3."
@@ -2769,7 +2764,7 @@ description = "Multilingual support for OARepo"
 name = "oarepo-multilingual"
 optional = false
 python-versions = "*"
-version = "2.4.2"
+version = "2.4.3"
 
 [package.dependencies]
 flask = "*"
@@ -3582,6 +3577,18 @@ version = "5.1.1"
 
 [[package]]
 category = "main"
+description = "Fast, Extensible Progress Meter"
+name = "tqdm"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+version = "4.57.0"
+
+[package.extras]
+dev = ["py-make (>=0.1.0)", "twine", "wheel"]
+telegram = ["requests"]
+
+[[package]]
+category = "main"
 description = "Traitlets Python configuration system"
 name = "traitlets"
 optional = false
@@ -3833,7 +3840,7 @@ docs = []
 tests = []
 
 [metadata]
-content-hash = "998a05b57cc8231681f70f7636174a030d0c2287bab6d7c4711cdcb64e9f292a"
+content-hash = "807246b81d75425e0a319826e3417610d7149f887bccefabc80fa3263f04b06a"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -3911,8 +3918,8 @@ botocore = [
     {file = "botocore-1.20.12.tar.gz", hash = "sha256:39a92315a17a6f8bc1914dbb020f52e929f18e5b99a4fa1c5d8785f913427ed8"},
 ]
 build = [
-    {file = "build-0.2.1-py2.py3-none-any.whl", hash = "sha256:f4a35cd9a7834ef54bdf2159a25ca42979bdf397f7c52b98884c51127a03a1b8"},
-    {file = "build-0.2.1.tar.gz", hash = "sha256:be64a48b158cf14ba607977fe394f838879ec8b6c104fa5fa2e2dd666ed99ca8"},
+    {file = "build-0.3.0-py2.py3-none-any.whl", hash = "sha256:75bc5676b1a014fb996dc96914428b197d174364392a46778200d5e115ffe76c"},
+    {file = "build-0.3.0.tar.gz", hash = "sha256:0eb95b2c8d770d7c4c9b92c68c227c350bbf65f3ec83551ace9097c18cc15fdd"},
 ]
 cachelib = [
     {file = "cachelib-0.1.1-py3-none-any.whl", hash = "sha256:7df6e05b8dfccdeb869e171575580e5606cf1e82a166633b3cb406bc4f113fd0"},
@@ -4226,8 +4233,7 @@ flask-wtf = [
     {file = "Flask_WTF-0.14.3-py2.py3-none-any.whl", hash = "sha256:57b3faf6fe5d6168bda0c36b0df1d05770f8e205e18332d0376ddb954d17aef2"},
 ]
 flatten-json = [
-    {file = "flatten_json-0.1.7-py3-none-any.whl", hash = "sha256:cdb1a0802f0268f892294f51014097912ba5a6fea99996573a7e3f0cc43cfd26"},
-    {file = "flatten_json-0.1.7.tar.gz", hash = "sha256:06341ba64baf2fd9b960b4cacf3d3bab38e1e09a855d9902e79cfd2fe66fa29c"},
+    {file = "flatten_json-0.1.13.tar.gz", hash = "sha256:ee352333e8293e957ccb1b4597a111fc4f6da88ab74b8cb3f8f51eed1e12f500"},
 ]
 fs = [
     {file = "fs-0.5.4.tar.gz", hash = "sha256:ba2cca8773435a7c86059d57cb4b8ea30fda40f8610941f7822d1ce3ffd36197"},
@@ -4637,8 +4643,8 @@ oarepo-micro-api = [
     {file = "oarepo_micro_api-3.3.50-py2.py3-none-any.whl", hash = "sha256:10fe76f261156cdf9c4fb32c18cb0ee5b1eb55ac7fa94b55471779fd40657479"},
 ]
 oarepo-multilingual = [
-    {file = "oarepo_multilingual-2.4.2-py3-none-any.whl", hash = "sha256:025470f6009a4b99a9a8eef20de368b7296b9ff05cf5d59155760d882173c83e"},
-    {file = "oarepo_multilingual-2.4.2.tar.gz", hash = "sha256:fc441061c4aa01a1df3eba8973a2880dbbf7ee3ae4eb77c2f825e06d708cfb9c"},
+    {file = "oarepo_multilingual-2.4.3-py3-none-any.whl", hash = "sha256:723dc9175caa53a0af2f8ab6811622ae89eab3372cd214f286493976708488d8"},
+    {file = "oarepo_multilingual-2.4.3.tar.gz", hash = "sha256:4df32e318e89ab0e4835dc6e7de9f5b215f15cc13b225c4402a12254d1aa2137"},
 ]
 oarepo-oai-pmh-harvester = [
     {file = "oarepo-oai-pmh-harvester-2.0.0a25.tar.gz", hash = "sha256:13074926915c0b2219feac298c07b98f325b8d1c8f63c40231130c5a1b45aff2"},
@@ -5080,6 +5086,10 @@ tornado = [
     {file = "tornado-5.1.1-cp37-cp37m-win32.whl", hash = "sha256:e5f2585afccbff22390cddac29849df463b252b711aa2ce7c5f3f342a5b3b444"},
     {file = "tornado-5.1.1-cp37-cp37m-win_amd64.whl", hash = "sha256:8e9d728c4579682e837c92fdd98036bd5cdefa1da2aaf6acf26947e6dd0c01c5"},
     {file = "tornado-5.1.1.tar.gz", hash = "sha256:4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409"},
+]
+tqdm = [
+    {file = "tqdm-4.57.0-py2.py3-none-any.whl", hash = "sha256:70657337ec104eb4f3fb229285358f23f045433f6aea26846cdd55f0fd68945c"},
+    {file = "tqdm-4.57.0.tar.gz", hash = "sha256:65185676e9fdf20d154cffd1c5de8e39ef9696ff7e59fe0156b1b08e468736af"},
 ]
 traitlets = [
     {file = "traitlets-5.0.5-py3-none-any.whl", hash = "sha256:69ff3f9d5351f31a7ad80443c2674b7099df13cc41fc5fa6e2f6d3b0330b0426"},
