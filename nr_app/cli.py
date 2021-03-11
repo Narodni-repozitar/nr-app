@@ -1,19 +1,12 @@
-import json
-import traceback
-
 import click
 from flask import current_app
 from flask.cli import with_appcontext
 from invenio_app.factory import create_api
-from invenio_indexer.api import RecordIndexer
-from invenio_pidstore.models import PersistentIdentifier, PIDStatus
 from invenio_records_rest.utils import obj_or_import_string
-from invenio_search import current_search_client
-from invenio_search.utils import build_alias_name
-from tqdm import tqdm
-
 
 # from nr_cli import nr
+from nr_app.index import reindex_pid
+
 
 @click.group()
 def nr_test():
@@ -22,6 +15,8 @@ def nr_test():
 
 
 @nr_test.command('reindex')
+@click.option('--pid', '-p', 'pids', multiple=True,
+              help="Please choose PID that will be reindexed. Default option is all PIDs")
 @click.option(
     '--raise-on-error/--skip-errors', default=True,
     help='Controls if Elasticsearch bulk indexing errors raise an exception.')
@@ -30,41 +25,23 @@ def nr_test():
     help='Index only this item')
 @with_appcontext
 @click.pass_context
-def nr_reindex(ctx, raise_on_error=True, only=None):
+def nr_reindex(ctx, pids, raise_on_error=True, only=None):
     version_type = None  # elasticsearch version to use
     api = create_api()
     with api.app_context():
-        def reindex_pid(pid_type, RecordClass):
-            index_name = None
-            indexer = RecordIndexer()
-            pids = PersistentIdentifier.query.filter_by(pid_type=pid_type, object_type='rec',
-                                                      status=PIDStatus.REGISTERED.value).all()
-            for pid in pids:
-                record = RecordClass.get_record(pid.object_uuid)
-                if only and str(record.id) != only:
-                    continue
-                try:
-                    index_name, doc_type = indexer.record_to_index(record)
-                    index_name = build_alias_name(index_name)
-                    # print('Indexing', record.get('id'), 'into', index_name)
-                    indexer.index(record)
-                except:
-                    with open('/tmp/indexing-error.json', 'a') as f:
-                        print(json.dumps(record.dumps(), indent=4, ensure_ascii=False), file=f)
-                        traceback.print_exc(file=f)
-                    if raise_on_error:
-                        raise
-            if index_name:
-                current_search_client.indices.refresh(index_name)
-                current_search_client.indices.flush(index_name)
-
-        # reindex all objects
         endpoints = current_app.config.get("RECORDS_REST_ENDPOINTS").endpoints
-        for config in endpoints.values():
-            try:
+        if not pids:
+            # reindex all objects
+            for config in endpoints.values():
                 pid_type: str = config["pid_type"]
                 record_class = obj_or_import_string(config["record_class"])
-            except:
-                raise
-            print(f"pid_type: {pid_type}")
-            reindex_pid(pid_type, record_class)
+                print(f"pid_type: {pid_type}")
+                reindex_pid(pid_type, record_class, only=only, raise_on_error=raise_on_error)
+        else:
+            for p in pids:
+                config = [ep for ep in endpoints.values() if ep["pid_type"] == p][0]
+                if not config:
+                    raise ValueError(f'There is not PID type with the value: "{p}"')
+                pid_type: str = config["pid_type"]
+                record_class = obj_or_import_string(config["record_class"])
+                reindex_pid(pid_type, record_class, only=only, raise_on_error=raise_on_error)
