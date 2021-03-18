@@ -3,18 +3,17 @@ from flask import current_app
 from flask.cli import with_appcontext
 from invenio_app.factory import create_api
 from invenio_records_rest.utils import obj_or_import_string
-
-# from nr_cli import nr
 from nr_app.index import reindex_pid
 
+from nr_cli import nr
 
-@click.group()
-def nr_test():
-    """Czech National Repository cli commands."""
+
+@nr.group()
+def index():
     pass
 
 
-@nr_test.command('reindex')
+@index.command('reindex')
 @click.option('--pid', '-p', 'pids', multiple=True,
               help="Please choose PID that will be reindexed. Default option is all PIDs")
 @click.option(

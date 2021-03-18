@@ -5,6 +5,7 @@ from invenio_indexer.api import RecordIndexer
 from invenio_pidstore.models import PersistentIdentifier, PIDStatus
 from invenio_search import current_search_client
 from invenio_search.utils import build_alias_name
+from sqlalchemy.orm.exc import NoResultFound
 from tqdm import tqdm
 
 
@@ -14,7 +15,10 @@ def reindex_pid(pid_type, RecordClass, only: bool = False, raise_on_error=None):
     pids = PersistentIdentifier.query.filter_by(pid_type=pid_type, object_type='rec',
                                                 status=PIDStatus.REGISTERED.value).all()
     for pid in tqdm(pids):
-        record = RecordClass.get_record(pid.object_uuid)
+        try:
+            record = RecordClass.get_record(pid.object_uuid)
+        except NoResultFound:
+            continue
         keywords = record.get("keywords")
         if keywords:
             if keywords == "Keywords must be fixed in draft mode":
