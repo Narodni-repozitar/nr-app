@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "nr-app"
-version = "2.0.0a3"
+version = "2.0.0a4"
 description = "Czech National Repository app"
 license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
@@ -27,7 +27,7 @@ xmltodict = "^0.12.0"
 tqdm = "^4.57.0"
 oarepo-taxonomies = {version = "^3.0.0-alpha.1", allow-prereleases = true}
 oarepo-invenio-model = "^2.1.2"
-oarepo-multilingual = "^2.4.3"
+oarepo-multilingual = ">=2.4.3"
 
 [tool.poetry.extras]
 tests = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "pytest-cache", "pytest-cov", "pytest-invenio", "pytest-mock", "pytest-pep8", "pytest-random-order", "selenium"]
@@ -42,5 +42,8 @@ restoration = "nr_app.config"
 
 [tool.poetry.plugins.'flask.commands']
 'nr' = 'nr_app.cli:nr'
+
+[tool.poetry.plugins."invenio_base.api_apps"]
+invenio_i18n = "invenio_i18n:InvenioI18N"
 
 
