@@ -21,6 +21,19 @@ ELASTICSEARCH_DEFAULT_LANGUAGE_TEMPLATE = {
     }
 }
 
+ELASTICSEARCH_LANGUAGE_TEMPLATES = {
+    "*#subjectAll": {
+        "type": "text",
+        "copy_to": "subjectAll.*",
+        "fields": {
+            "raw": {
+                "type": "keyword"
+            }
+        }
+    }
+
+}
+
 # hack to serve schemas both on jsonschemas host and server name (if they differ)
 @jsonresolver.hookimpl
 def jsonresolver_loader(url_map):
