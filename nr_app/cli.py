@@ -7,11 +7,16 @@ from invenio_app.factory import create_api
 from invenio_db import db
 from invenio_pidstore.models import PersistentIdentifier
 from invenio_records_rest.utils import obj_or_import_string
-from nr_cli import nr
 from sqlalchemy.orm.exc import NoResultFound
 from tqdm import tqdm
 
 from nr_app.index import reindex_pid
+
+
+@click.group()
+def nr():
+    """Czech National Repository cli commands."""
+    pass
 
 
 @nr.group()
@@ -77,7 +82,7 @@ def nr_recommit(ctx):
                         continue
                     t0 = datetime.now()
                     record.commit()
-                    print(f"Commiting time: {datetime.now()-t0}")
+                    print(f"Commiting time: {datetime.now() - t0}")
                     if i % 100 == 0:
                         db.session.commit()
             finally:
