@@ -20,9 +20,9 @@ oarepo-records-draft = "^5.5.0"
 oarepo-iiif = "^1.1.4"
 oarepo-ui = "^2.0"
 oarepo-whitenoise = "^1.0.0"
-nr-all = { git = "https://github.com/Narodni-repozitar/nr-all.git", branch = "main" }
+nr-all = { git = "https://github.com/Narodni-repozitar/nr-all.git", branch = "devel" }
 nr-taxonomies = { git = "https://github.com/Narodni-repozitar/nr-taxonomies.git" }
-nr-oai-pmh-harvester = { git = "https://github.com/Narodni-repozitar/nr-oai-pmh-harvester.git", branch = "main" }
+nr-oai-pmh-harvester = { git = "https://github.com/Narodni-repozitar/nr-oai-pmh-harvester.git", branch = "devel" }
 xmltodict = "^0.12.0"
 tqdm = "^4.57.0"
 oarepo-taxonomies = {version = "^3.0.0-alpha.1", allow-prereleases = true}
