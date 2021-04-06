@@ -773,6 +773,18 @@ blinker = "*"
 
 [[package]]
 category = "main"
+description = "Pagination extension for flask-restful"
+name = "flask-rest-paginate"
+optional = false
+python-versions = "*"
+version = "1.1.2"
+
+[package.dependencies]
+flask-restful = "*"
+flask-sqlalchemy = "*"
+
+[[package]]
+category = "main"
 description = "Simple framework for creating REST APIs"
 name = "flask-restful"
 optional = false
@@ -2194,17 +2206,16 @@ description = ""
 name = "nr-all"
 optional = false
 python-versions = "^3.8"
-version = "1.0.0a3"
+version = "1.0.0a4"
 
 [package.dependencies]
 nr-Nresults = "branch master"
 nr-common = "branch master"
 nr-events = "branch master"
 nr-theses = "branch master"
-oarepo-ui = "^2.0.1"
 
 [package.source]
-reference = "67193c8603d802ec937e8287d9c665b33bcfe5ab"
+reference = "fbf15a2cffd28ab72cdce451bfe2d3a427cec8fc"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-all.git"
 
@@ -2227,18 +2238,19 @@ description = ""
 name = "nr-common"
 optional = false
 python-versions = "^3.8"
-version = "3.0.0a35"
+version = "3.0.0a37"
 
 [package.dependencies]
 idutils = "^1.1.8"
 isbnlib = "^3.10.3"
+oarepo-invenio-model = "^2.0.0"
 python-stdnum = "^1.16"
 
 [package.extras]
 docs = ["sphinx (^1.5.1)"]
 
 [package.source]
-reference = "664119f3de7036cc3d1df3d7561adba2ea52c8d2"
+reference = "90c76af1fc503a07066dbfdafad0ac52776505f7"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-common.git"
 
@@ -2248,7 +2260,7 @@ description = ""
 name = "nr-events"
 optional = false
 python-versions = "^3.8"
-version = "1.0.0a11"
+version = "1.0.0a12"
 
 [package.dependencies]
 nr-common = "branch master"
@@ -2257,7 +2269,7 @@ nr-common = "branch master"
 tests = []
 
 [package.source]
-reference = "1d540abf520df2c05c9aa9b79abdcfbc548432f0"
+reference = "229a67d4f3b031715d1b215a05d77f158fd778e4"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-events.git"
 
@@ -2267,13 +2279,13 @@ description = ""
 name = "nr-nresults"
 optional = false
 python-versions = "^3.8"
-version = "1.0.0a10"
+version = "1.0.0a11"
 
 [package.dependencies]
 nr-common = "branch master"
 
 [package.source]
-reference = "3ebb8d2fb91dd49cc6271507d882f966d7608cf3"
+reference = "0db32f740ae7bc9a9aab2c4bf7409516c67f2aec"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-Nresults.git"
 
@@ -2325,13 +2337,13 @@ description = ""
 name = "nr-theses"
 optional = false
 python-versions = "^3.8"
-version = "3.0.0a11"
+version = "3.0.0a13"
 
 [package.dependencies]
 nr-common = "branch master"
 
 [package.source]
-reference = "ce155a1e1eeea33aec4f8398f39a5eba1bc56056"
+reference = "4b95630bdbece29740a8c3eaf5962b121693dabf"
 type = "git"
 url = "https://github.com/Narodni-repozitar/nr-theses.git"
 
@@ -2527,6 +2539,74 @@ wtforms-components = "0.10.5"
 
 [package.extras]
 tests = ["alembic (1.5.7)", "amqp (5.0.5)", "angular-gettext-babel (0.3)", "aniso8601 (9.0.1)", "apipkg (1.5)", "appnope (0.1.2)", "arrow (1.0.3)", "atomicwrites (1.4.0)", "attrs (20.3.0)", "babel (2.9.0)", "backcall (0.2.0)", "base32-lib (1.0.2)", "billiard (3.6.3.0)", "bleach (3.3.0)", "blinker (1.4)", "boto3 (1.17.27)", "botocore (1.20.27)", "build (0.3.1.post1)", "cachelib (0.1.1)", "cchardet (2.1.7)", "celery (5.0.5)", "certifi (2020.12.5)", "cffi (1.14.5)", "chardet (3.0.4)", "check-manifest (0.46)", "click (7.1.2)", "click-default-group (1.2.2)", "click-didyoumean (0.0.3)", "click-plugins (1.1.1)", "click-repl (0.1.6)", "colorama (0.4.4)", "coverage (4.5.4)", "cryptography (3.4.6)", "decorator (4.4.2)", "defusedxml (0.7.1)", "dnspython (2.1.0)", "docker-services-cli (0.3.0)", "dojson (1.4.0)", "elasticsearch (7.11.0)", "elasticsearch-dsl (7.3.0)", "email-validator (1.1.2)", "entrypoints (0.3)", "execnet (1.8.0)", "flask (1.1.2)", "flask-admin (1.5.7)", "flask-alembic (2.0.1)", "flask-assets (2.0)", "flask-babelex (0.9.4)", "flask-breadcrumbs (0.5.1)", "flask-caching (1.10.0)", "flask-celeryext (0.3.4)", "flask-collect (1.2.2)", "flask-cors (3.0.10)", "flask-iiif (0.6.1)", "flask-kvsession-invenio (0.6.3)", "flask-limiter (1.1.0)", "flask-login (0.4.1)", "flask-mail (0.9.1)", "flask-menu (0.7.2)", "flask-oauthlib (0.9.6)", "flask-principal (0.4.0)", "flask-restful (0.3.8)", "flask-security (3.0.0)", "flask-shell-ipython (0.4.1)", "flask-sqlalchemy (2.4.4)", "flask-talisman (0.5.0)", "flask-webpackext (1.0.2)", "flask-wtf (0.14.3)", "fs (0.5.4)", "ftfy (4.4.3)", "future (0.18.2)", "html5lib (1.1)", "idna (2.10)", "infinity (1.5)", "intervals (0.9.1)", "invenio (3.3.0)", "invenio-access (1.4.2)", "invenio-accounts (1.4.2)", "invenio-admin (1.2.1)", "invenio-app (1.2.7)", "invenio-assets (1.1.5)", "invenio-base (1.2.3)", "invenio-cache (1.1.0)", "invenio-celery (1.2.2)", "invenio-config (1.0.3)", "invenio-db (1.0.8)", "invenio-files-rest (1.2.0)", "invenio-formatter (1.0.3)", "invenio-i18n (1.2.0)", "invenio-iiif (1.1.0)", "invenio-indexer (1.1.2)", "invenio-jsonschemas (1.1.1)", "invenio-logging (1.3.0)", "invenio-mail (1.0.2)", "invenio-oaiserver (1.2.0)", "invenio-oauth2server (1.3.1)", "invenio-oauthclient (1.4.0)", "invenio-pidstore (1.2.2)", "invenio-previewer (1.2.2)", "invenio-records (1.3.2)", "invenio-records-files (1.2.1)", "invenio-records-rest (1.7.2)", "invenio-records-ui (1.1.0)", "invenio-rest (1.2.3)", "invenio-search (1.3.1)", "invenio-search-ui (1.2.0)", "invenio-theme (1.1.4)", "ipython (7.21.0)", "ipython-genutils (0.2.0)", "isort (5.7.0)", "itsdangerous (1.1.0)", "jedi (0.18.0)", "jinja2 (2.11.3)", "jmespath (0.10.0)", "jsmin (2.2.2)", "jsonpatch (1.31)", "jsonpointer (2.0)", "jsonref (0.2)", "jsonresolver (0.3.1)", "jsonschema (3.2.0)", "jupyter-client (6.1.11)", "jupyter-core (4.7.1)", "kombu (5.0.2)", "limits (1.5.1)", "lxml (4.6.2)", "mako (1.1.4)", "markupsafe (1.1.1)", "marshmallow (3.10.0)", "maxminddb (2.0.3)", "maxminddb-geolite2 (2018.703)", "mistune (0.8.4)", "more-itertools (8.7.0)", "msgpack (1.0.2)", "nbconvert (5.6.1)", "nbformat (5.1.2)", "node-semver (0.1.1)", "oauthlib (2.1.0)", "packaging (20.9)", "pandocfilters (1.4.3)", "parso (0.8.1)", "passlib (1.7.4)", "pep517 (0.10.0)", "pep8 (1.7.1)", "pexpect (4.8.0)", "pickleshare (0.7.5)", "pillow (8.1.2)", "pluggy (0.13.1)", "prompt-toolkit (3.0.17)", "psycopg2-binary (2.8.6)", "ptyprocess (0.7.0)", "py (1.10.0)", "pycparser (2.20)", "pydocstyle (5.1.1)", "pygments (2.8.1)", "pyjwt (2.0.1)", "pynpm (0.1.2)", "pyparsing (2.4.7)", "pyrsistent (0.17.3)", "pytest (4.6.11)", "pytest-cache (1.0)", "pytest-cov (2.10.1)", "pytest-flask (0.15.1)", "pytest-invenio (1.3.4)", "pytest-pep8 (1.0.6)", "python-dateutil (2.8.1)", "python-editor (1.0.4)", "pytz (2021.1)", "pywebpack (1.2.0)", "pyzmq (22.0.3)", "redis (3.5.3)", "requests (2.24.0)", "requests-oauthlib (1.1.0)", "s3-client-lib (0.1.3)", "s3transfer (0.3.4)", "selenium (3.141.0)", "simplejson (3.17.2)", "simplekv (0.14.1)", "six (1.15.0)", "snowballstemmer (2.1.0)", "speaklater (1.3)", "sqlalchemy (1.3.23)", "sqlalchemy-continuum (1.3.11)", "sqlalchemy-utils (0.35.0)", "testpath (0.4.4)", "toml (0.10.2)", "tornado (5.1.1)", "traitlets (5.0.5)", "ua-parser (0.10.0)", "uritools (3.0.1)", "urllib3 (1.25.11)", "validators (0.18.2)", "vine (5.0.0)", "wand (0.6.6)", "wcwidth (0.2.5)", "webargs (5.5.3)", "webassets (2.0)", "webencodings (0.5.1)", "werkzeug (1.0.1)", "wtforms (2.3.3)", "wtforms-alchemy (0.17.0)", "wtforms-components (0.10.5)"]
+
+[[package]]
+category = "main"
+description = "OArepo module that adds support for communities"
+name = "oarepo-communities"
+optional = false
+python-versions = "*"
+version = "1.3.4"
+
+[package.dependencies]
+oarepo-enrollment-permissions = "*"
+oarepo-fsm = ">=1.5.0"
+oarepo-micro-api = "*"
+oarepo-ui = "*"
+
+[package.extras]
+all = ["oarepo (>=3.3.0,<3.4.0)", "pydocstyle", "isort"]
+tests = ["oarepo (>=3.3.0,<3.4.0)", "pydocstyle", "isort"]
+
+[[package]]
+category = "main"
+description = "OArepo Enrollment library for record metadata validation"
+name = "oarepo-enrollment-permissions"
+optional = false
+python-versions = "*"
+version = "1.0.1"
+
+[package.dependencies]
+oarepo-enrollments = "*"
+wrapt = ">=1.11.2"
+
+[package.extras]
+dev = ["pytest", "oarepo (>=3.3,<4.0)", "markdown-toc"]
+tests = ["pytest", "oarepo (>=3.3,<4.0)"]
+
+[[package]]
+category = "main"
+description = "OArepo Enrollments library for record metadata validation"
+name = "oarepo-enrollments"
+optional = false
+python-versions = "*"
+version = "1.2.1"
+
+[package.dependencies]
+flask-rest-paginate = "*"
+tabulate = "*"
+wrapt = ">=1.11.2"
+
+[package.extras]
+dev = ["pytest", "oarepo (>=3.3,<4.0)", "mock", "markdown-toc"]
+tests = ["pytest", "oarepo (>=3.3,<4.0)", "mock"]
+
+[[package]]
+category = "main"
+description = "OArepo FSM library for record state transitions"
+name = "oarepo-fsm"
+optional = false
+python-versions = "*"
+version = "1.5.0"
+
+[package.dependencies]
+wrapt = ">=1.11.2"
+
+[package.extras]
+deploy = ["oarepo (>=3.3.0,<3.4.0)"]
+devel = ["oarepo (>=3.3.0,<3.4.0)"]
+tests = ["oarepo (>=3.3.0,<3.4.0)"]
+tests-es7 = ["oarepo (>=3.3.0,<3.4.0)"]
 
 [[package]]
 category = "main"
@@ -3223,6 +3303,17 @@ url = ["furl (>=0.4.1)"]
 
 [[package]]
 category = "main"
+description = "Pretty-print tabular data"
+name = "tabulate"
+optional = false
+python-versions = "*"
+version = "0.8.9"
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[[package]]
+category = "main"
 description = "Test utilities for code working with files and commands"
 name = "testpath"
 optional = false
@@ -3514,7 +3605,7 @@ docs = []
 tests = []
 
 [metadata]
-content-hash = "934636d2a7c48b67c74b6c677fb86737b734174c50191195aaa73efec40a5995"
+content-hash = "a08229412d977598584cc0a48181767ceca64a8c4f945b050088221c79da785c"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -3821,6 +3912,9 @@ flask-oauthlib = [
 ]
 flask-principal = [
     {file = "Flask-Principal-0.4.0.tar.gz", hash = "sha256:f5d6134b5caebfdbb86f32d56d18ee44b080876a27269560a96ea35f75c99453"},
+]
+flask-rest-paginate = [
+    {file = "flask_rest_paginate-1.1.2-py3-none-any.whl", hash = "sha256:ada8bb800318a94879b10205ccdead9206a6ac49adbe2c0efb43842450d93a2b"},
 ]
 flask-restful = [
     {file = "Flask-RESTful-0.3.8.tar.gz", hash = "sha256:5ea9a5991abf2cb69b4aac19793faac6c032300505b325687d7c305ffaa76915"},
@@ -4253,6 +4347,22 @@ oarepo = [
     {file = "oarepo-3.3.54-py2.py3-none-any.whl", hash = "sha256:b7762dc781cc3b9568ab5bf650a8a24f17161f039a07b9a19a1a5bb9f82583b6"},
     {file = "oarepo-3.3.54.tar.gz", hash = "sha256:5bb599dacc5556067068ef20c7ee2ab8832dd4fb6fa9537db62ab106c679f0a6"},
 ]
+oarepo-communities = [
+    {file = "oarepo-communities-1.3.4.tar.gz", hash = "sha256:463e521cfc92dd2612716e59c9158a53015174ca26d1f0dcd068795ce9488081"},
+    {file = "oarepo_communities-1.3.4-py2.py3-none-any.whl", hash = "sha256:d3b1f5e028568a02cd472709b4954c1bbcb8cc55203f0feec6312cd99b9ab163"},
+]
+oarepo-enrollment-permissions = [
+    {file = "oarepo-enrollment-permissions-1.0.1.tar.gz", hash = "sha256:3c5338326c84c40550f126e67bcf8203e9f3887158db245a73aee566ff966c85"},
+    {file = "oarepo_enrollment_permissions-1.0.1-py2.py3-none-any.whl", hash = "sha256:f19c70d3606d8493c8101c808cd3699a41d1ddbe10b9555806d6337b72df4453"},
+]
+oarepo-enrollments = [
+    {file = "oarepo-enrollments-1.2.1.tar.gz", hash = "sha256:8b61d30afc6af26bbac5c0a9c4a4e1eda47ef74236b64bbd234b079b012e9f2c"},
+    {file = "oarepo_enrollments-1.2.1-py2.py3-none-any.whl", hash = "sha256:18f11f118250db65902ef12632dabbb5f5dea41eb02599ca1ebc3d2d05aa729f"},
+]
+oarepo-fsm = [
+    {file = "oarepo-fsm-1.5.0.tar.gz", hash = "sha256:4da237b122916b5d48de5aa2da99deb22847271e2be7b8836e727ca53a1ef62e"},
+    {file = "oarepo_fsm-1.5.0-py2.py3-none-any.whl", hash = "sha256:06c2ff631842f666dafcca60ecf5b0e7ffb6fdc08e525a61f8314d9298bf01e8"},
+]
 oarepo-heartbeat = [
     {file = "oarepo-heartbeat-1.0.0.tar.gz", hash = "sha256:f84324faa5933025bac5e7f22c6f8dc010db526757dd0bc288bfceca651046bd"},
 ]
@@ -4654,6 +4764,10 @@ sqlalchemy-continuum = [
 ]
 sqlalchemy-utils = [
     {file = "SQLAlchemy-Utils-0.35.0.tar.gz", hash = "sha256:01f0f0ebed696386bc7bf9231cd6894087baba374dd60f40eb1b07512d6b1a5e"},
+]
+tabulate = [
+    {file = "tabulate-0.8.9-py3-none-any.whl", hash = "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4"},
+    {file = "tabulate-0.8.9.tar.gz", hash = "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"},
 ]
 testpath = [
     {file = "testpath-0.4.4-py2.py3-none-any.whl", hash = "sha256:bfcf9411ef4bf3db7579063e0546938b1edda3d69f4e1fb8756991f5951f85d4"},

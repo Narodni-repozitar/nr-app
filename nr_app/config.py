@@ -34,6 +34,9 @@ ELASTICSEARCH_LANGUAGE_TEMPLATES = {
 
 }
 
+OAREPO_COMMUNITIES_ROLES = ['member', 'curator', 'publisher']
+"""Roles present in each community."""
+
 # hack to serve schemas both on jsonschemas host and server name (if they differ)
 @jsonresolver.hookimpl
 def jsonresolver_loader(url_map):
