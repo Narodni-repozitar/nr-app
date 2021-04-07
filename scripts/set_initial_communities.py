@@ -1,10 +1,15 @@
-from multiprocessing.pool import ThreadPool
+import threading
+from random import random
+
+import time
+from multiprocessing.pool import ThreadPool, Pool
 
 import itertools
 from invenio_app.factory import create_api
 from invenio_db import db
 from invenio_records.models import RecordMetadata
 from sqlalchemy.orm.attributes import flag_modified
+from tqdm import tqdm
 
 app = create_api()
 
@@ -41,10 +46,14 @@ def grouper(n, iterable):
     iterable = iter(iterable)
     return iter(lambda: list(itertools.islice(iterable, n)), [])
 
+def initiate():
+    time.sleep(10 * random())
+
 def run():
     md_stream = [x[0] for x in db.session.query(RecordMetadata.id).distinct()]
-    with ThreadPool(processes=5) as pool:
-        pool.starmap(set_providers, grouper(10000, md_stream))
+    md_stream = list(grouper(1000, md_stream))
+    with Pool(processes=5, initializer=initiate) as pool:
+        pool.starmap(set_providers, tqdm(md_stream))
     pool.join()
 
 

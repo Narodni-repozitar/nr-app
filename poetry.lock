@@ -1076,7 +1076,7 @@ all = ["Sphinx (>=3)", "cachelib (>=0.1)", "pytest-invenio (>=1.4.1)", "redis (>
 docs = ["Sphinx (>=3)"]
 mysql = ["invenio-db[mysql,versioning] (>=1.0.8)"]
 postgresql = ["invenio-db[postgresql,versioning] (>=1.0.8)"]
-sqlite = ["invenio-db[versioning,sqlite] (>=1.0.8)"]
+sqlite = ["invenio-db[sqlite,versioning] (>=1.0.8)"]
 tests = ["cachelib (>=0.1)", "pytest-invenio (>=1.4.1)", "redis (>=2.10.5)"]
 
 [[package]]
@@ -2129,6 +2129,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "namedatomiclock"
+version = "1.1.3"
+description = "Python module for an atomic named interprocess lock which is local to the machine."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "nbconvert"
 version = "5.6.1"
 description = "Converting Jupyter Notebooks"
@@ -2555,7 +2563,7 @@ tests = ["pytest", "pytest-cov", "oarepo"]
 
 [[package]]
 name = "oarepo-records-draft"
-version = "5.5.4"
+version = "5.5.5"
 description = "Handling Draft and Production invenio records in one package"
 category = "main"
 optional = false
@@ -2563,6 +2571,7 @@ python-versions = "*"
 
 [package.dependencies]
 deepmerge = "*"
+NamedAtomicLock = "*"
 oarepo-validate = "*"
 wrapt = ">=1.11.2"
 
@@ -3551,7 +3560,7 @@ tests = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c34c63e46a32ac8646c59923814d0faf4e5814ed71649263d20c43923753ed92"
+content-hash = "fcf4555eba93be319413afa79c1329f432a5801000f92ff28c9f39b1787f2018"
 
 [metadata.files]
 alembic = [
@@ -4267,6 +4276,9 @@ msgpack = [
     {file = "msgpack-1.0.2-cp39-cp39-win_amd64.whl", hash = "sha256:d8167b84af26654c1124857d71650404336f4eb5cc06900667a493fc619ddd9f"},
     {file = "msgpack-1.0.2.tar.gz", hash = "sha256:fae04496f5bc150eefad4e9571d1a76c55d021325dcd484ce45065ebbdd00984"},
 ]
+namedatomiclock = [
+    {file = "NamedAtomicLock-1.1.3.tar.gz", hash = "sha256:fe0fd055422ffc16f290625417a953322dd1defe6070cdcd8c65123246237aa9"},
+]
 nbconvert = [
     {file = "nbconvert-5.6.1-py2.py3-none-any.whl", hash = "sha256:f0d6ec03875f96df45aa13e21fd9b8450c42d7e1830418cccc008c0df725fcee"},
     {file = "nbconvert-5.6.1.tar.gz", hash = "sha256:21fb48e700b43e82ba0e3142421a659d7739b65568cc832a13976a77be16b523"},
@@ -4326,8 +4338,8 @@ oarepo-oai-pmh-harvester = [
     {file = "oarepo_oai_pmh_harvester-2.0.0a25-py3-none-any.whl", hash = "sha256:5e7605f2f18b560f4f659ed46057c5fbed8ecfd2851d2556134d7785795941ba"},
 ]
 oarepo-records-draft = [
-    {file = "oarepo-records-draft-5.5.4.tar.gz", hash = "sha256:d55a5723ae15d69c5979705f8d5e562544c9f527f7761fb6ad1606da29c829c8"},
-    {file = "oarepo_records_draft-5.5.4-py3-none-any.whl", hash = "sha256:d859079e6132d87d37b4ae4d408b4ff50a3dad8b11a1861f583d02a022488a7f"},
+    {file = "oarepo-records-draft-5.5.5.tar.gz", hash = "sha256:c8fd286f3e67356a04441ff172734fe9d87df873a24f039897cf61c6512cfe99"},
+    {file = "oarepo_records_draft-5.5.5-py3-none-any.whl", hash = "sha256:bd27716029fc5804a7cc1433b6bbbfc0a154f8edd32bb35b261c8b27e45e0552"},
 ]
 oarepo-references = [
     {file = "oarepo-references-1.11.2.tar.gz", hash = "sha256:b17ce504b82087d026343494b3718c2a97e6f74d1273c044df3dcdaaeacfa7ed"},
