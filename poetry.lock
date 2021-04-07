@@ -1076,7 +1076,7 @@ all = ["Sphinx (>=3)", "cachelib (>=0.1)", "pytest-invenio (>=1.4.1)", "redis (>
 docs = ["Sphinx (>=3)"]
 mysql = ["invenio-db[mysql,versioning] (>=1.0.8)"]
 postgresql = ["invenio-db[postgresql,versioning] (>=1.0.8)"]
-sqlite = ["invenio-db[sqlite,versioning] (>=1.0.8)"]
+sqlite = ["invenio-db[versioning,sqlite] (>=1.0.8)"]
 tests = ["cachelib (>=0.1)", "pytest-invenio (>=1.4.1)", "redis (>=2.10.5)"]
 
 [[package]]
@@ -1691,9 +1691,9 @@ invenio-pidstore = ">=1.2.0"
 invenio-records = ">=1.0.0"
 
 [package.extras]
-all = ["Sphinx (>=1.5.1)", "check-manifest (>=0.25)", "coverage (>=4.0)", "invenio-access (>=1.0.0)", "invenio-accounts (>=1.2.0)", "invenio-db[mysql,postgresql,versioning] (>=1.0.0)", "isort (>=4.2.2)", "pydocstyle (>=1.0.0)", "pytest-cov (>=1.8.0)", "pytest-pep8 (>=1.0.6)", "pytest (>=2.8.0)"]
+all = ["Sphinx (>=1.5.1)", "check-manifest (>=0.25)", "coverage (>=4.0)", "invenio-access (>=1.0.0)", "invenio-accounts (>=1.2.0)", "invenio-db[postgresql,mysql,versioning] (>=1.0.0)", "isort (>=4.2.2)", "pydocstyle (>=1.0.0)", "pytest-cov (>=1.8.0)", "pytest-pep8 (>=1.0.6)", "pytest (>=2.8.0)"]
 docs = ["Sphinx (>=1.5.1)"]
-tests = ["check-manifest (>=0.25)", "coverage (>=4.0)", "invenio-access (>=1.0.0)", "invenio-accounts (>=1.2.0)", "invenio-db[mysql,postgresql,versioning] (>=1.0.0)", "isort (>=4.2.2)", "pydocstyle (>=1.0.0)", "pytest-cov (>=1.8.0)", "pytest-pep8 (>=1.0.6)", "pytest (>=2.8.0)"]
+tests = ["check-manifest (>=0.25)", "coverage (>=4.0)", "invenio-access (>=1.0.0)", "invenio-accounts (>=1.2.0)", "invenio-db[postgresql,mysql,versioning] (>=1.0.0)", "isort (>=4.2.2)", "pydocstyle (>=1.0.0)", "pytest-cov (>=1.8.0)", "pytest-pep8 (>=1.0.6)", "pytest (>=2.8.0)"]
 
 [[package]]
 name = "invenio-rest"
@@ -2382,7 +2382,7 @@ tests = ["alembic (==1.5.8)", "amqp (==5.0.6)", "angular-gettext-babel (==0.3)",
 
 [[package]]
 name = "oarepo-communities"
-version = "1.4.2"
+version = "2.0.0"
 description = "OArepo module that adds support for communities"
 category = "main"
 optional = false
@@ -2390,7 +2390,7 @@ python-versions = "*"
 
 [package.dependencies]
 oarepo-enrollment-permissions = "*"
-oarepo-fsm = ">=1.5.0"
+oarepo-fsm = ">=1.6.1"
 oarepo-micro-api = "*"
 oarepo-ui = "*"
 
@@ -2433,7 +2433,7 @@ tests = ["pytest", "oarepo[tests] (>=3.3,<4.0)", "mock"]
 
 [[package]]
 name = "oarepo-fsm"
-version = "1.5.1"
+version = "1.6.1"
 description = "OArepo FSM library for record state transitions"
 category = "main"
 optional = false
@@ -3551,7 +3551,7 @@ tests = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "95e4f60662f75e68fe52b7b67896dfd0917d8e6c074267673ee8cd339b876316"
+content-hash = "c34c63e46a32ac8646c59923814d0faf4e5814ed71649263d20c43923753ed92"
 
 [metadata.files]
 alembic = [
@@ -4283,8 +4283,8 @@ oarepo = [
     {file = "oarepo-3.3.59.tar.gz", hash = "sha256:6432be841460f14ba661e024cbb9efe5cd4db9a1875401a82a961f5e27c30860"},
 ]
 oarepo-communities = [
-    {file = "oarepo-communities-1.4.2.tar.gz", hash = "sha256:6c1d79901a05488ede516e575454262ecd40eb7c29ce89d5653871290aa26840"},
-    {file = "oarepo_communities-1.4.2-py2.py3-none-any.whl", hash = "sha256:ce7a8759d19b1c6797996ac43c97e51aa8307accd9731b073e10105b88ded8c0"},
+    {file = "oarepo-communities-2.0.0.tar.gz", hash = "sha256:e506c13aab135e863782f2346caf823a93000a674ba5070dfd559e8872a05d2f"},
+    {file = "oarepo_communities-2.0.0-py2.py3-none-any.whl", hash = "sha256:5921a0d6b621a0f4596f881d351f95d0cf992dca39b4e300a24468acb406b18d"},
 ]
 oarepo-enrollment-permissions = [
     {file = "oarepo-enrollment-permissions-1.0.1.tar.gz", hash = "sha256:3c5338326c84c40550f126e67bcf8203e9f3887158db245a73aee566ff966c85"},
@@ -4295,8 +4295,8 @@ oarepo-enrollments = [
     {file = "oarepo_enrollments-1.2.1-py2.py3-none-any.whl", hash = "sha256:18f11f118250db65902ef12632dabbb5f5dea41eb02599ca1ebc3d2d05aa729f"},
 ]
 oarepo-fsm = [
-    {file = "oarepo-fsm-1.5.1.tar.gz", hash = "sha256:96b8c02a68e8052593eb8b58d2ef2658ba2887a9e4d34ec501656fdb8d6d2c61"},
-    {file = "oarepo_fsm-1.5.1-py2.py3-none-any.whl", hash = "sha256:07105435afb23c60d740ae6bbe2caee11d2460d7bebfc7831ea5c154d82e7047"},
+    {file = "oarepo-fsm-1.6.1.tar.gz", hash = "sha256:eb2cc1d8f8a4732fa421985a8e78d0beaf2ee6154dd37939468cf10cff988623"},
+    {file = "oarepo_fsm-1.6.1-py2.py3-none-any.whl", hash = "sha256:2aad3f083c6ce7ec0f83aaff830fe7d4944ec6f0624de7dedbf77385ccb4ec63"},
 ]
 oarepo-heartbeat = [
     {file = "oarepo-heartbeat-1.0.0.tar.gz", hash = "sha256:f84324faa5933025bac5e7f22c6f8dc010db526757dd0bc288bfceca651046bd"},
