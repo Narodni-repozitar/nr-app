@@ -46,13 +46,11 @@ def grouper(n, iterable):
     iterable = iter(iterable)
     return iter(lambda: list(itertools.islice(iterable, n)), [])
 
-def initiate():
-    time.sleep(10 * random())
 
 def run():
     md_stream = [x[0] for x in db.session.query(RecordMetadata.id).distinct()]
     md_stream = list(grouper(1000, md_stream))
-    with Pool(processes=5, initializer=initiate) as pool:
+    with Pool(processes=5) as pool:
         pool.starmap(set_providers, tqdm(md_stream))
     pool.join()
 

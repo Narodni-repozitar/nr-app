@@ -37,6 +37,14 @@ ELASTICSEARCH_LANGUAGE_TEMPLATES = {
 OAREPO_COMMUNITIES_ROLES = ['member', 'curator', 'publisher']
 """Roles present in each community."""
 
+OAREPO_COMMUNITIES_ENDPOINTS = [
+    'theses', 'draft-theses'
+]
+
+OAREPO_FSM_ENABLED_REST_ENDPOINTS = [
+
+]
+
 # hack to serve schemas both on jsonschemas host and server name (if they differ)
 @jsonresolver.hookimpl
 def jsonresolver_loader(url_map):
@@ -77,10 +85,6 @@ SESSION_COOKIE_SAMESITE='Lax'
 SESSION_COOKIE_PATH = '/'
 
 OAISERVER_ID_PREFIX = 'oai:narodni-repozitar.cz:'
-
-OAREPO_FSM_ENABLED_REST_ENDPOINTS = [
-
-]
 
 # from invenio_openid_connect import InvenioAuthOpenIdRemote
 #
