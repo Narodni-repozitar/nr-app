@@ -6,7 +6,6 @@ SUPPORTED_LANGUAGES = ['cs', 'en', 'sk', 'de', 'fr', 'ru', 'es', 'nl', 'it', 'no
 
 JSONSCHEMAS_HOST = 'repozitar.narodni-repozitar.cz'
 
-
 BABEL_DEFAULT_LOCALE = 'cs'
 I18N_LANGUAGES = (('en', _('English')), ('cs', _('Czech')))
 I18N_SESSION_KEY = 'language'
@@ -34,8 +33,22 @@ ELASTICSEARCH_LANGUAGE_TEMPLATES = {
 
 }
 
+# communities
 OAREPO_COMMUNITIES_ROLES = ['member', 'curator', 'publisher']
 """Roles present in each community."""
+
+OAREPO_COMMUNITIES_ENDPOINTS = [
+    'theses', 'draft-theses'
+]
+
+OAREPO_COMMUNITIES_PRIMARY_COMMUNITY_FIELD = '_administration.primaryCommunity'
+OAREPO_COMMUNITIES_COMMUNITIES_FIELD = '_administration.communities'
+OAREPO_COMMUNITIES_OWNED_BY_FIELD = '_administration.ownedBy'
+
+OAREPO_FSM_ENABLED_REST_ENDPOINTS = [
+
+]
+
 
 # hack to serve schemas both on jsonschemas host and server name (if they differ)
 @jsonresolver.hookimpl
@@ -62,9 +75,9 @@ RATELIMIT_ENABLED = False
 REST_CSRF_ENABLED = False
 CSRF_HEADER = 'X-CSRFTOKEN'
 
-SESSION_COOKIE_SECURE=True
-SESSION_COOKIE_HTTPONLY=True
-SESSION_COOKIE_SAMESITE='Lax'
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 # for CSRF etc to work; normally set to /api in uAPI
 # as the main content is at / (or any path other than /api), the cookie is normally
@@ -77,10 +90,6 @@ SESSION_COOKIE_SAMESITE='Lax'
 SESSION_COOKIE_PATH = '/'
 
 OAISERVER_ID_PREFIX = 'oai:narodni-repozitar.cz:'
-
-OAREPO_FSM_ENABLED_REST_ENDPOINTS = [
-
-]
 
 # from invenio_openid_connect import InvenioAuthOpenIdRemote
 #
@@ -111,3 +120,11 @@ SEARCH_ELASTIC_HOSTS = [dict(host=h, **ES_PARAMS) for h in
 APP_ALLOWED_HOSTS = [h for h in os.getenv('OAREPO_APP_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')]
 
 INDEXER_RECORD_TO_INDEX = 'nr_app.indexer.record_to_index'
+
+if True:
+    import logging
+
+    es_trace_logger = logging.getLogger('elasticsearch.trace')
+    es_trace_logger.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler()
+    es_trace_logger.addHandler(handler)

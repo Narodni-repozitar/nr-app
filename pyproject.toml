@@ -15,7 +15,7 @@ oarepo = "^3.3.0.4"
 oarepo-micro-api = "^3.3.53"
 oarepo-validate = "^1.0.0"
 oarepo-references = "^1.11.1"
-oarepo-mapping-includes = "<=1.2.0"
+oarepo-mapping-includes = "^1.4.4"
 oarepo-records-draft = "^5.5.5"
 oarepo-iiif = "^1.1.4"
 oarepo-ui = "^2.0"
@@ -27,7 +27,7 @@ oarepo-taxonomies = { version = "^3.0.0-alpha.1", allow-prereleases = true }
 oarepo-invenio-model = "^2.1.2"
 oarepo-multilingual = ">=2.4.3"
 oarepo-fsm = "^1.5.0"
-oarepo-communities = "^2.0.0"
+oarepo-communities = "^2.0.1"
 techlib-nr-oai-pmh-harvester = "^1.0.0-alpha.8"
 
 [tool.poetry.extras]
