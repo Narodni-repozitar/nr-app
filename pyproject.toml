@@ -12,7 +12,7 @@ readme = "README.rst"
 [tool.poetry.dependencies]
 python = "^3.8"
 oarepo = "^3.3.0.4"
-oarepo-micro-api = "^3.3.53"
+oarepo-micro-api = "^3.3.60"
 oarepo-validate = "^1.0.0"
 oarepo-references = "^1.11.1"
 oarepo-mapping-includes = "^1.4.4"
