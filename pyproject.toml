@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "nr-app"
-version = "2.0.0a4"
+version = "2.0.0a5"
 description = "Czech National Repository app"
 license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
@@ -20,7 +20,7 @@ oarepo-records-draft = "^5.5.5"
 oarepo-iiif = "^1.1.4"
 oarepo-ui = "^2.0"
 oarepo-whitenoise = "^1.0.0"
-techlib-nr-all = { version = "^1.0.0a5", allow-prereleases = true }
+techlib-nr-all = { version = "^1.0.0a7", allow-prereleases = true }
 xmltodict = "^0.12.0"
 tqdm = "^4.57.0"
 oarepo-taxonomies = { version = "^3.0.0-alpha.1", allow-prereleases = true }
@@ -29,8 +29,6 @@ oarepo-multilingual = ">=2.4.3"
 oarepo-fsm = "^1.5.0"
 oarepo-communities = "^2.0.1"
 techlib-nr-oai-pmh-harvester = "^1.0.0-alpha.8"
-techlib-nr-common = "^3.0.0-alpha.40"
-techlib-nr-theses = "^1.0.0-alpha.2"
 
 [tool.poetry.extras]
 tests = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "pytest-cache", "pytest-cov", "pytest-invenio", "pytest-mock", "pytest-pep8", "pytest-random-order", "selenium"]
