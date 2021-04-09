@@ -37,9 +37,8 @@ ELASTICSEARCH_LANGUAGE_TEMPLATES = {
 OAREPO_COMMUNITIES_ROLES = ['member', 'curator', 'publisher']
 """Roles present in each community."""
 
-OAREPO_COMMUNITIES_ENDPOINTS = [
-    'theses', 'draft-theses'
-]
+# added automatically
+# OAREPO_COMMUNITIES_ENDPOINTS = []
 
 OAREPO_COMMUNITIES_PRIMARY_COMMUNITY_FIELD = '_administration.primaryCommunity'
 OAREPO_COMMUNITIES_COMMUNITIES_FIELD = '_administration.communities'
