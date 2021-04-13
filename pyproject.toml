@@ -23,7 +23,7 @@ oarepo-whitenoise = "^1.0.0"
 techlib-nr-all = { version = "^1.0.0a8", allow-prereleases = true }
 xmltodict = "^0.12.0"
 tqdm = "^4.57.0"
-oarepo-taxonomies = { version = "^3.0.0-alpha.1", allow-prereleases = true }
+oarepo-taxonomies = { version = "^3.0.0-alpha.2", allow-prereleases = true }
 oarepo-invenio-model = "^2.1.2"
 oarepo-multilingual = ">=2.4.3"
 oarepo-fsm = "^1.5.0"

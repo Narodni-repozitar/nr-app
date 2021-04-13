@@ -1076,7 +1076,7 @@ all = ["Sphinx (>=3)", "cachelib (>=0.1)", "pytest-invenio (>=1.4.1)", "redis (>
 docs = ["Sphinx (>=3)"]
 mysql = ["invenio-db[mysql,versioning] (>=1.0.8)"]
 postgresql = ["invenio-db[versioning,postgresql] (>=1.0.8)"]
-sqlite = ["invenio-db[sqlite,versioning] (>=1.0.8)"]
+sqlite = ["invenio-db[versioning,sqlite] (>=1.0.8)"]
 tests = ["cachelib (>=0.1)", "pytest-invenio (>=1.4.1)", "redis (>=2.10.5)"]
 
 [[package]]
@@ -2623,7 +2623,7 @@ tests = ["oarepo[tests] (>=3.3.60,<3.4.0)", "pydocstyle", "isort"]
 
 [[package]]
 name = "oarepo-taxonomies"
-version = "3.0.0a1"
+version = "3.0.0a2"
 description = "Wrapper that connect flask-taxonomies with Invenio"
 category = "main"
 optional = false
@@ -3213,7 +3213,7 @@ widechars = ["wcwidth"]
 
 [[package]]
 name = "techlib-nr-all"
-version = "1.0.0a8"
+version = "1.0.0a9"
 description = "Czech National Repository index that store all records from all metadata models"
 category = "main"
 optional = false
@@ -3246,7 +3246,7 @@ docs = ["sphinx (>=1.5.1,<2.0.0)"]
 
 [[package]]
 name = "techlib-nr-events"
-version = "1.0.0a18"
+version = "1.0.0a19"
 description = "National repository events metadata model"
 category = "main"
 optional = false
@@ -3257,7 +3257,7 @@ techlib-nr-common = ">=3.0.0a45,<4.0.0"
 
 [[package]]
 name = "techlib-nr-generic"
-version = "1.0.0a3"
+version = "1.0.0a4"
 description = "NR generic model REST API"
 category = "main"
 optional = false
@@ -3275,7 +3275,7 @@ docs = ["sphinx (>=1.5.1,<2.0.0)"]
 
 [[package]]
 name = "techlib-nr-nresults"
-version = "1.0.0a15"
+version = "1.0.0a17"
 description = "National repository Nresults metadata model"
 category = "main"
 optional = false
@@ -3301,7 +3301,7 @@ xmltodict = ">=0.12.0,<0.13.0"
 
 [[package]]
 name = "techlib-nr-theses"
-version = "1.0.0a6"
+version = "1.0.0a7"
 description = "Czech National Repository theses data model."
 category = "main"
 optional = false
@@ -3606,7 +3606,7 @@ tests = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e02d04d664feb095eabaece6143038eeedcfac7018d09006d483cab49da8a0ab"
+content-hash = "620b1dc43a4e57348613becf767779d0e22c761e2fcfb57a384fd52c8e7bb1a9"
 
 [metadata.files]
 alembic = [
@@ -4400,8 +4400,8 @@ oarepo-search = [
     {file = "oarepo_search-1.0.0-py3-none-any.whl", hash = "sha256:184d691a7fca86575ddbf73ba04963614712edb250f4f543a79b81b43fbe45d7"},
 ]
 oarepo-taxonomies = [
-    {file = "oarepo_taxonomies-3.0.0a1-py2.py3-none-any.whl", hash = "sha256:02ebb8c99f79bacf73759308a3af2b9841b0f31e5caa6b5a66b777b046c76a85"},
-    {file = "oarepo_taxonomies-3.0.0a1.tar.gz", hash = "sha256:be3f917c998e74f267f97a4e43fea087a97330e5bac3bc69d7335c6c72707074"},
+    {file = "oarepo_taxonomies-3.0.0a2-py2.py3-none-any.whl", hash = "sha256:40202053ec27411654768bddf2c9174e6230b42623e01e47175d3cae118fe6d6"},
+    {file = "oarepo_taxonomies-3.0.0a2.tar.gz", hash = "sha256:8d2e07b77a5e8587403130e538c7b73ab9878abb591e3c4641c69d2913d72502"},
 ]
 oarepo-ui = [
     {file = "oarepo_ui-2.3.0-py3-none-any.whl", hash = "sha256:dcf183de97b0b9b41812fdc141b64e257796dda5387945ed6fe68e7e3b1f0203"},
@@ -4771,32 +4771,32 @@ tabulate = [
     {file = "tabulate-0.8.9.tar.gz", hash = "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"},
 ]
 techlib-nr-all = [
-    {file = "techlib-nr-all-1.0.0a8.tar.gz", hash = "sha256:237e6ce841e19ec59e39744805837cb3ab565e969274dabe6b98f51d58e74869"},
-    {file = "techlib_nr_all-1.0.0a8-py3-none-any.whl", hash = "sha256:9a29ed73dafa6efa0ca3b3b905c88da805b1806c0321929928088f77b58ea8c6"},
+    {file = "techlib-nr-all-1.0.0a9.tar.gz", hash = "sha256:226109ab2cceee6f7a9f0f1e31836cd601611eefb42b81eda475025e2dc8b1e1"},
+    {file = "techlib_nr_all-1.0.0a9-py3-none-any.whl", hash = "sha256:a492ce3eec45e7aa1004a7dbbbaff4df8ee4476027f9bb29ba0cc4d94ee97723"},
 ]
 techlib-nr-common = [
     {file = "techlib-nr-common-3.0.0a46.tar.gz", hash = "sha256:d9427cb2437fce65d3a45bd29554af8069d9747ea57d8cc4aba73815930ac12d"},
     {file = "techlib_nr_common-3.0.0a46-py3-none-any.whl", hash = "sha256:4621465a712cf44494c1077c708701fa40fb5c5fd8effe5eb2252b602e5d1199"},
 ]
 techlib-nr-events = [
-    {file = "techlib-nr-events-1.0.0a18.tar.gz", hash = "sha256:9e08e3cdfb8ca676cc9b8c377d7daf7d990831cbf558756b2ffca4b152c82116"},
-    {file = "techlib_nr_events-1.0.0a18-py3-none-any.whl", hash = "sha256:c61cc637333a9908dd079b9f89c250091ba2bf4dbfed7d75a046439358a1960b"},
+    {file = "techlib-nr-events-1.0.0a19.tar.gz", hash = "sha256:672b5dd8760afb07d2c8f955e291048acd42bf7f15a3058a0d7c2e67b975703e"},
+    {file = "techlib_nr_events-1.0.0a19-py3-none-any.whl", hash = "sha256:1ac002d0b61ef0eb35e6b8bf884aae1ef7e47eff0ac4c49ed2659387ea841658"},
 ]
 techlib-nr-generic = [
-    {file = "techlib-nr-generic-1.0.0a3.tar.gz", hash = "sha256:4fec54601d3763d9822187ade69259c87bc85f9ee6aab943d748046f0abd50fa"},
-    {file = "techlib_nr_generic-1.0.0a3-py3-none-any.whl", hash = "sha256:9429ad31f915714c763ebaef6e294a421d8b736908020b79993c419db3de07b7"},
+    {file = "techlib-nr-generic-1.0.0a4.tar.gz", hash = "sha256:4e66618a9c3f0e7146b088cd3df10c7f6464217b3a1b583fa65f3fc0c5016e61"},
+    {file = "techlib_nr_generic-1.0.0a4-py3-none-any.whl", hash = "sha256:1a1dafaaf44c2ebe1c9f9eee3e7e9b1b8948a76b9417832b605e550678a320ff"},
 ]
 techlib-nr-nresults = [
-    {file = "techlib-nr-Nresults-1.0.0a15.tar.gz", hash = "sha256:9818bdd337d13434f7f148ce63853f01796fc30c357c101431fb6932c1d32c71"},
-    {file = "techlib_nr_Nresults-1.0.0a15-py3-none-any.whl", hash = "sha256:c0fa8609d6fc3d82e623cb6ad0e733c9d1181078bb657152ebc4f61f767811f1"},
+    {file = "techlib-nr-Nresults-1.0.0a17.tar.gz", hash = "sha256:f335e166c0cc8825ab0785325a67b45fe354a4b7743cbc69cc6f53b8c1230852"},
+    {file = "techlib_nr_Nresults-1.0.0a17-py3-none-any.whl", hash = "sha256:f58fd4ac21f6e665432cbd9ff3d7f7c19999e2dd31aad4aabd70710f8af09285"},
 ]
 techlib-nr-oai-pmh-harvester = [
     {file = "techlib-nr-oai-pmh-harvester-1.0.0a9.tar.gz", hash = "sha256:8bb5d26f1d42c5e2cc591a89ef712dc0312dd79b68da3a6300e51ff0cb895836"},
     {file = "techlib_nr_oai_pmh_harvester-1.0.0a9-py3-none-any.whl", hash = "sha256:ce1e12817c3f39f5465b52183f0f76fd85120b33e7d1207fe8ce592fb37aa497"},
 ]
 techlib-nr-theses = [
-    {file = "techlib-nr-theses-1.0.0a6.tar.gz", hash = "sha256:7f223197bbc5ca73a2140c0d59e902667a8268bfff2330e8d8f69ee3b7f08f1c"},
-    {file = "techlib_nr_theses-1.0.0a6-py3-none-any.whl", hash = "sha256:19e1acc450d123cd66a5b1d6e707549005b2930c7838bceefdaaf5a30ae18246"},
+    {file = "techlib-nr-theses-1.0.0a7.tar.gz", hash = "sha256:d86b0c11c62e7bdd0501ecfefd0d4f27d24135b175cb7eff4a5de9cb8dd9c655"},
+    {file = "techlib_nr_theses-1.0.0a7-py3-none-any.whl", hash = "sha256:5652331f8ca1cbcac26274f71c761cdff181621dde17c17350ed1ed4cd58a5f1"},
 ]
 testpath = [
     {file = "testpath-0.4.4-py2.py3-none-any.whl", hash = "sha256:bfcf9411ef4bf3db7579063e0546938b1edda3d69f4e1fb8756991f5951f85d4"},
