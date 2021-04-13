@@ -20,7 +20,7 @@ oarepo-records-draft = "^5.5.5"
 oarepo-iiif = "^1.1.4"
 oarepo-ui = "^2.0"
 oarepo-whitenoise = "^1.0.0"
-techlib-nr-all = { version = "^1.0.0a7", allow-prereleases = true }
+techlib-nr-all = { version = "^1.0.0a8", allow-prereleases = true }
 xmltodict = "^0.12.0"
 tqdm = "^4.57.0"
 oarepo-taxonomies = { version = "^3.0.0-alpha.1", allow-prereleases = true }
