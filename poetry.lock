@@ -2400,16 +2400,18 @@ tests = ["alembic (==1.5.8)", "amqp (==5.0.6)", "angular-gettext-babel (==0.3)",
 
 [[package]]
 name = "oarepo-communities"
-version = "2.0.5"
+version = "2.2.0"
 description = "OArepo module that adds support for communities"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
+boltons = "*"
 oarepo-enrollment-permissions = "*"
 oarepo-fsm = ">=1.6.1"
 oarepo-micro-api = "*"
+oarepo-search = "*"
 oarepo-ui = "*"
 
 [package.extras]
@@ -2623,7 +2625,7 @@ tests = ["oarepo[tests] (>=3.3.60,<3.4.0)", "pydocstyle", "isort"]
 
 [[package]]
 name = "oarepo-taxonomies"
-version = "3.0.0a2"
+version = "3.0.0a4"
 description = "Wrapper that connect flask-taxonomies with Invenio"
 category = "main"
 optional = false
@@ -3301,7 +3303,7 @@ xmltodict = ">=0.12.0,<0.13.0"
 
 [[package]]
 name = "techlib-nr-theses"
-version = "1.0.0a7"
+version = "1.0.0a8"
 description = "Czech National Repository theses data model."
 category = "main"
 optional = false
@@ -4345,8 +4347,8 @@ oarepo = [
     {file = "oarepo-3.3.61.tar.gz", hash = "sha256:e43a6fb6b3387c7ca46eda1000f3ad5de8b77e58a5e4a9f3b9e77120bf78c2be"},
 ]
 oarepo-communities = [
-    {file = "oarepo-communities-2.0.5.tar.gz", hash = "sha256:8ceb5b6662cfac4bd526e2092f0534e9d193420457f965b83667deb7e32a7581"},
-    {file = "oarepo_communities-2.0.5-py2.py3-none-any.whl", hash = "sha256:755087e8adcb880b7c8e3e8db97e35b885bf4f3319fffc993d3acafba29e0ccd"},
+    {file = "oarepo-communities-2.2.0.tar.gz", hash = "sha256:2dc312e34b5bbea7309ba830004cc22e78505c007d973b30af0b6cf5c8639e87"},
+    {file = "oarepo_communities-2.2.0-py2.py3-none-any.whl", hash = "sha256:261e7b19dd777dd3099a17659277e1cf2298c8ce72dd9222b6bfed229bbef008"},
 ]
 oarepo-enrollment-permissions = [
     {file = "oarepo-enrollment-permissions-1.0.1.tar.gz", hash = "sha256:3c5338326c84c40550f126e67bcf8203e9f3887158db245a73aee566ff966c85"},
@@ -4400,8 +4402,8 @@ oarepo-search = [
     {file = "oarepo_search-1.0.0-py3-none-any.whl", hash = "sha256:184d691a7fca86575ddbf73ba04963614712edb250f4f543a79b81b43fbe45d7"},
 ]
 oarepo-taxonomies = [
-    {file = "oarepo_taxonomies-3.0.0a2-py2.py3-none-any.whl", hash = "sha256:40202053ec27411654768bddf2c9174e6230b42623e01e47175d3cae118fe6d6"},
-    {file = "oarepo_taxonomies-3.0.0a2.tar.gz", hash = "sha256:8d2e07b77a5e8587403130e538c7b73ab9878abb591e3c4641c69d2913d72502"},
+    {file = "oarepo_taxonomies-3.0.0a4-py2.py3-none-any.whl", hash = "sha256:673116e912edf2d48e9641d4ef3fef081342ee587aad7fe143001e20d7082f2d"},
+    {file = "oarepo_taxonomies-3.0.0a4.tar.gz", hash = "sha256:1d83ed8aba2cc89ff906178a2169ec8ccb45da10d28c857241824fdcff408896"},
 ]
 oarepo-ui = [
     {file = "oarepo_ui-2.3.0-py3-none-any.whl", hash = "sha256:dcf183de97b0b9b41812fdc141b64e257796dda5387945ed6fe68e7e3b1f0203"},
@@ -4795,8 +4797,8 @@ techlib-nr-oai-pmh-harvester = [
     {file = "techlib_nr_oai_pmh_harvester-1.0.0a9-py3-none-any.whl", hash = "sha256:ce1e12817c3f39f5465b52183f0f76fd85120b33e7d1207fe8ce592fb37aa497"},
 ]
 techlib-nr-theses = [
-    {file = "techlib-nr-theses-1.0.0a7.tar.gz", hash = "sha256:d86b0c11c62e7bdd0501ecfefd0d4f27d24135b175cb7eff4a5de9cb8dd9c655"},
-    {file = "techlib_nr_theses-1.0.0a7-py3-none-any.whl", hash = "sha256:5652331f8ca1cbcac26274f71c761cdff181621dde17c17350ed1ed4cd58a5f1"},
+    {file = "techlib-nr-theses-1.0.0a8.tar.gz", hash = "sha256:391a38ae672a742e8998b4493111858e2dff93b664f9e629da22d2bee87e12e6"},
+    {file = "techlib_nr_theses-1.0.0a8-py3-none-any.whl", hash = "sha256:20447212168762ec5d67ccf7e31c813bcbb6df4a4a04fc7793a1960a54df36da"},
 ]
 testpath = [
     {file = "testpath-0.4.4-py2.py3-none-any.whl", hash = "sha256:bfcf9411ef4bf3db7579063e0546938b1edda3d69f4e1fb8756991f5951f85d4"},
