@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "nr-app"
-version = "2.0.0a4"
+version = "2.0.0a5"
 description = "Czech National Repository app"
 license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
@@ -12,22 +12,23 @@ readme = "README.rst"
 [tool.poetry.dependencies]
 python = "^3.8"
 oarepo = "^3.3.0.4"
-oarepo-micro-api = "^3.3.53"
+oarepo-micro-api = "^3.3.60"
 oarepo-validate = "^1.0.0"
 oarepo-references = "^1.11.1"
-oarepo-mapping-includes = "<=1.2.0"
-oarepo-records-draft = "^5.5.0"
+oarepo-mapping-includes = "^1.4.4"
+oarepo-records-draft = "^5.5.5"
 oarepo-iiif = "^1.1.4"
 oarepo-ui = "^2.0"
 oarepo-whitenoise = "^1.0.0"
-nr-all = { git = "https://github.com/Narodni-repozitar/nr-all.git", branch = "main" }
-nr-taxonomies = { git = "https://github.com/Narodni-repozitar/nr-taxonomies.git" }
-nr-oai-pmh-harvester = { git = "https://github.com/Narodni-repozitar/nr-oai-pmh-harvester.git", branch = "main" }
+techlib-nr-all = { version = "^1.0.0a8", allow-prereleases = true }
 xmltodict = "^0.12.0"
 tqdm = "^4.57.0"
-oarepo-taxonomies = {version = "^3.0.0-alpha.1", allow-prereleases = true}
+oarepo-taxonomies = { version = "^3.0.0-alpha.2", allow-prereleases = true }
 oarepo-invenio-model = "^2.1.2"
 oarepo-multilingual = ">=2.4.3"
+oarepo-fsm = "^1.5.0"
+oarepo-communities = "^2.0.1"
+techlib-nr-oai-pmh-harvester = "^1.0.0-alpha.8"
 
 [tool.poetry.extras]
 tests = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "pytest-cache", "pytest-cov", "pytest-invenio", "pytest-mock", "pytest-pep8", "pytest-random-order", "selenium"]
@@ -36,9 +37,6 @@ docs = ["sphinx"]
 
 [tool.poetry.plugins."invenio_config.module"]
 restoration = "nr_app.config"
-
-#[tool.poetry.plugins."flask.commands"]
-#nr = "nr_app.cli:nr_test"
 
 [tool.poetry.plugins.'flask.commands']
 'nr' = 'nr_app.cli:nr'

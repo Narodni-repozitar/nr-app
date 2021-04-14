@@ -71,3 +71,7 @@ target/
 requirements.txt
 
 venv/
+
+token.txt
+
+.DS_Store
