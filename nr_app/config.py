@@ -120,6 +120,8 @@ APP_ALLOWED_HOSTS = [h for h in os.getenv('OAREPO_APP_ALLOWED_HOSTS', 'localhost
 
 INDEXER_RECORD_TO_INDEX = 'nr_app.indexer.record_to_index'
 
+NR_ES_TYPED_KEYS = True
+
 if False:
     import logging
 

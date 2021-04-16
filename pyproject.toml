@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "nr-app"
-version = "2.0.0a7"
+version = "2.0.0a9"
 description = "Czech National Repository app"
 license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
@@ -19,7 +19,7 @@ oarepo-mapping-includes = "^1.4.4"
 oarepo-records-draft = "^5.5.5"
 oarepo-iiif = "^1.1.4"
 oarepo-ui = "^2.0"
-oarepo-whitenoise = "^1.0.0"
+oarepo-whitenoise = "^2.0.0"
 techlib-nr-all = { version = "^1.0.0a8", allow-prereleases = true }
 xmltodict = "^0.12.0"
 tqdm = "^4.57.0"
