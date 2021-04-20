@@ -7,7 +7,7 @@ license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
 classifiers = ["Environment :: Web Environment", "Intended Audience :: Developers", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent", "Programming Language :: Python", "Topic :: Internet :: WWW/HTTP :: Dynamic Content", "Topic :: Software Development :: Libraries :: Python Modules", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3.7", "Development Status :: 3 - Planning"]
 authors = ["Daniel Kopecký <Daniel.Kopecky@techlib.cz>"]
-readme = "README.rst"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
