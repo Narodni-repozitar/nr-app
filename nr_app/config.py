@@ -122,6 +122,8 @@ INDEXER_RECORD_TO_INDEX = 'nr_app.indexer.record_to_index'
 
 NR_ES_TYPED_KEYS = True
 
+OAREPO_SEARCH_DEFAULT_INDEX = 'draft-nr_common-nr-common-v1.0.0'
+
 if False:
     import logging
 
