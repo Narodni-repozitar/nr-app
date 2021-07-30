@@ -29,6 +29,8 @@ oarepo-multilingual = ">=2.4.3"
 oarepo-fsm = "^1.5.0"
 oarepo-communities = "^2.0.1"
 techlib-nr-oai-pmh-harvester = "^1.0.0-alpha.8"
+cesnet-openid-remote = "^2.1.5"
+json-schema-for-humans = "^0.34.1"
 
 [tool.poetry.extras]
 tests = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "pytest-cache", "pytest-cov", "pytest-invenio", "pytest-mock", "pytest-pep8", "pytest-random-order", "selenium"]
@@ -43,5 +45,3 @@ restoration = "nr_app.config"
 
 [tool.poetry.plugins."invenio_base.api_apps"]
 invenio_i18n = "invenio_i18n:InvenioI18N"
-
-

@@ -1,14 +1,21 @@
+import json
+import os
+import tempfile
 from datetime import datetime
+from os.path import basename
 
 import click
 from flask import current_app
 from flask.cli import with_appcontext
+from jsonref import JsonRef, JsonRefError
 from invenio_app.factory import create_api
 from invenio_db import db
+from invenio_jsonschemas.proxies import current_jsonschemas
 from invenio_pidstore.models import PersistentIdentifier
 from invenio_records_rest.utils import obj_or_import_string
 from sqlalchemy.orm.exc import NoResultFound
 from tqdm import tqdm
+from invenio_records.api import _records_state
 
 from nr_app.index import reindex_pid
 
@@ -21,6 +28,11 @@ def nr():
 
 @nr.group()
 def index():
+    pass
+
+
+@nr.group()
+def docs():
     pass
 
 
@@ -87,3 +99,68 @@ def nr_recommit(ctx):
                         db.session.commit()
             finally:
                 db.session.commit()
+
+
+@docs.command('build')
+@click.argument('schemas', nargs=-1)
+@with_appcontext
+def build_docs(schemas):
+    """Generates API docs for included / specified data models."""
+    from json_schema_for_humans.generate import generate_from_file_object
+
+    for schema_path in schemas or current_jsonschemas.list_schemas():
+        click.secho(f'Generating docs for schema {schema_path}')
+        schema = current_jsonschemas.get_schema(schema_path, with_refs=False, resolved=False)
+
+        try:
+            schema = JsonRef.replace_refs(
+                schema,
+                jsonschema=True,
+                base_uri=current_app.config.get('JSONSCHEMAS_HOST'),
+                loader=_records_state.loader_cls(),
+            )
+
+            # TODO: this is necessary to resolve JSONRefs in allOf
+            schema = json.loads(json.dumps(schema, default=lambda x: x.__subject__))
+
+            # Resolve definition schemas
+            if 'definitions' in schema:
+                definitions = list(schema['definitions'].keys())
+                # Consider only a first definition as a schema for now
+                schema = schema['definitions'][definitions[0]]
+
+            click.secho(f'Schema resolved to: {json.dumps(schema)}', color='blue')
+
+
+        except JsonRefError as e:
+            click.secho(f'Error resolving schema: {e}. Skipping...', color='red')
+            continue
+
+        # Generate and save html docs for the schema
+        with tempfile.NamedTemporaryFile(mode="w+") as schema_source:
+            schema_source.write(json.dumps(schema))
+            schema_source.flush()
+
+            with open(f'docs/schemas/{basename(schema_path.rstrip(".json"))}.html', mode='w+') as result_file:
+                click.secho(f'Writing schema docs to {result_file.name}', color='green')
+                generate_from_file_object(
+                    schema_file=schema_source,
+                    result_file=result_file,
+                    minify=True,
+                    expand_buttons=True
+                )
+
+    # Generate and save schema index page
+    index_md = r"""---
+layout: default
+---
+
+# Data Models Schema Docs
+
+"""
+    for f in os.listdir('docs/schemas/'):
+        if f.endswith('.html'):
+            index_md += f'- [{f.rstrip(".html")}](./{f})\n'
+
+    with open(f'docs/schemas/index.md', mode='w+') as index_file:
+        index_file.write(index_md)

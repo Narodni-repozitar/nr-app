@@ -90,19 +90,11 @@ SESSION_COOKIE_PATH = '/'
 
 OAISERVER_ID_PREFIX = 'oai:narodni-repozitar.cz:'
 
-# from invenio_openid_connect import InvenioAuthOpenIdRemote
-#
-#
-# OAUTHCLIENT_REST_REMOTE_APPS = dict(
-#     cis=InvenioAuthOpenIdRemote().remote_app(),
-# )
-#
-# OPENIDC_CONFIG = dict(
-#     base_url='https://cis-login.vscht.cz/openid/',
-#     consumer_key=os.environ.get('PROXYIDP_CONSUMER_KEY'),
-#     consumer_secret=os.environ.get('PROXYIDP_CONSUMER_SECRET'),
-#     scope='openid email profile http://cis.vscht.cz/openid http://djangoproject.com/openid http://vscht.cz/shibboleth/1.0'
-# )
+
+from cesnet_openid_remote.remote import CesnetOpenIdRemote
+OAUTHCLIENT_REST_REMOTE_APPS = dict(
+    eduid=CesnetOpenIdRemote().remote_app(),
+)
 
 import os
 
