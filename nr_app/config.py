@@ -40,8 +40,10 @@ OAREPO_COMMUNITIES_ROLES = ['member', 'curator', 'publisher']
 # added automatically
 # OAREPO_COMMUNITIES_ENDPOINTS = []
 
-OAREPO_COMMUNITIES_PRIMARY_COMMUNITY_FIELD = '_administration.primaryCommunity'
-OAREPO_COMMUNITIES_COMMUNITIES_FIELD = '_administration.communities'
+OAREPO_COMMUNITIES_PRIMARY_COMMUNITY_FIELD = '_primary_community'
+OAREPO_COMMUNITIES_COMMUNITIES_FIELD = 'communities'
+# OAREPO_COMMUNITIES_PRIMARY_COMMUNITY_FIELD = '_administration.primaryCommunity'
+# OAREPO_COMMUNITIES_COMMUNITIES_FIELD = '_administration.communities'
 OAREPO_COMMUNITIES_OWNED_BY_FIELD = '_administration.ownedBy'
 
 OAREPO_FSM_ENABLED_REST_ENDPOINTS = [
@@ -68,7 +70,10 @@ def jsonresolver_loader(url_map):
 # global config
 FLASK_TAXONOMIES_URL_PREFIX = '/api/2.0/taxonomies/'
 PREFERRED_URL_SCHEME = 'https'
-RATELIMIT_ENABLED = False
+RATELIMIT_ENABLED = True
+RATELIMIT_PER_ENDPOINT = {
+    'oarepo_records_draft.draft-datasets_presigned_part': '25000 per hour'
+}
 
 # csrf will be enabled by default in the next invenio
 REST_CSRF_ENABLED = False
@@ -123,3 +128,5 @@ if False:
     es_trace_logger.setLevel(logging.DEBUG)
     handler = logging.StreamHandler()
     es_trace_logger.addHandler(handler)
+
+FILES_REST_STORAGE_FACTORY = 'oarepo_s3.storage.s3_storage_factory'
