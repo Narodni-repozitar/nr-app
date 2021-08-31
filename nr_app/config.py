@@ -75,7 +75,7 @@ RATELIMIT_PER_ENDPOINT = {
     'oarepo_records_draft.draft-datasets_presigned_part': '25000 per hour'
 }
 
-# csrf will be enabled by default in the next invenio
+# TODO: csrf will be enabled by default in the next invenio
 REST_CSRF_ENABLED = False
 CSRF_HEADER = 'X-CSRFTOKEN'
 

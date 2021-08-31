@@ -79,3 +79,4 @@ token.txt
 .invenio.cfg
 
 .env
+.venv

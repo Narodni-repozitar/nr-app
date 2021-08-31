@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "nr-app"
-version = "2.0.0a12"
+version = "2.0.0"
 description = "Czech National Repository app"
 license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
@@ -19,7 +19,6 @@ oarepo-records-draft = ">=5.5.5"
 oarepo-iiif = ">=1.1.4"
 oarepo-ui = ">=2.0"
 oarepo-whitenoise = ">=2.0.0"
-techlib-nr-all = { version = "^1.0.0a16", allow-prereleases = true }
 xmltodict = "^0.12.0"
 tqdm = ">=4.57.0"
 oarepo-taxonomies = ">=3.2"
@@ -29,8 +28,9 @@ oarepo-communities = ">=2.3.0"
 techlib-nr-oai-pmh-harvester = ">=1.0.0-alpha.11"
 cesnet-openid-remote = ">=2.1.5"
 json-schema-for-humans = ">=0.34.1"
-techlib-nr-datasets = "^1.0.0a6"
+techlib-nr-datasets = "^1.0.0"
 oarepo-s3 = "^1.3.1"
+oarepo-actions = "^1.0.7"
 
 [tool.poetry.extras]
 tests = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "pytest-cache", "pytest-cov", "pytest-invenio", "pytest-mock", "pytest-pep8", "pytest-random-order", "selenium"]
@@ -38,10 +38,14 @@ all = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "p
 docs = ["sphinx"]
 
 [tool.poetry.plugins."invenio_config.module"]
-restoration = "nr_app.config"
+nr = "nr_app.config"
 
 [tool.poetry.plugins.'flask.commands']
 'nr' = 'nr_app.cli:nr'
 
 [tool.poetry.plugins."invenio_base.api_apps"]
 invenio_i18n = "invenio_i18n:InvenioI18N"
+
+[tool.poetry.dev-dependencies]
+#techlib-nr-datasets = { path = "../../metadata/nr-datasets" }
+#techlib-nr-datasets-metadata = {path = "../../metadata/nr-datasets-metadata"}
