@@ -4,12 +4,13 @@ import jsonresolver
 SUPPORTED_LANGUAGES = ['cs', 'en', 'sk', 'de', 'fr', 'ru', 'es', 'nl', 'it', 'no', 'pl', 'da', 'el',
                        'hu', 'lt', 'pt', 'bg', 'ro', 'sv']
 
-JSONSCHEMAS_HOST = 'repozitar.narodni-repozitar.cz'
+JSONSCHEMAS_HOST = 'narodni-repozitar.cz'
 
 BABEL_DEFAULT_LOCALE = 'cs'
 I18N_LANGUAGES = (('en', _('English')), ('cs', _('Czech')))
 I18N_SESSION_KEY = 'language'
-I18N_SET_LANGUAGE_URL = '/api/lang'
+# TODO: this is not in routes - fix
+#I18N_SET_LANGUAGE_URL = '/lang'
 
 ELASTICSEARCH_DEFAULT_LANGUAGE_TEMPLATE = {
     "type": "text",
@@ -20,36 +21,28 @@ ELASTICSEARCH_DEFAULT_LANGUAGE_TEMPLATE = {
     }
 }
 
-ELASTICSEARCH_LANGUAGE_TEMPLATES = {
-    "*#subjectAll": {
-        "type": "text",
-        "copy_to": "subjectAll.*",
-        "fields": {
-            "raw": {
-                "type": "keyword"
-            }
-        }
-    }
-
-}
+# TODO: is this useful or can be removed?
+# ELASTICSEARCH_LANGUAGE_TEMPLATES = {
+#     "*#subjectAll": {
+#         "type": "text",
+#         "copy_to": "subjectAll.*",
+#         "fields": {
+#             "raw": {
+#                 "type": "keyword"
+#             }
+#         }
+#     }
+#
+# }
 
 # communities
 OAREPO_COMMUNITIES_ROLES = ['member', 'curator', 'publisher']
 """Roles present in each community."""
 
-# added automatically
-# OAREPO_COMMUNITIES_ENDPOINTS = []
-
-OAREPO_COMMUNITIES_PRIMARY_COMMUNITY_FIELD = '_primary_community'
-OAREPO_COMMUNITIES_COMMUNITIES_FIELD = 'communities'
-# OAREPO_COMMUNITIES_PRIMARY_COMMUNITY_FIELD = '_administration.primaryCommunity'
-# OAREPO_COMMUNITIES_COMMUNITIES_FIELD = '_administration.communities'
-OAREPO_COMMUNITIES_OWNED_BY_FIELD = '_administration.ownedBy'
-
-OAREPO_FSM_ENABLED_REST_ENDPOINTS = [
-
-]
-
+OAREPO_COMMUNITIES_PRIMARY_COMMUNITY_FIELD = 'oarepo:primaryCommunity'
+OAREPO_COMMUNITIES_COMMUNITIES_FIELD = 'oarepo:secondaryCommunities'
+OAREPO_COMMUNITIES_OWNED_BY_FIELD = 'oarepo:ownedBy'
+PIDSTORE_RECID_FIELD = 'InvenioID'
 
 # hack to serve schemas both on jsonschemas host and server name (if they differ)
 @jsonresolver.hookimpl
@@ -68,7 +61,7 @@ def jsonresolver_loader(url_map):
 
 
 # global config
-FLASK_TAXONOMIES_URL_PREFIX = '/api/2.0/taxonomies/'
+FLASK_TAXONOMIES_URL_PREFIX = '/2.0/taxonomies/'
 PREFERRED_URL_SCHEME = 'https'
 RATELIMIT_ENABLED = True
 RATELIMIT_PER_ENDPOINT = {
@@ -76,6 +69,7 @@ RATELIMIT_PER_ENDPOINT = {
 }
 
 # TODO: csrf will be enabled by default in the next invenio
+# TODO(mesemus): is it time to enable it now?
 REST_CSRF_ENABLED = False
 CSRF_HEADER = 'X-CSRFTOKEN'
 
@@ -83,6 +77,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 
+# TODO: the following comment is no longer valid - we dont use /api
 # for CSRF etc to work; normally set to /api in uAPI
 # as the main content is at / (or any path other than /api), the cookie is normally
 # not accessible on document.cookies and csrf header can not thus be sent.
@@ -119,7 +114,7 @@ INDEXER_RECORD_TO_INDEX = 'nr_app.indexer.record_to_index'
 
 NR_ES_TYPED_KEYS = True
 
-OAREPO_SEARCH_DEFAULT_INDEX = 'draft-nr_common-nr-common-v1.0.0'
+OAREPO_SEARCH_DEFAULT_INDEX = 'nr_datasets-nr-datasets-v1.0.0'
 
 if False:
     import logging
