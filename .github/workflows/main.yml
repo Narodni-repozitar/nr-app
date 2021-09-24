@@ -29,11 +29,11 @@ jobs:
         run: |
           mkdir pypi
           mkdir variables
-          pip install --upgrade pip setuptools py poetry
+          pip install --upgrade pip 'setuptools<58.0.0' py poetry
           poetry config virtualenvs.in-project true --local
           python -m venv .venv
           source .venv/bin/activate
-          .venv/bin/pip install -U setuptools pip wheel
+          .venv/bin/pip install -U 'setuptools<58.0.0' pip wheel
           poetry update --lock
           poetry export --without-hashes -f requirements.txt -o pypi/requirements-build.txt
           poetry export --without-hashes --dev -f requirements.txt -o pypi/requirements-dev.txt
