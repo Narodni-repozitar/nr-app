@@ -45,6 +45,7 @@ oarepo taxonomies import resourceType.xlsx
 oarepo taxonomies import languages.xlsx
 oarepo taxonomies import accessRights.xlsx
 oarepo taxonomies import subjects.xlsx
+oarepo taxonomies import subjectCategories.xlsx
 oarepo taxonomies import studyFields.xlsx
 oarepo taxonomies import Nresults_usage.xlsx
 oarepo taxonomies import Nresults_type.xlsx
