@@ -65,7 +65,8 @@ FLASK_TAXONOMIES_URL_PREFIX = '/2.0/taxonomies/'
 PREFERRED_URL_SCHEME = 'https'
 RATELIMIT_ENABLED = True
 RATELIMIT_PER_ENDPOINT = {
-    'oarepo_records_draft.draft-datasets_presigned_part': '25000 per hour'
+    'oarepo_records_draft.draft-datasets_presigned_part': '25000 per hour',
+    'oarepo_records_draft.draft-datasets-community_presigned_part': '25000 per hour'
 }
 
 # TODO: csrf will be enabled by default in the next invenio
