@@ -23,12 +23,6 @@ def reindex_pid(pid_type, RecordClass, only: bool = False, raise_on_error=None):
         if keywords:
             if keywords == "Keywords must be fixed in draft mode":
                 del record["keywords"]
-        if "rulesExceptions" in record.keys():
-            new_array = []
-            for _ in record["rulesExceptions"]:
-                _["element"] = str(_["element"])
-                new_array.append(_)
-            record["rulesExceptions"] = new_array
         if only and str(record.id) != only:
             continue
         try:

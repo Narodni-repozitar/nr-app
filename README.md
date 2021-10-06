@@ -26,21 +26,30 @@ oarepo index queue init purge
 # Init taxonomies tables
 oarepo taxonomies init
 ```
+
+### Inicializace S3 bucketu pro vychozi file storage location
+
+```bash
+S3_BUCKET=oarepo
+oarepo files location --default 'default-s3' s3://${S3_BUCKET}
+```
+
 ### Import taxonomii (data v nr-taxonomies/data/excel)
 ```shell
-oarepo taxonomies import institutions
-oarepo taxonomies import funders
-oarepo taxonomies import itemRelationType
-oarepo taxonomies import countries
-oarepo taxonomies import licenses
-oarepo taxonomies import resourceType
-oarepo taxonomies import languages
-oarepo taxonomies import accessRights
-oarepo taxonomies import subjects
-oarepo taxonomies import studyFields
-oarepo taxonomies import Nresults_usage
-oarepo taxonomies import Nresults_type
-oarepo taxonomies import contributorType
+oarepo taxonomies import institutions.xlsx
+oarepo taxonomies import funders.xlsx
+oarepo taxonomies import itemRelationType.xlsx
+oarepo taxonomies import countries.xlsx
+oarepo taxonomies import licenses.xlsx
+oarepo taxonomies import resourceType.xlsx
+oarepo taxonomies import languages.xlsx
+oarepo taxonomies import accessRights.xlsx
+oarepo taxonomies import subjects.xlsx
+oarepo taxonomies import subjectCategories.xlsx
+oarepo taxonomies import studyFields.xlsx
+oarepo taxonomies import Nresults_usage.xlsx
+oarepo taxonomies import Nresults_type.xlsx
+oarepo taxonomies import contributorType.xlsx
 ```
 
 ### Vytvoření indexu na taxonomiích
@@ -53,7 +62,10 @@ CREATE INDEX json_index ON taxonomy_term USING gin (extra_data);
 oarepo users create -a <email>
 ```
 
-TODO: Vytvoření komunit a přiřazení práv
+```shell
+oarepo oarepo:communities create cesnet 'CESNET community' --description 'Default CESNET OA repository community'
+oarepo oarepo:communities actions list -c cesnet
+```
 
 ### Import z NUŠLu
 ```shell

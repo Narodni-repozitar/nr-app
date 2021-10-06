@@ -77,3 +77,6 @@ token.txt
 .DS_Store
 
 .invenio.cfg
+
+.env
+.venv

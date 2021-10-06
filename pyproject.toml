@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "nr-app"
-version = "2.0.0a10"
+version = "3.0.0a7"
 description = "Czech National Repository app"
 license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
@@ -11,24 +11,28 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-oarepo = "^3.3.0.4"
-oarepo-micro-api = "^3.3.60"
-oarepo-validate = "^1.0.0"
-oarepo-references = "^1.11.1"
-oarepo-mapping-includes = "^1.4.4"
-oarepo-records-draft = "^5.5.5"
-oarepo-iiif = "^1.1.4"
-oarepo-ui = "^2.0"
-oarepo-whitenoise = "^2.0.0"
-techlib-nr-all = { version = "^1.0.0a8", allow-prereleases = true }
+oarepo = "^3.3"
+# See: https://github.com/celery/celery/issues/6829
+celery = "5.0.5"
+oarepo-micro-api = "^3.3"
+oarepo-records-draft = ">=5.5.5"
+oarepo-iiif = ">=1.1.4"
+oarepo-ui = ">=2.0"
+oarepo-whitenoise = ">=2.0.0"
 xmltodict = "^0.12.0"
-tqdm = "^4.57.0"
-oarepo-taxonomies = { version = "^3.0.0-alpha.2", allow-prereleases = true }
-oarepo-invenio-model = "^2.1.2"
+tqdm = ">=4.57.0"
+oarepo-taxonomies = ">=3.2"
 oarepo-multilingual = ">=2.4.3"
-oarepo-fsm = "^1.5.0"
-oarepo-communities = "^2.0.1"
-techlib-nr-oai-pmh-harvester = "^1.0.0-alpha.8"
+oarepo-fsm = "^2.0"
+oarepo-communities = "^3.0"
+techlib-nr-oai-pmh-harvester = ">=1.0.0-alpha.11"
+cesnet-openid-remote = "^2.1.5"
+json-schema-for-humans = ">=0.34.1"
+oarepo-s3 = "^1.4.1"
+oarepo-actions = "^1.0.7"
+techlib-nr-datasets = "^1.0.4"
+# techlib-nr-datasets = {path = "../../metadata/nr-datasets"}
+oarepo-doi-resolver = "^1.0.5"
 
 [tool.poetry.extras]
 tests = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "pytest-cache", "pytest-cov", "pytest-invenio", "pytest-mock", "pytest-pep8", "pytest-random-order", "selenium"]
@@ -36,7 +40,7 @@ all = ["check-manifest", "coverage", "isort", "mock", "pydocstyle", "pytest", "p
 docs = ["sphinx"]
 
 [tool.poetry.plugins."invenio_config.module"]
-restoration = "nr_app.config"
+nr = "nr_app.config"
 
 [tool.poetry.plugins.'flask.commands']
 'nr' = 'nr_app.cli:nr'
@@ -44,4 +48,10 @@ restoration = "nr_app.config"
 [tool.poetry.plugins."invenio_base.api_apps"]
 invenio_i18n = "invenio_i18n:InvenioI18N"
 
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
+[tool.poetry.dev-dependencies]
+#techlib-nr-datasets = { path = "../../metadata/nr-datasets" }
+#techlib-nr-datasets-metadata = {path = "../../metadata/nr-datasets-metadata"}
