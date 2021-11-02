@@ -16,7 +16,7 @@ from invenio_records_rest.utils import obj_or_import_string
 from sqlalchemy.orm.exc import NoResultFound
 from tqdm import tqdm
 from invenio_records.api import _records_state
-
+from nr_datasets.tasks import update_access_rights
 from nr_app.index import reindex_pid
 
 
@@ -72,6 +72,15 @@ def nr_reindex(ctx, pids, raise_on_error=True, only=None):
                 pid_type: str = config["pid_type"]
                 record_class = obj_or_import_string(config["record_class"])
                 reindex_pid(pid_type, record_class, only=only, raise_on_error=raise_on_error)
+
+
+@records.command('update-access-rights')
+@with_appcontext
+@click.pass_context
+def nr_update_access_rights(ctx):
+    api = create_api()
+    with api.app_context():
+        update_access_rights()
 
 
 @records.command('recommit')
