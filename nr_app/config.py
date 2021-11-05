@@ -1,4 +1,7 @@
+from urllib import request
+
 from flask_babelex import lazy_gettext as _
+from invenio_records_rest.utils import allow_all, deny_all
 import jsonresolver
 
 SUPPORTED_LANGUAGES = ['cs', 'en', 'sk', 'de', 'fr', 'ru', 'es', 'nl', 'it', 'no', 'pl', 'da', 'el',
@@ -62,6 +65,21 @@ def jsonresolver_loader(url_map):
 
 # global config
 FLASK_TAXONOMIES_URL_PREFIX = '/2.0/taxonomies/'
+
+FLASK_TAXONOMIES_PERMISSION_FACTORIES = {
+    'taxonomy_list': allow_all,
+    'taxonomy_read': allow_all,
+    'taxonomy_create': deny_all,
+    'taxonomy_update': deny_all,
+    'taxonomy_delete': deny_all,
+
+    'taxonomy_term_read':  allow_all,
+    'taxonomy_term_create': deny_all,
+    'taxonomy_term_update': deny_all,
+    'taxonomy_term_delete': deny_all,
+    'taxonomy_term_move': deny_all
+}
+
 PREFERRED_URL_SCHEME = 'https'
 RATELIMIT_ENABLED = True
 RATELIMIT_PER_ENDPOINT = {

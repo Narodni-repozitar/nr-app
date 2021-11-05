@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "nr-app"
-version = "3.0.0a16"
+version = "3.0.0a17"
 description = "Czech National Repository app"
 license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
@@ -30,7 +30,7 @@ cesnet-openid-remote = "^2.1.5"
 json-schema-for-humans = ">=0.34.1"
 oarepo-s3 = "^1.4.1"
 oarepo-actions = "^1.0.7"
-techlib-nr-datasets = "^1.1.5"
+techlib-nr-datasets = "^1.1.8"
 # techlib-nr-datasets = {path = "../../metadata/nr-datasets"}
 oarepo-doi-resolver = "^1.0.5"
 
