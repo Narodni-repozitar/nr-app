@@ -67,17 +67,17 @@ def jsonresolver_loader(url_map):
 FLASK_TAXONOMIES_URL_PREFIX = '/2.0/taxonomies/'
 
 FLASK_TAXONOMIES_PERMISSION_FACTORIES = {
-    'taxonomy_list': allow_all,
-    'taxonomy_read': allow_all,
-    'taxonomy_create': deny_all,
-    'taxonomy_update': deny_all,
-    'taxonomy_delete': deny_all,
+    'taxonomy_list': [allow_all()],
+    'taxonomy_read': [allow_all()],
+    'taxonomy_create': [deny_all()],
+    'taxonomy_update': [deny_all()],
+    'taxonomy_delete': [deny_all()],
 
-    'taxonomy_term_read':  allow_all,
-    'taxonomy_term_create': deny_all,
-    'taxonomy_term_update': deny_all,
-    'taxonomy_term_delete': deny_all,
-    'taxonomy_term_move': deny_all
+    'taxonomy_term_read':  [allow_all()],
+    'taxonomy_term_create': [deny_all()],
+    'taxonomy_term_update': [deny_all()],
+    'taxonomy_term_delete': [deny_all()],
+    'taxonomy_term_move': [deny_all()]
 }
 
 PREFERRED_URL_SCHEME = 'https'
