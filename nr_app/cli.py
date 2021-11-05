@@ -41,6 +41,25 @@ def records():
     pass
 
 
+def _reindex(pids, raise_on_error=True, only=None):
+    endpoints = current_app.config.get("RECORDS_REST_ENDPOINTS").endpoints
+    if not pids:
+        # reindex all objects
+        for config in endpoints.values():
+            pid_type: str = config["pid_type"]
+            record_class = obj_or_import_string(config["record_class"])
+            print(f"pid_type: {pid_type}")
+            reindex_pid(pid_type, record_class, only=only, raise_on_error=raise_on_error)
+    else:
+        for p in pids:
+            config = [ep for ep in endpoints.values() if ep["pid_type"] == p][0]
+            if not config:
+                raise ValueError(f'There is not PID type with the value: "{p}"')
+            pid_type: str = config["pid_type"]
+            record_class = obj_or_import_string(config["record_class"])
+            reindex_pid(pid_type, record_class, only=only, raise_on_error=raise_on_error)
+
+
 @index.command('reindex')
 @click.option('--pid', '-p', 'pids', multiple=True,
               help="Please choose PID that will be reindexed. Default option is all PIDs")
@@ -56,23 +75,7 @@ def nr_reindex(ctx, pids, raise_on_error=True, only=None):
     version_type = None  # elasticsearch version to use
     api = create_api()
     with api.app_context():
-        endpoints = current_app.config.get("RECORDS_REST_ENDPOINTS").endpoints
-        if not pids:
-            # reindex all objects
-            for config in endpoints.values():
-                pid_type: str = config["pid_type"]
-                record_class = obj_or_import_string(config["record_class"])
-                print(f"pid_type: {pid_type}")
-                reindex_pid(pid_type, record_class, only=only, raise_on_error=raise_on_error)
-        else:
-            for p in pids:
-                config = [ep for ep in endpoints.values() if ep["pid_type"] == p][0]
-                if not config:
-                    raise ValueError(f'There is not PID type with the value: "{p}"')
-                pid_type: str = config["pid_type"]
-                record_class = obj_or_import_string(config["record_class"])
-                reindex_pid(pid_type, record_class, only=only, raise_on_error=raise_on_error)
-
+        _reindex(pids, raise_on_error=raise_on_error, only=only)
 
 @records.command('update-access-rights')
 @with_appcontext
@@ -80,7 +83,8 @@ def nr_reindex(ctx, pids, raise_on_error=True, only=None):
 def nr_update_access_rights(ctx):
     api = create_api()
     with api.app_context():
-        update_access_rights()
+        update_access_rights(deep=True)
+        _reindex(None, raise_on_error=True, only=None)
 
 
 @records.command('recommit')
