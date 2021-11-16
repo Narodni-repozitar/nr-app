@@ -7,7 +7,7 @@ import jsonresolver
 SUPPORTED_LANGUAGES = ['cs', 'en', 'sk', 'de', 'fr', 'ru', 'es', 'nl', 'it', 'no', 'pl', 'da', 'el',
                        'hu', 'lt', 'pt', 'bg', 'ro', 'sv']
 
-JSONSCHEMAS_HOST = 'narodni-repozitar.cz'
+JSONSCHEMAS_HOST = 'data.narodni-repozitar.cz'
 
 BABEL_DEFAULT_LOCALE = 'cs'
 I18N_LANGUAGES = (('en', _('English')), ('cs', _('Czech')))
@@ -107,7 +107,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 # made and a retry logic would be needed.
 SESSION_COOKIE_PATH = '/'
 
-OAISERVER_ID_PREFIX = 'oai:narodni-repozitar.cz:'
+OAISERVER_ID_PREFIX = 'oai:data.narodni-repozitar.cz:'
 
 
 from cesnet_openid_remote.remote import CesnetOpenIdRemote
@@ -135,12 +135,12 @@ NR_ES_TYPED_KEYS = True
 
 OAREPO_SEARCH_DEFAULT_INDEX = 'nr_datasets-nr-datasets-v1.0.0'
 
-if False:
-    import logging
-
-    es_trace_logger = logging.getLogger('elasticsearch.trace')
-    es_trace_logger.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler()
-    es_trace_logger.addHandler(handler)
+# if False:
+#     import logging
+#
+#     es_trace_logger = logging.getLogger('elasticsearch.trace')
+#     es_trace_logger.setLevel(logging.DEBUG)
+#     handler = logging.StreamHandler()
+#     es_trace_logger.addHandler(handler)
 
 FILES_REST_STORAGE_FACTORY = 'oarepo_s3.storage.s3_storage_factory'

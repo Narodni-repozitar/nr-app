@@ -9,7 +9,7 @@ def test_change_taxonomy():
             'en': 'Application of Sustainable Development Concept as a Factor of '
                   'International Competitiveness'
         }],
-        '$schema': 'https://repozitar.narodni-repozitar.cz/schemas/nr_theses/nr-theses-v1.0.0.json',
+        '$schema': 'https://data.narodni-repozitar.cz/schemas/nr_theses/nr-theses-v1.0.0.json',
         'creator': [{'name': 'Kolmosová, Lucia'}], 'abstract': {
             'cs': "\nThis Master's thesis focuses on the application of the sustainable "
                   "development concept in the company Volkswagen Slovakia to enhance its "
@@ -104,7 +104,7 @@ def test_change_taxonomy():
     new_json = deepcopy(json)
     res = change_taxonomy(new_json)
     assert res == {
-        '$schema': 'https://repozitar.narodni-repozitar.cz/schemas/nr_theses/nr-theses-v1.0.0.json',
+        '$schema': 'https://data.narodni-repozitar.cz/schemas/nr_theses/nr-theses-v1.0.0.json',
         'abstract': {
             'cs': '\n'
                   "This Master's thesis focuses on the application of the "
