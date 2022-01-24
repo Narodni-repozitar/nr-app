@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "nr-app"
-version = "3.0.0a37"
+version = "3.0.0a38"
 description = "Czech National Repository app"
 license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
@@ -14,7 +14,7 @@ python = "^3.8"
 oarepo = "~3.3"
 # See: https://github.com/celery/celery/issues/6829
 celery = "5.0.5"
-oarepo-micro-api = "~3.3"
+oarepo-micro-api = ">=3.3.126,<3.4.0"
 oarepo-records-draft = ">=5.5.5"
 oarepo-iiif = ">=1.1.4"
 oarepo-ui = ">=2.0"
