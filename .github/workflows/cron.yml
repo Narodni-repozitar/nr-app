@@ -1,0 +1,69 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2020 CESNET.
+#
+# invenio-integration-tests is free software; you can redistribute it and/or modify it
+# under the terms of the MIT License; see LICENSE file for more details.
+
+name: version bump, w.cron supp.
+
+on:
+  schedule:
+    # every sat. at 7:51 GMT
+    - cron: '51 7 * * 6'
+    # debug run (min,hour,dom,mon,dow)
+    #- cron: '32 18 25 7 *'
+  workflow_dispatch:
+
+jobs:
+  cron-wf-job:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        branch: [ 'master' ]
+    env:
+      BRANCH: ${{ matrix.branch }}
+      PYPROJECT: "./pyproject.toml"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.BRANCH }}
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: install bump
+        run: |
+          pip install bump
+      - name: get bumped version
+        run: |
+          # extract version from pyproject.toml:
+          VERLINE=$(grep -E '^version = ' "${{ env.PYPROJECT }}")
+          echo "verline:$VERLINE"
+          VER=$(sed -n '/^version = / {s/^[^\x27"]\+[\x27"]\([0-9a-z\.]\+\)[\x27"]$/\1/;p}' <<< "$(echo "$VERLINE")")
+          MAJOR=$(sed -n '/^version = / {s/^[^\x27"]\+[\x27"]\([0-9]\+\)\.[0-9\.a-z]\+[\x27"]$/\1/;p}' <<< "$(echo "$VERLINE")")
+          SEP=$(sed -n '/^version = / {s/^[^\x27"]\+[\x27"][0-9\.]\+\([\.a-z]\)[0-9]\+[\x27"]$/\1/;p}' <<< "$(echo "$VERLINE")")
+          VER4BUMP=$(sed -n '/^version = / {s/^\([^\x27"]\+[\x27"]\)[0-9]\+\.\([0-9\.]\+\)[\.a-z]\([0-9]\+[\x27"]\)$/\1\2.\3/;p}' <<< "$(echo "$VERLINE")")
+          echo "oldver:$VER; major:$MAJOR; ver4bump:$VER4BUMP"
+          VER3BUMP=$(bump - /dev/null <<< "$(echo "$VER4BUMP")")
+          NEWVER="$MAJOR.$(sed 's/^\([0-9\.]\+\)\.\([0-9]\+\)$/\1'$SEP'\2/' <<< "$(echo "$VER3BUMP")" )"
+          echo "bump from '$VER' to '$NEWVER'"
+          echo "NEWVER=$NEWVER" >> $GITHUB_ENV
+      - name: modify ${{ env.PYPROJECT }}
+        run: |
+          sed -i '/^version = / { s/\([\x27"]\)[0-9a-z.]\+\([\x27"]\)/\1'${{ env.NEWVER }}'\2/ }' "${{ env.PYPROJECT }}"
+          echo "new version line in ${{ env.PYPROJECT }}:"
+          grep -E '^version' "${{ env.PYPROJECT }}"
+          echo "NEWTAG=$NEWVER" >> $GITHUB_ENV
+#      - name: Commit and Push generated ${{ env.PYPROJECT }}
+#        uses: stefanzweifel/git-auto-commit-action@v4
+#        with:
+#          commit_message: "update ${{ env.PYPROJECT }} (tag ${{ env.NEWTAG }})"
+#          branch: ${{ env.BRANCH }}
+#          file_pattern: ${{ env.PYPROJECT }}
+#          commit_user_name: test1-workflow
+#          commit_user_email: test1-workflow@th22.net
+#          tagging_message: ${{ env.NEWTAG }}
