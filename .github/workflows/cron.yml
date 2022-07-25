@@ -58,12 +58,12 @@ jobs:
           echo "new version line in ${{ env.PYPROJECT }}:"
           grep -E '^version' "${{ env.PYPROJECT }}"
           echo "NEWTAG=$NEWVER" >> $GITHUB_ENV
-#      - name: Commit and Push generated ${{ env.PYPROJECT }}
-#        uses: stefanzweifel/git-auto-commit-action@v4
-#        with:
-#          commit_message: "update ${{ env.PYPROJECT }} (tag ${{ env.NEWTAG }})"
-#          branch: ${{ env.BRANCH }}
-#          file_pattern: ${{ env.PYPROJECT }}
-#          commit_user_name: test1-workflow
-#          commit_user_email: test1-workflow@th22.net
-#          tagging_message: ${{ env.NEWTAG }}
+      - name: Commit and Push generated ${{ env.PYPROJECT }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "update ${{ env.PYPROJECT }} (tag ${{ env.NEWTAG }})"
+          branch: ${{ env.BRANCH }}
+          file_pattern: ${{ env.PYPROJECT }}
+          commit_user_name: oarepo-bot
+          commit_user_email: noreply@cesnet.cz
+          tagging_message: ${{ env.NEWTAG }}
