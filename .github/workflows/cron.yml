@@ -67,3 +67,5 @@ jobs:
           commit_user_name: oarepo-bot
           commit_user_email: noreply@cesnet.cz
           tagging_message: ${{ env.NEWTAG }}
+          push_options: '--force'
+        if: success() && ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' )
