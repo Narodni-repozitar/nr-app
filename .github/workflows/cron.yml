@@ -8,11 +8,13 @@
 name: version bump, w.cron supp.
 
 on:
-  schedule:
-    # every sat. at 7:51 GMT
-    - cron: '51 7 * * 6'
-    # debug run (min,hour,dom,mon,dow)
-    #- cron: '32 18 25 7 *'
+# disabled - doesn't trig main workflow on tag push
+#			have to be changed to push by bot token
+#  schedule:
+#    # every sat. at 7:51 GMT
+#    - cron: '51 7 * * 6'
+#    # debug run (min,hour,dom,mon,dow)
+#    #- cron: '32 18 25 7 *'
   workflow_dispatch:
 
 jobs:
