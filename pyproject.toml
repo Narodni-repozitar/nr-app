@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "nr-app"
-version = "3.0.0a49"
+version = "3.0.0a50"
 description = "Czech National Repository app"
 license = "MIT"
 keywords = ["National", "Respository", "App", "REST", "REST API", "Invenio"]
